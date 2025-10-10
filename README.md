@@ -1,2 +1,6 @@
 # Pacman-
-Compila essa porra krl
+como compilar
+______________________
+
+
+usando gcc
