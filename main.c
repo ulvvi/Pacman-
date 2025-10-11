@@ -73,11 +73,12 @@ switch(matriz[(int)(pos_player.y/TAM_GRID)][(int)(pos_player.x/TAM_GRID)])
         score+=50;
         matriz[(int)(pos_player.y/TAM_GRID)][(int)(pos_player.x/TAM_GRID)] = ' ';
         break;
-    //fantasma
-    case 'F':
-        //dps ver o bagulho de flags e tudo mais, caso o pacman possa ou nao comer os fantasmas
+    //fantasma(acho que vou fazer um sistema de colisoes a parte pra ele, suspeito que nao vai ficar uma colisao discreta dessa forma)
+    /*case 'F':
+        //logica
         vida_player--;
         break;
+    */
     //portal
     case 'T':
         //logica do portal
