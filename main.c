@@ -81,16 +81,23 @@ switch(matriz[(int)(pos_player.y/TAM_GRID)][(int)(pos_player.x/TAM_GRID)])
     */
     //portal
     case 'T':
-        //logica do portal
+        if(move_x == input_x)
+        {
+            //
+        }    
+        else if(move_y == input_y)
+        {
+            //
+        }
         break;
         
 }
  
     
 BeginDrawing(); 
-ClearBackground(RAYWHITE); 
-DrawRectangle(pos_player.x, pos_player.y, 20, 20, RED);
-DrawText(TextFormat("Score: %d", score), 10, 10, 20, BLACK);
+ClearBackground(BLACK); 
+DrawCircle(pos_player.x, pos_player.y, 20, YELLOW);
+DrawText(TextFormat("Score: %d", score), 10, 10, 20, WHITE);
 EndDrawing(); 
 }
 
