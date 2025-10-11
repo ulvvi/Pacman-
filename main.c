@@ -17,9 +17,14 @@ char **matriz;
 
 //alocacao dinamica do tamanho do mapa
 matriz = (char**)malloc(sizeof(char*)*TAM_I);
+if(matriz == NULL)
+    return -1;
+
 for(int i = 0; i < TAM_I; i++)
 {
     *(matriz+i) = (char*)malloc(sizeof(char)*TAM_J);
+    if(*(matriz+i) == NULL)
+        return -1;
 }
 
 //Inicializações
@@ -88,6 +93,12 @@ DrawText(TextFormat("Score: %d", score), 10, 10, 20, BLACK);
 EndDrawing(); 
 }
 
-CloseWindow(); 
+CloseWindow();
+
+//liberacao de memoria
+for(int i = 0; i < TAM_I; i++)
+    free(*(matriz+i));
+free(matriz);
+
 return 0;
 }
