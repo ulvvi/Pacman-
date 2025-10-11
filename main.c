@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include <stdlib.h>
 #include <string.h>
 #define LARGURA 1600
 #define ALTURA 840
