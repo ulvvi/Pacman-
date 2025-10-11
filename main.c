@@ -12,11 +12,17 @@ int input_x, input_y, move_x = 0, move_y = 0, move_alvo_x = 0, move_alvo_y = 0;
 float spd = 4/3;
 int score = 0;
 int vida_player = 3;
-int matriz[TAM_I][TAM_J];
+char **matriz;
 
+//alocacao dinamica do tamanho do mapa
+matriz = (char**)malloc(sizeof(char*)*TAM_I);
+for(int i = 0; i < TAM_I; i++)
+{
+    *(matriz+i) = (char*)malloc(sizeof(char)*TAM_J);
+}
 
 //Inicializações
-InitWindow(LARGURA, ALTURA, "Movimento"); 
+InitWindow(LARGURA, ALTURA, "PACMAN-"); 
 SetTargetFPS(60);
 
 
@@ -36,11 +42,11 @@ else if((input_y = (IsKeyPressed(KEY_DOWN) - IsKeyPressed(KEY_UP))*spd) != 0)
     move_alvo_y = input_y;
     move_alvo_x = 0;
 }
-
 if(move_alvo_x != move_x)
     move_x = move_alvo_x;    
 if(move_alvo_y != move_y)
     move_y = move_alvo_y;
+
 //atualizacao da pos
 if ((matriz[(int)(pos_player.y+move_y)/TAM_GRID][(int)(pos_player.x+move_x)/TAM_GRID]) != '#')
     pos_player.x+=move_x;
@@ -50,18 +56,23 @@ if ((matriz[(int)(pos_player.y+move_y)/TAM_GRID][(int)(pos_player.x+move_x)/TAM_
 //colisoes gerais
 switch(matriz[(int)(pos_player.y/TAM_GRID)][(int)(pos_player.x/TAM_GRID)])
 {
+    //pellet
     case '.':
-        score++;
+        score+=10;
         matriz[(int)(pos_player.y/TAM_GRID)][(int)(pos_player.x/TAM_GRID)] = ' ';
         break;
+    //power pellet
     case 'o':
         //logica do power pellet(a fazer)
+        score+=50;
         matriz[(int)(pos_player.y/TAM_GRID)][(int)(pos_player.x/TAM_GRID)] = ' ';
         break;
+    //fantasma
     case 'F':
+        //dps ver o bagulho de flags e tudo mais, caso o pacman possa ou nao comer os fantasmas
         vida_player--;
-        //logica a mais de tomar dano
         break;
+    //portal
     case 'T':
         //logica do portal
         break;
