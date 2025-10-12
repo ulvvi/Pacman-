@@ -1,35 +1,43 @@
+#include <stdio.h>
 #include "raylib.h"
 #include <stdlib.h>
 #include <string.h>
+//macros
 #define LARGURA 1600
 #define ALTURA 840
 #define TAM_I 20
 #define TAM_J 40
 #define TAM_GRID 40
+//funcoes
 
+
+
+//MAIN
 int main(void){
+
 Vector2 pos_player = {400,400};
 int input_x, input_y, move_x = 0, move_y = 0, move_alvo_x = 0, move_alvo_y = 0;
 float spd = 4/3;
 int score = 0;
 int vida_player = 3;
-char **matriz;
+char **grid_mapa;
 
 //alocacao dinamica do tamanho do mapa
-matriz = (char**)malloc(sizeof(char*)*TAM_I);
-if(matriz == NULL)
+grid_mapa = (char**)malloc(sizeof(char*)*TAM_I);
+if(grid_mapa == NULL)
     return -1;
 
 for(int i = 0; i < TAM_I; i++)
 {
-    *(matriz+i) = (char*)malloc(sizeof(char)*TAM_J);
-    if(*(matriz+i) == NULL)
+    *(grid_mapa+i) = (char*)malloc(sizeof(char)*TAM_J);
+    if(*(grid_mapa+i) == NULL)
         return -1;
 }
 
 //Inicializações
 InitWindow(LARGURA, ALTURA, "PACMAN-"); 
 SetTargetFPS(60);
+
 
 
 //Laço principal do jogo
@@ -54,24 +62,24 @@ if(move_alvo_y != move_y)
     move_y = move_alvo_y;
 
 //atualizacao da pos
-if ((matriz[(int)(pos_player.y+move_y)/TAM_GRID][(int)(pos_player.x+move_x)/TAM_GRID]) != '#')
+if ((grid_mapa[(int)(pos_player.y+move_y)/TAM_GRID][(int)(pos_player.x+move_x)/TAM_GRID]) != '#')
     pos_player.x+=move_x;
-if ((matriz[(int)(pos_player.y+move_y)/TAM_GRID][(int)(pos_player.x+move_x)/TAM_GRID]) != '#')
+if ((grid_mapa[(int)(pos_player.y+move_y)/TAM_GRID][(int)(pos_player.x+move_x)/TAM_GRID]) != '#')
     pos_player.y+=move_y;
 
 //colisoes gerais
-switch(matriz[(int)(pos_player.y/TAM_GRID)][(int)(pos_player.x/TAM_GRID)])
+switch(grid_mapa[(int)(pos_player.y/TAM_GRID)][(int)(pos_player.x/TAM_GRID)])
 {
     //pellet
     case '.':
         score+=10;
-        matriz[(int)(pos_player.y/TAM_GRID)][(int)(pos_player.x/TAM_GRID)] = ' ';
+        grid_mapa[(int)(pos_player.y/TAM_GRID)][(int)(pos_player.x/TAM_GRID)] = ' ';
         break;
     //power pellet
     case 'o':
         //logica do power pellet(a fazer)
         score+=50;
-        matriz[(int)(pos_player.y/TAM_GRID)][(int)(pos_player.x/TAM_GRID)] = ' ';
+        grid_mapa[(int)(pos_player.y/TAM_GRID)][(int)(pos_player.x/TAM_GRID)] = ' ';
         break;
     //fantasma(acho que vou fazer um sistema de colisoes a parte pra ele, suspeito que nao vai ficar uma colisao discreta dessa forma)
     /*case 'F':
@@ -105,8 +113,8 @@ CloseWindow();
 
 //liberacao de memoria
 for(int i = 0; i < TAM_I; i++)
-    free(*(matriz+i));
-free(matriz);
+    free(*(grid_mapa+i));
+free(grid_mapa);
 
 return 0;
 }
