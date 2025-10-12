@@ -9,13 +9,14 @@
 #define TAM_J 40
 #define TAM_GRID 40
 //funcoes
+void initMatrix(char filename[], char **mapa);
+void drawMap(char **mapa);
 
 
 
 //MAIN
 int main(void){
 
-Vector2 pos_player = {400,400};
 int input_x, input_y, move_x = 0, move_y = 0, move_alvo_x = 0, move_alvo_y = 0;
 float spd = 4/3;
 int score = 0;
@@ -34,11 +35,28 @@ for(int i = 0; i < TAM_I; i++)
         return -1;
 }
 
+//inicia a matriz
+initMatrix("level1.txt", grid_mapa);
+
+//pos inicial do player
+Vector2 pos_player;
+
+for(int i = 0; i < TAM_I; i++)
+{
+    for(int j = 0; j < TAM_J; j++)
+    {
+        if(grid_mapa[i][j] == 'P')
+        {
+            pos_player.x = j * TAM_GRID + TAM_GRID / 2;
+            pos_player.y = i * TAM_GRID + TAM_GRID / 2;
+            break;
+        }
+    }
+}
+
 //Inicializações
 InitWindow(LARGURA, ALTURA, "PACMAN-"); 
 SetTargetFPS(60);
-
-
 
 //Laço principal do jogo
 while (!WindowShouldClose())
@@ -101,10 +119,11 @@ switch(grid_mapa[(int)(pos_player.y/TAM_GRID)][(int)(pos_player.x/TAM_GRID)])
         
 }
  
-    
+//desenhos    
 BeginDrawing(); 
 ClearBackground(BLACK); 
 DrawCircle(pos_player.x, pos_player.y, 20, YELLOW);
+drawMap(grid_mapa);
 DrawText(TextFormat("Score: %d", score), 10, 10, 20, WHITE);
 EndDrawing(); 
 }
@@ -117,4 +136,78 @@ for(int i = 0; i < TAM_I; i++)
 free(grid_mapa);
 
 return 0;
+}
+
+//inicializa a matriz com o nome do arq
+void initMatrix(char filename[], char **mapa) {
+    ///abrir
+    FILE *map;
+    map = fopen(filename, "r");
+    if(map == NULL)
+    {
+        puts("erro de abertura");
+        exit(1);
+    }
+    //coloca as informação do arquivo para uma matriz que será o mapa;
+    char cur;
+    int a = 0;
+    int b = 0;
+    while((cur = fgetc(map)) != EOF) 
+    {
+        if(cur == '\n') 
+        {
+            a++;
+            b = 0;
+        } 
+        else 
+        {
+            mapa[a][b] = cur;
+            b++;
+        }      
+    }
+    ///fechar
+    fclose(map);
+}
+
+//desenha o mapa com a matriz
+void drawMap(char** mapa) 
+{
+    for(int i = 0; i < TAM_I; i++) 
+    {
+        for(int j = 0; j < TAM_J; j++)
+        {
+            float x = j * TAM_GRID;
+            float y = i * TAM_GRID;
+            float center_x = j * TAM_GRID + TAM_GRID / 2;
+            float center_y = i * TAM_GRID + TAM_GRID / 2;
+
+            switch(mapa[i][j])
+            {
+                //desenhar parede
+                case '#':
+                    DrawRectangle(x, y, 40, 40, BLUE);
+
+                    break;
+                //desenhar pellet
+                case '.':
+                    DrawCircle(center_x, center_y, 5, ORANGE);
+
+                    break;
+                //desenhar super pellet
+                case 'o':
+                    DrawCircle(center_x, center_y, 10, ORANGE);
+
+                    break;
+                case 'T':
+                    DrawRectangle(x, y, 40, 40, PURPLE);
+                    break;
+                //desenhar(ou n kkkkkkkkkkkkk) os vazios
+                case ' ':
+                    break;
+                //bizzarrices
+                default:
+                    break;
+            }
+        }
+    }
 }

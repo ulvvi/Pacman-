@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../../../msys64/ucrt64/include/raylib.h"
+#include "raylib.h"
 #include <stdlib.h>
 #include <string.h>
 #define TAM_I 20
