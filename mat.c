@@ -7,7 +7,7 @@
 
 
 
-void createMap(FILE *map, char mapa[][TAM_J]){
+void InitMatrix(FILE *map, char mapa[][TAM_J]){
     char filename[99];
     char ext[] = ".txt";
     
@@ -73,4 +73,5 @@ int main(){
     createMap(map, mapa);
 
     return 0;
+
 }
