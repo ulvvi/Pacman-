@@ -2,12 +2,12 @@
 #include "../../../msys64/ucrt64/include/raylib.h"
 #include <stdlib.h>
 #include <string.h>
-#define LINHA 20
-#define COLUNA 40
+#define TAM_I 20
+#define TAM_J 40
 
 
 
-void createMap(FILE *map, char mapa[][COLUNA]){
+void createMap(FILE *map, char mapa[][TAM_J]){
     char filename[99];
     char ext[] = ".txt";
     
@@ -38,8 +38,8 @@ void createMap(FILE *map, char mapa[][COLUNA]){
 
     fclose(map);
 
-    for (int i = 0; i < LINHA; i++){
-        for(int j = 0; j < COLUNA; j++){
+    for (int i = 0; i < TAM_I; i++){
+        for(int j = 0; j < TAM_J; j++){
             printf("%c", mapa[i][j]);
         }
         printf("\n");
@@ -57,13 +57,13 @@ int main(){
     
 
     //alocação da matriz do mapa
-    char** mapa = (char**) malloc(sizeof(char*) * LINHA);
+    char** mapa = (char**) malloc(sizeof(char*) * TAM_I);
     if(mapa == NULL){
         puts("erro");
         return -1;
     }
-    for(int i = 0; i < LINHA; i++){
-        *(mapa + i) = (char*) malloc(sizeof(char) * COLUNA);
+    for(int i = 0; i < TAM_I; i++){
+        *(mapa + i) = (char*) malloc(sizeof(char) * TAM_J);
         if(*(mapa + i) == NULL){
             puts("erro");
             return -1;
