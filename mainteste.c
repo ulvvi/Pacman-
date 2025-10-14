@@ -13,19 +13,17 @@
 //funcoes
 void initMatrix(char filename[], char **mapa);
 void drawMap(char **mapa);
-
+void centralizaPlayer(Vector2* pos_player, char** grid_mapa);
 
 //MAIN
 int main(void){
-int input_x, input_y, move_x = 0, move_y = 0, move_alvo_x = 0, move_alvo_y = 0;
-int spd = 2;
+int move_x = 0, move_y = 0, move_alvo_x = 0, move_alvo_y = 0, spd = 2, grid_i, grid_j;
 int score = 0;
 int vida_player = 3;
 float raio = 20;
 char **grid_mapa;
-int grid_i, grid_j;
-bool movimento_inicial = true, intencao_vertical = false, intencao_horizontal = false, virou = false;
-bool centro_grid = false, reverteu = false;
+char nome_mapa[50];
+bool movimento_inicial = true, intencao_vertical = false, intencao_horizontal = false, virou = false, centro_grid = false, reverteu = false;
 
 //alocacao dinamica do tamanho do mapa
 grid_mapa = (char**)malloc(sizeof(char*)*TAM_I);
@@ -40,23 +38,11 @@ for(int i = 0; i < TAM_I; i++)
 }
 
 //inicia a matriz
-initMatrix("level1.txt", grid_mapa);
+initMatrix("mapa1.txt", grid_mapa);
 
 //pos inicial do player
 Vector2 pos_player;
-
-for(int i = 0; i < TAM_I; i++)
-{
-    for(int j = 0; j < TAM_J; j++)
-    {
-        if(grid_mapa[i][j] == 'P')
-        {
-            pos_player.x = j * TAM_GRID + TAM_GRID / 2;
-            pos_player.y = i * TAM_GRID + TAM_GRID / 2;
-            break;
-        }
-    }
-}
+centralizaPlayer(&pos_player, grid_mapa);
 
 //Inicializações
 InitWindow(LARGURA, ALTURA, "PACMAN-"); 
@@ -66,9 +52,9 @@ SetTargetFPS(60);
 while (!WindowShouldClose())
 {
 
-//calculo do movimento
 virou = false;
 centro_grid = ((int)(pos_player.x-(TAM_GRID/2)) % TAM_GRID) == 0 && ((int)(pos_player.y-(TAM_GRID/2)) % TAM_GRID) == 0;
+//pegar o input
 if(IsKeyPressed(KEY_RIGHT))
 {
     intencao_horizontal = true;
@@ -98,7 +84,7 @@ if(IsKeyPressed(KEY_DOWN))
     move_alvo_y = spd;
 }
 
-//impedir o delay aparente(se apertar pra se mover no msm eixo, ele n espera centralizar no grid)
+//impedir o delay aparente(se apertar pra se mover no msm eixo, ele n espera centralizar no grid, os dois ifs sao pra isso)
 if(intencao_horizontal == true && move_alvo_x == -move_x)
 {
     move_x = move_alvo_x;
@@ -111,13 +97,14 @@ if(intencao_vertical == true && move_alvo_y == -move_y)
     intencao_vertical = false;
     reverteu = true;
 }
-
+//grid atual do player
 grid_i = (int)pos_player.y/TAM_GRID;
 grid_j = (int)pos_player.x/TAM_GRID;
 
-//tomar a decisao de virar
+//tomar a decisao de virar(caso seja necessario)
 if(centro_grid == true && reverteu == false)
 {
+    //há intencao de mudar de eixo(do vertical pro horizontal ne)
     if(intencao_horizontal == true)
     {
         if((grid_mapa[grid_i][grid_j+(move_alvo_x)/spd]) != '#')
@@ -128,6 +115,7 @@ if(centro_grid == true && reverteu == false)
             virou = true;
         }
     }
+    //há intencao de mudar de eixo
     else if(intencao_vertical == true)
     {
         if((grid_mapa[grid_i+(move_alvo_y/spd)][grid_j]) != '#')
@@ -138,6 +126,7 @@ if(centro_grid == true && reverteu == false)
             virou = true;
         }
     }
+    //caso de colisao caso ele esteja andando reto em algum eixo
     if(virou == false && (grid_mapa[grid_i+(move_y/spd)][grid_j+(move_x/spd)]) == '#')
     {
         move_x = 0;
@@ -146,9 +135,7 @@ if(centro_grid == true && reverteu == false)
 }
 
 reverteu = false;
-
-//colisao parede
-    
+//atualizacao da pos    
 pos_player.x+= move_x; 
 pos_player.y+= move_y;
    
@@ -175,7 +162,7 @@ switch(grid_mapa[grid_i][grid_j])
     */
     //portal
     case 'T':
-        if(move_x == input_x)
+        /*if()
         {
             //
         }    
@@ -184,6 +171,7 @@ switch(grid_mapa[grid_i][grid_j])
             //
         }
         break;
+        */
         
 }
  
@@ -206,6 +194,8 @@ free(grid_mapa);
 
 return 0;
 }
+
+/*----------------------- FUNCOES -----------------------*/
 
 //inicializa a matriz com o nome do arq
 void initMatrix(char filename[], char **mapa) {
@@ -276,6 +266,22 @@ void drawMap(char** mapa)
                 //bizzarrices
                 default:
                     break;
+            }
+        }
+    }
+}
+
+void centralizaPlayer(Vector2* pos_player, char** grid_mapa)
+{   
+    for(int i = 0; i < TAM_I; i++)
+    {
+        for(int j = 0; j < TAM_J; j++)
+        {
+            if(grid_mapa[i][j] == 'P')
+            {
+                pos_player->x = j * TAM_GRID + TAM_GRID / 2;
+                pos_player->y = i * TAM_GRID + TAM_GRID / 2;
+                break;
             }
         }
     }
