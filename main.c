@@ -1,27 +1,15 @@
-#include <stdio.h>
-#include "raylib.h"
-#include <stdlib.h>
-#include <string.h>
-//macros
-#define LARGURA 1600
-#define ALTURA 840
-#define TAM_I 20
-#define TAM_J 40
-#define TAM_GRID 40
-//funcoes
-void initMatrix(char filename[], char **mapa);
-void drawMap(char **mapa);
-
+#include "header.h"
 
 
 //MAIN
 int main(void){
-
-int input_x, input_y, move_x = 0, move_y = 0, move_alvo_x = 0, move_alvo_y = 0;
-float spd = 4/3;
+int move_x = 0, move_y = 0, move_alvo_x = 0, move_alvo_y = 0, spd = 2, grid_i, grid_j;
 int score = 0;
 int vida_player = 3;
+float raio = 20;
 char **grid_mapa;
+char nome_mapa[50];
+bool movimento_inicial = true, intencao_vertical = false, intencao_horizontal = false, virou = false, centro_grid = false, reverteu = false;
 
 //alocacao dinamica do tamanho do mapa
 grid_mapa = (char**)malloc(sizeof(char*)*TAM_I);
@@ -36,23 +24,11 @@ for(int i = 0; i < TAM_I; i++)
 }
 
 //inicia a matriz
-initMatrix("level1.txt", grid_mapa);
+initMatrix("mapa1.txt", grid_mapa);
 
 //pos inicial do player
 Vector2 pos_player;
-
-for(int i = 0; i < TAM_I; i++)
-{
-    for(int j = 0; j < TAM_J; j++)
-    {
-        if(grid_mapa[i][j] == 'P')
-        {
-            pos_player.x = j * TAM_GRID + TAM_GRID / 2;
-            pos_player.y = i * TAM_GRID + TAM_GRID / 2;
-            break;
-        }
-    }
-}
+centralizaPlayer(&pos_player, grid_mapa);
 
 //Inicializações
 InitWindow(LARGURA, ALTURA, "PACMAN-"); 
@@ -62,42 +38,107 @@ SetTargetFPS(60);
 while (!WindowShouldClose())
 {
 
-//movimentacao
-input_x = (IsKeyPressed(KEY_RIGHT) - IsKeyPressed(KEY_LEFT))*spd;
-if(input_x != 0)
+virou = false;
+centro_grid = ((int)(pos_player.x-(TAM_GRID/2)) % TAM_GRID) == 0 && ((int)(pos_player.y-(TAM_GRID/2)) % TAM_GRID) == 0;
+//pegar o input
+if(IsKeyPressed(KEY_RIGHT))
 {
-    move_alvo_x = input_x;
+    intencao_horizontal = true;
+    intencao_vertical = false;
+    move_alvo_x = spd;
     move_alvo_y = 0;
 }
-else if((input_y = (IsKeyPressed(KEY_DOWN) - IsKeyPressed(KEY_UP))*spd) != 0)
+if(IsKeyPressed(KEY_LEFT))
 {
-    move_alvo_y = input_y;
-    move_alvo_x = 0;
+    intencao_horizontal = true;
+    intencao_vertical = false;
+    move_alvo_x = -spd;
+    move_alvo_y = 0;
 }
-if(move_alvo_x != move_x)
-    move_x = move_alvo_x;    
-if(move_alvo_y != move_y)
-    move_y = move_alvo_y;
+if(IsKeyPressed(KEY_UP))
+{
+    intencao_horizontal = false;
+    intencao_vertical = true;
+    move_alvo_x = 0;
+    move_alvo_y = -spd;
+}
+if(IsKeyPressed(KEY_DOWN))
+{
+    intencao_horizontal = false;
+    intencao_vertical = true;
+    move_alvo_x = 0;
+    move_alvo_y = spd;
+}
 
-//atualizacao da pos
-if ((grid_mapa[(int)(pos_player.y+move_y)/TAM_GRID][(int)(pos_player.x+move_x)/TAM_GRID]) != '#')
-    pos_player.x+=move_x;
-if ((grid_mapa[(int)(pos_player.y+move_y)/TAM_GRID][(int)(pos_player.x+move_x)/TAM_GRID]) != '#')
-    pos_player.y+=move_y;
+//impedir o delay aparente(se apertar pra se mover no msm eixo, ele n espera centralizar no grid, os dois ifs sao pra isso)
+if(intencao_horizontal == true && move_alvo_x == -move_x)
+{
+    move_x = move_alvo_x;
+    intencao_horizontal = false;
+    reverteu = true;
+}
+if(intencao_vertical == true && move_alvo_y == -move_y)
+{
+    move_y = move_alvo_y;
+    intencao_vertical = false;
+    reverteu = true;
+}
+//grid atual do player
+grid_i = (int)pos_player.y/TAM_GRID;
+grid_j = (int)pos_player.x/TAM_GRID;
+
+//tomar a decisao de virar(caso seja necessario)
+if(centro_grid == true && reverteu == false)
+{
+    //há intencao de mudar de eixo(do vertical pro horizontal ne)
+    if(intencao_horizontal == true)
+    {
+        if((grid_mapa[grid_i][grid_j+(move_alvo_x)/spd]) != '#')
+        {
+            move_x = move_alvo_x;
+            move_y = 0;
+            intencao_horizontal = false;
+            virou = true;
+        }
+    }
+    //há intencao de mudar de eixo
+    else if(intencao_vertical == true)
+    {
+        if((grid_mapa[grid_i+(move_alvo_y/spd)][grid_j]) != '#')
+        {
+            move_y = move_alvo_y;
+            move_x = 0;
+            intencao_vertical = false;
+            virou = true;
+        }
+    }
+    //caso de colisao caso ele esteja andando reto em algum eixo
+    if(virou == false && (grid_mapa[grid_i+(move_y/spd)][grid_j+(move_x/spd)]) == '#')
+    {
+        move_x = 0;
+        move_y = 0;
+    }    
+}
+
+reverteu = false;
+//atualizacao da pos    
+pos_player.x+= move_x; 
+pos_player.y+= move_y;
+   
 
 //colisoes gerais
-switch(grid_mapa[(int)(pos_player.y/TAM_GRID)][(int)(pos_player.x/TAM_GRID)])
+switch(grid_mapa[grid_i][grid_j])
 {
     //pellet
     case '.':
         score+=10;
-        grid_mapa[(int)(pos_player.y/TAM_GRID)][(int)(pos_player.x/TAM_GRID)] = ' ';
+        grid_mapa[grid_i][grid_j] = ' ';
         break;
     //power pellet
     case 'o':
         //logica do power pellet(a fazer)
         score+=50;
-        grid_mapa[(int)(pos_player.y/TAM_GRID)][(int)(pos_player.x/TAM_GRID)] = ' ';
+        grid_mapa[grid_i][grid_j] = ' ';
         break;
     //fantasma(acho que vou fazer um sistema de colisoes a parte pra ele, suspeito que nao vai ficar uma colisao discreta dessa forma)
     /*case 'F':
@@ -107,7 +148,7 @@ switch(grid_mapa[(int)(pos_player.y/TAM_GRID)][(int)(pos_player.x/TAM_GRID)])
     */
     //portal
     case 'T':
-        if(move_x == input_x)
+        /*if()
         {
             //
         }    
@@ -116,15 +157,17 @@ switch(grid_mapa[(int)(pos_player.y/TAM_GRID)][(int)(pos_player.x/TAM_GRID)])
             //
         }
         break;
+        */
         
 }
  
 //desenhos    
 BeginDrawing(); 
 ClearBackground(BLACK); 
-DrawCircle(pos_player.x, pos_player.y, 20, YELLOW);
+DrawCircle(pos_player.x, pos_player.y, raio, YELLOW);
 drawMap(grid_mapa);
 DrawText(TextFormat("Score: %d", score), 10, 10, 20, WHITE);
+DrawText(TextFormat("posx: %.2f, posy: %.2f", pos_player.x, pos_player.y), 300, 10, 20, WHITE);
 EndDrawing(); 
 }
 
@@ -136,78 +179,4 @@ for(int i = 0; i < TAM_I; i++)
 free(grid_mapa);
 
 return 0;
-}
-
-//inicializa a matriz com o nome do arq
-void initMatrix(char filename[], char **mapa) {
-    ///abrir
-    FILE *map;
-    map = fopen(filename, "r");
-    if(map == NULL)
-    {
-        puts("erro de abertura");
-        exit(1);
-    }
-    //coloca as informação do arquivo para uma matriz que será o mapa;
-    char cur;
-    int a = 0;
-    int b = 0;
-    while((cur = fgetc(map)) != EOF) 
-    {
-        if(cur == '\n') 
-        {
-            a++;
-            b = 0;
-        } 
-        else 
-        {
-            mapa[a][b] = cur;
-            b++;
-        }      
-    }
-    ///fechar
-    fclose(map);
-}
-
-//desenha o mapa com a matriz
-void drawMap(char** mapa) 
-{
-    for(int i = 0; i < TAM_I; i++) 
-    {
-        for(int j = 0; j < TAM_J; j++)
-        {
-            float x = j * TAM_GRID;
-            float y = i * TAM_GRID;
-            float center_x = j * TAM_GRID + TAM_GRID / 2;
-            float center_y = i * TAM_GRID + TAM_GRID / 2;
-
-            switch(mapa[i][j])
-            {
-                //desenhar parede
-                case '#':
-                    DrawRectangle(x, y, 40, 40, BLUE);
-
-                    break;
-                //desenhar pellet
-                case '.':
-                    DrawCircle(center_x, center_y, 5, ORANGE);
-
-                    break;
-                //desenhar super pellet
-                case 'o':
-                    DrawCircle(center_x, center_y, 10, ORANGE);
-
-                    break;
-                case 'T':
-                    DrawRectangle(x, y, 40, 40, PURPLE);
-                    break;
-                //desenhar(ou n kkkkkkkkkkkkk) os vazios
-                case ' ':
-                    break;
-                //bizzarrices
-                default:
-                    break;
-            }
-        }
-    }
 }
