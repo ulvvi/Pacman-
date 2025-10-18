@@ -24,7 +24,7 @@ for(int i = 0; i < TAM_I; i++)
 }
 
 //inicia a matriz
-initMatrix("mapa1.txt", grid_mapa);
+initMatrix("maps/mapa1.txt", grid_mapa);
 
 //pos inicial do player
 Vector2 pos_player;
@@ -39,7 +39,7 @@ while (!WindowShouldClose())
 {
 
 virou = false;
-centro_grid = ((int)(pos_player.x-(TAM_GRID/2)) % TAM_GRID) == 0 && ((int)(pos_player.y-(TAM_GRID/2)) % TAM_GRID) == 0;
+centro_grid = ((int)pos_player.x % TAM_GRID) == 0 && ((int)pos_player.y % TAM_GRID) == 0;
 //pegar o input
 if(IsKeyPressed(KEY_RIGHT))
 {
@@ -127,45 +127,49 @@ pos_player.y+= move_y;
    
 
 //colisoes gerais
-switch(grid_mapa[grid_i][grid_j])
-{
-    //pellet
-    case '.':
-        score+=10;
-        grid_mapa[grid_i][grid_j] = ' ';
-        break;
-    //power pellet
-    case 'o':
-        //logica do power pellet(a fazer)
-        score+=50;
-        grid_mapa[grid_i][grid_j] = ' ';
-        break;
-    //fantasma(acho que vou fazer um sistema de colisoes a parte pra ele, suspeito que nao vai ficar uma colisao discreta dessa forma)
-    /*case 'F':
-        //logica
-        vida_player--;
-        break;
-    */
-    //portal
-    case 'T':
-        /*if()
-        {
-            //
-        }    
-        else if(move_y == input_y)
-        {
-            //
-        }
-        break;
+if(centro_grid == true)
+{   
+    switch(grid_mapa[grid_i][grid_j])
+    {
+        //pellet
+        case '.':
+            score+=10;
+            grid_mapa[grid_i][grid_j] = ' ';
+            break;
+        //power pellet
+        case 'o':
+            //logica do power pellet(a fazer)
+            score+=50;
+            grid_mapa[grid_i][grid_j] = ' ';
+            break;
+        //fantasma(acho que vou fazer um sistema de colisoes a parte pra ele, suspeito que nao vai ficar uma colisao discreta dessa forma)
+        /*case 'F':
+            //logica
+            vida_player--;
+            break;
         */
-        
+        //portal
+        case 'T':
+            /*if()
+            {
+                //
+            }    
+            else if(move_y == input_y)
+            {
+                //
+            }
+            break;
+            */
+            
+    }
+    
 }
  
 //desenhos    
 BeginDrawing(); 
-ClearBackground(BLACK); 
-DrawCircle(pos_player.x, pos_player.y, raio, YELLOW);
+ClearBackground(BLACK);
 drawMap(grid_mapa);
+DrawRectangle(pos_player.x, pos_player.y, TAM_GRID, TAM_GRID, YELLOW); 
 DrawText(TextFormat("Score: %d", score), 10, 10, 20, WHITE);
 DrawText(TextFormat("posx: %.2f, posy: %.2f", pos_player.x, pos_player.y), 300, 10, 20, WHITE);
 EndDrawing(); 
@@ -179,4 +183,3 @@ for(int i = 0; i < TAM_I; i++)
 free(grid_mapa);
 
 return 0;
-}
