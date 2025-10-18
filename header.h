@@ -97,10 +97,11 @@ void centralizaPlayer(Vector2* pos_player, char** grid_mapa)
         {
             if(grid_mapa[i][j] == 'P')
             {
-                pos_player->x = j * TAM_GRID + TAM_GRID / 2;
-                pos_player->y = i * TAM_GRID + TAM_GRID / 2;
+                pos_player->x = j*TAM_GRID;
+                pos_player->y = i*TAM_GRID;
                 break;
             }
         }
     }
 }
+
