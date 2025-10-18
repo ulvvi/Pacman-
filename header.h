@@ -110,3 +110,4 @@ void centralizaPlayer(Vector2* pos_player, char** grid_mapa)
         }
     }
 }
+
