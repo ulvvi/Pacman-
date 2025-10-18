@@ -16,9 +16,10 @@
 /*----------------------- FUNCOES -----------------------*/
 
 //inicializa a matriz com o nome do arq
-void initMatrix(char filename[], char **mapa) {
+int initMatrix(char filename[], char **mapa) {
     ///abrir
     FILE *map;
+    int p = 0; //contador de pellets
     map = fopen(filename, "r");
     if(map == NULL)
     {
@@ -40,10 +41,15 @@ void initMatrix(char filename[], char **mapa) {
         {
             mapa[a][b] = cur;
             b++;
-        }      
+        }
+        if(cur == '.' || cur == 'o') 
+        {
+            p++;//conta os pellets
+        } 
     }
     ///fechar
     fclose(map);
+    return p;  
 }
 
 //desenha o mapa com a matriz
@@ -97,8 +103,8 @@ void centralizaPlayer(Vector2* pos_player, char** grid_mapa)
         {
             if(grid_mapa[i][j] == 'P')
             {
-                pos_player->x = j * TAM_GRID + TAM_GRID / 2;
-                pos_player->y = i * TAM_GRID + TAM_GRID / 2;
+                pos_player->x = j*TAM_GRID;
+                pos_player->y = i*TAM_GRID;
                 break;
             }
         }

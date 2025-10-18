@@ -24,14 +24,14 @@ for(int i = 0; i < TAM_I; i++)
 }
 
 //inicia a matriz
-initMatrix("maps/mapa1.txt", grid_mapa);
+int totalPellets = initMatrix("maps/mapa1.txt", grid_mapa);
 
 //pos inicial do player
 Vector2 pos_player;
 centralizaPlayer(&pos_player, grid_mapa);
 
 //Inicializações
-InitWindow(LARGURA, ALTURA, "PACMAN-"); 
+InitWindow(LARGURA, ALTURA, "PACMAN+"); 
 SetTargetFPS(60);
 
 //Laço principal do jogo
@@ -135,12 +135,22 @@ if(centro_grid == true)
         case '.':
             score+=10;
             grid_mapa[grid_i][grid_j] = ' ';
+            totalPellets--;
+            if(totalPellets == 0)
+            {
+                //logica de vitoria(a fazer)
+            }
             break;
         //power pellet
         case 'o':
             //logica do power pellet(a fazer)
             score+=50;
             grid_mapa[grid_i][grid_j] = ' ';
+            totalPellets--;
+            if(totalPellets == 0)
+            {
+                //logica de vitoria(a fazer)
+            }
             break;
         //fantasma(acho que vou fazer um sistema de colisoes a parte pra ele, suspeito que nao vai ficar uma colisao discreta dessa forma)
         /*case 'F':
@@ -172,6 +182,7 @@ drawMap(grid_mapa);
 DrawRectangle(pos_player.x, pos_player.y, TAM_GRID, TAM_GRID, YELLOW); 
 DrawText(TextFormat("Score: %d", score), 10, 10, 20, WHITE);
 DrawText(TextFormat("posx: %.2f, posy: %.2f", pos_player.x, pos_player.y), 300, 10, 20, WHITE);
+DrawText(TextFormat("pellets: %d", totalPellets), 900, 10, 20, WHITE);
 EndDrawing(); 
 }
 
