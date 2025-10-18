@@ -183,3 +183,4 @@ for(int i = 0; i < TAM_I; i++)
 free(grid_mapa);
 
 return 0;
+}
