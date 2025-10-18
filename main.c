@@ -1,6 +1,6 @@
 #include "header.h"
 
-
+//teste
 //MAIN
 int main(void){
 int move_x = 0, move_y = 0, move_alvo_x = 0, move_alvo_y = 0, spd = 2, grid_i, grid_j;
