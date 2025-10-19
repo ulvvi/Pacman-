@@ -125,3 +125,23 @@ void centralizaPlayer(tJogador* pacman, char** grid_mapa)
     }
 }
 
+void teleportaPlayer(tJogador* pacman, int move_x, int move_y)
+{
+    if(move_x > 0)
+    {
+        pacman->pos.x = move_x - TAM_GRID;
+    }    
+    else if(move_x < 0)
+    {
+        pacman->pos.x = TAM_GRID*(TAM_J) + move_x;
+    }
+
+    if(move_y < 0)
+    {
+        pacman->pos.y = TAM_GRID*(TAM_I) + move_y;
+    }
+    else if(move_y > 0)
+    {
+        pacman->pos.y = move_y - TAM_GRID;
+    }    
+}

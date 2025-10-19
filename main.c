@@ -6,7 +6,8 @@ int move_x = 0, move_y = 0, move_alvo_x = 0, move_alvo_y = 0, grid_i, grid_j;
 int score = 0;
 char **grid_mapa;
 char nome_mapa[50];
-bool movimento_inicial = true, intencao_vertical = false, intencao_horizontal = false, virou = false, centro_grid = false, reverteu = false, teleporte = true;
+bool movimento_inicial = true, intencao_vertical = false, intencao_horizontal = false, virou = false, centro_grid = false, reverteu = false;
+bool dentro_mapa = true, teleporte = false;
 
 //Cores custom
 Color CYAN = {0, 255, 255, 255}; 
@@ -39,7 +40,7 @@ centralizaPlayer(&pacman, grid_mapa);
 //Laço principal do jogo
 while (!WindowShouldClose())
 {
-teleporte = true;
+dentro_mapa = pacman.pos.x >= 0 && pacman.pos.x <= TAM_GRID*(TAM_J-1) && pacman.pos.y >= 0 && pacman.pos.y <= TAM_GRID*(TAM_I-1);
 virou = false;
 centro_grid = ((int)pacman.pos.x % TAM_GRID) == 0 && ((int)pacman.pos.y % TAM_GRID) == 0;
 
@@ -116,48 +117,50 @@ if(intencao_vertical == true && move_alvo_y == -move_y)
     reverteu = true;
 }
 //grid atual do player
-grid_i = (int)pacman.pos.y/TAM_GRID;
-grid_j = (int)pacman.pos.x/TAM_GRID;
-
-//tomar a decisao de virar(caso seja necessario)
-if(centro_grid == true && reverteu == false)
+if(dentro_mapa == true)
 {
-    //há intencao de mudar de eixo(do vertical pro horizontal ne)
-    if(intencao_horizontal == true)
-    {
-        if((grid_mapa[grid_i][grid_j+(move_alvo_x)/pacman.spd]) != '#')
-        {
-            move_x = move_alvo_x;
-            move_y = 0;
-            intencao_horizontal = false;
-            virou = true;
-        }
-    }
-    //há intencao de mudar de eixo
-    else if(intencao_vertical == true)
-    {
-        if((grid_mapa[grid_i+(move_alvo_y/pacman.spd)][grid_j]) != '#')
-        {
-            move_y = move_alvo_y;
-            move_x = 0;
-            intencao_vertical = false;
-            virou = true;
-        }
-    }
-    //caso de colisao caso ele esteja andando reto em algum eixo
-    //tive q adicionar grid_i != 0 na condicao por conta do caso particular em que o jogador ta no grid 0 se movimentando para cima, causando segmentation fault([0 +(-1)][])
-    if(virou == false && (grid_i != 0 && grid_i != TAM_I-1) && (grid_mapa[grid_i+(move_y/pacman.spd)][grid_j+(move_x/pacman.spd)]) == '#')
-    {
-        move_x = 0;
-        move_y = 0;
-    }    
-}
+    grid_i = (int)pacman.pos.y/TAM_GRID;
+    grid_j = (int)pacman.pos.x/TAM_GRID;
 
+    //tomar a decisao de virar(caso seja necessario)
+    if(centro_grid == true && reverteu == false)
+    {
+        //há intencao de mudar de eixo(do vertical pro horizontal ne)
+        if(intencao_horizontal == true)
+        {
+            if((grid_mapa[grid_i][grid_j+(move_alvo_x)/pacman.spd]) != '#')
+            {
+                move_x = move_alvo_x;
+                move_y = 0;
+                intencao_horizontal = false;
+                virou = true;
+            }
+        }
+        //há intencao de mudar de eixo
+        else if(intencao_vertical == true)
+        {
+            if((grid_mapa[grid_i+(move_alvo_y/pacman.spd)][grid_j]) != '#')
+            {
+                move_y = move_alvo_y;
+                move_x = 0;
+                intencao_vertical = false;
+                virou = true;
+            }
+        }
+        //caso de colisao caso ele esteja andando reto em algum eixo
+        //tive q adicionar grid_i != 0 na condicao por conta do caso particular em que o jogador ta no grid 0 se movimentando para cima, causando segmentation fault([0 +(-1)][])
+        if(virou == false && (grid_i != 0 && grid_i != TAM_I-1) && (grid_mapa[grid_i+(move_y/pacman.spd)][grid_j+(move_x/pacman.spd)]) == '#')
+        {
+            move_x = 0;
+            move_y = 0;
+        }    
+    }
+}
 reverteu = false;
 //atualizacao da pos    
 pacman.pos.x+= move_x; 
 pacman.pos.y+= move_y;
-   
+
 //colisoes gerais
 if(centro_grid == true)
 {   
@@ -182,27 +185,15 @@ if(centro_grid == true)
             //logica
         break;
         */
+        
         //portal
+        /*
         case 'T':
             //to atualizando a pos do pacman dps de entrar no portal usando a spd so pra continuar sendo um multiplo de 2 e n dar dor de cabeca
-            if(move_x == pacman.spd)
-            {
-                pacman.pos.x = pacman.spd;
-            }    
-            else if(move_x == -pacman.spd)
-            {
-                pacman.pos.x = TAM_GRID*(TAM_J-1) - pacman.spd;
-            }
+            
 
-            if(move_y == -pacman.spd)
-            {
-                pacman.pos.y = TAM_GRID*(TAM_I-1) - pacman.spd;
-            }
-            else if(move_y == pacman.spd)
-            {
-                pacman.pos.y = pacman.spd;
-            }
         break;
+        */
         
         //CONDICAO DE VITORIA
         if(totalPellets == 0)
@@ -211,6 +202,15 @@ if(centro_grid == true)
         }
     }
     
+}
+//teleporte player
+teleporte = (pacman.pos.x == -40 || pacman.pos.x == TAM_GRID*(TAM_J) || pacman.pos.y == -40 || pacman.pos.y == TAM_GRID*(TAM_I));
+if(dentro_mapa == false)
+{
+    if(teleporte == true)
+    {
+        teleportaPlayer(&pacman, move_x, move_y);
+    }
 }
 
 //desenhos    
