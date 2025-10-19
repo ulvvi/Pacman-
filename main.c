@@ -8,6 +8,9 @@ char **grid_mapa;
 char nome_mapa[50];
 bool movimento_inicial = true, intencao_vertical = false, intencao_horizontal = false, virou = false, centro_grid = false, reverteu = false, teleporte = true;
 
+//Cores custom
+Color CYAN = {0, 255, 255, 255}; 
+
 //inicializacao jogador
 tJogador pacman = {{}, 2, 3, false};
 
@@ -23,15 +26,15 @@ for(int i = 0; i < TAM_I; i++)
         return -1;
 }
 
+//Inicializações
+InitWindow(LARGURA, ALTURA, "PACMAN+"); 
+SetTargetFPS(60);
+
 //inicia a matriz
 int totalPellets = initMatrix("maps/mapa1.txt", grid_mapa);
 
 //pos inicial do player
 centralizaPlayer(&pacman, grid_mapa);
-
-//Inicializações
-InitWindow(LARGURA, ALTURA, "PACMAN+"); 
-SetTargetFPS(60);
 
 //Laço principal do jogo
 while (!WindowShouldClose())
@@ -39,6 +42,35 @@ while (!WindowShouldClose())
 teleporte = true;
 virou = false;
 centro_grid = ((int)pacman.pos.x % TAM_GRID) == 0 && ((int)pacman.pos.y % TAM_GRID) == 0;
+
+//input do menu de pause
+if(IsKeyPressed(KEY_TAB)){
+    //logica do menu
+    bool unPause = false;
+    while(!unPause){
+        BeginDrawing();
+        ClearBackground(BLACK);
+        DrawText("PAUSE", 10, 10, 40, YELLOW);
+        DrawText("Aperte V para voltar", 10, 45, 20, YELLOW);
+        DrawText("N: Novo Jogo", 10, 100, 20, PINK);
+        DrawText("C: Carregar", 10, 150, 20, ORANGE);
+        DrawText("S: Salvar", 10, 200, 20, CYAN);
+        DrawText("Q: Sair", 10, 250, 20, RED);
+        EndDrawing();
+
+        if(IsKeyPressed(KEY_V)){
+            unPause = true;
+        }
+        if(IsKeyPressed(KEY_N)){
+            unPause = true;
+            //resetGameState();
+        }
+
+        if(IsKeyPressed(KEY_Q)){
+            CloseWindow();
+        }
+    }
+}
 
 //pegar o input
 if(IsKeyPressed(KEY_RIGHT))
