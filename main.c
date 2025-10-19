@@ -1,6 +1,5 @@
 #include "header.h"
 
-//teste
 //MAIN
 int main(void){
 int move_x = 0, move_y = 0, move_alvo_x = 0, move_alvo_y = 0, spd = 2, grid_i, grid_j;
@@ -9,7 +8,10 @@ int vida_player = 3;
 float raio = 20;
 char **grid_mapa;
 char nome_mapa[50];
-bool movimento_inicial = true, intencao_vertical = false, intencao_horizontal = false, virou = false, centro_grid = false, reverteu = false;
+bool movimento_inicial = true, intencao_vertical = false, intencao_horizontal = false, virou = false, centro_grid = false, reverteu = false, teleporte = true;
+
+//inicializacao jogador
+tJogador pacman = {{}, 2, 3, false};
 
 //alocacao dinamica do tamanho do mapa
 grid_mapa = (char**)malloc(sizeof(char*)*TAM_I);
@@ -27,8 +29,7 @@ for(int i = 0; i < TAM_I; i++)
 int totalPellets = initMatrix("maps/mapa1.txt", grid_mapa);
 
 //pos inicial do player
-Vector2 pos_player;
-centralizaPlayer(&pos_player, grid_mapa);
+centralizaPlayer(&pacman, grid_mapa);
 
 //Inicializações
 InitWindow(LARGURA, ALTURA, "PACMAN+"); 
@@ -37,9 +38,9 @@ SetTargetFPS(60);
 //Laço principal do jogo
 while (!WindowShouldClose())
 {
-
+teleporte = true;
 virou = false;
-centro_grid = ((int)pos_player.x % TAM_GRID) == 0 && ((int)pos_player.y % TAM_GRID) == 0;
+centro_grid = ((int)pacman.pos.x % TAM_GRID) == 0 && ((int)pacman.pos.y % TAM_GRID) == 0;
 //pegar o input
 if(IsKeyPressed(KEY_RIGHT))
 {
@@ -84,8 +85,8 @@ if(intencao_vertical == true && move_alvo_y == -move_y)
     reverteu = true;
 }
 //grid atual do player
-grid_i = (int)pos_player.y/TAM_GRID;
-grid_j = (int)pos_player.x/TAM_GRID;
+grid_i = (int)pacman.pos.y/TAM_GRID;
+grid_j = (int)pacman.pos.x/TAM_GRID;
 
 //tomar a decisao de virar(caso seja necessario)
 if(centro_grid == true && reverteu == false)
@@ -122,8 +123,8 @@ if(centro_grid == true && reverteu == false)
 
 reverteu = false;
 //atualizacao da pos    
-pos_player.x+= move_x; 
-pos_player.y+= move_y;
+pacman.pos.x+= move_x; 
+pacman.pos.y+= move_y;
    
 
 //colisoes gerais
@@ -160,28 +161,34 @@ if(centro_grid == true)
         */
         //portal
         case 'T':
-            /*if()
-            {
-                //
-            }    
-            else if(move_y == input_y)
-            {
-                //
+            if(teleporte == true)
+            { 
+                if(move_x == spd)
+                {
+                    pacman.pos.x = 1;
+                    teleporte = false;
+                    
+                }    
+                else if(move_x == -spd)
+                {
+                    //
+                }
+
             }
             break;
-            */
+                        
             
     }
     
 }
- 
+
 //desenhos    
 BeginDrawing(); 
 ClearBackground(BLACK);
 drawMap(grid_mapa);
-DrawRectangle(pos_player.x, pos_player.y, TAM_GRID, TAM_GRID, YELLOW); 
+DrawRectangle(pacman.pos.x, pacman.pos.y, TAM_GRID, TAM_GRID, YELLOW); 
 DrawText(TextFormat("Score: %d", score), 10, 10, 20, WHITE);
-DrawText(TextFormat("posx: %.2f, posy: %.2f", pos_player.x, pos_player.y), 300, 10, 20, WHITE);
+DrawText(TextFormat("posx: %.2f, posy: %.2f", pacman.pos.x, pacman.pos.y), 300, 10, 20, WHITE);
 DrawText(TextFormat("pellets: %d", totalPellets), 900, 10, 20, WHITE);
 EndDrawing(); 
 }

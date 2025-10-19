@@ -11,7 +11,21 @@
 #define TAM_I 20
 #define TAM_J 40
 #define TAM_GRID 40
-
+typedef struct
+{
+    Vector2 pos;
+    int spd;
+    int vida;
+    bool power_pellet;
+} tJogador;
+typedef struct
+{
+    //vai ter q criar um array dessa struct se pa na main, dinamicamente
+    //vector2 tem os campos x e y
+    Vector2 pos;
+    int spd;
+    bool vulneravel;
+} tInimigo;
 
 /*----------------------- FUNCOES -----------------------*/
 
@@ -95,7 +109,7 @@ void drawMap(char** mapa)
     }
 }
 
-void centralizaPlayer(Vector2* pos_player, char** grid_mapa)
+void centralizaPlayer(tJogador* pacman, char** grid_mapa)
 {   
     for(int i = 0; i < TAM_I; i++)
     {
@@ -103,8 +117,8 @@ void centralizaPlayer(Vector2* pos_player, char** grid_mapa)
         {
             if(grid_mapa[i][j] == 'P')
             {
-                pos_player->x = j*TAM_GRID;
-                pos_player->y = i*TAM_GRID;
+                pacman->pos.x = j*TAM_GRID;
+                pacman->pos.y = i*TAM_GRID;
                 break;
             }
         }
