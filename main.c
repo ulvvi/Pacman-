@@ -4,8 +4,6 @@
 int main(void){
 int move_x = 0, move_y = 0, move_alvo_x = 0, move_alvo_y = 0, grid_i, grid_j;
 int score = 0;
-int vida_player = 3;
-float raio = 20;
 char **grid_mapa;
 char nome_mapa[50];
 bool movimento_inicial = true, intencao_vertical = false, intencao_horizontal = false, virou = false, centro_grid = false, reverteu = false, teleporte = true;
@@ -41,6 +39,7 @@ while (!WindowShouldClose())
 teleporte = true;
 virou = false;
 centro_grid = ((int)pacman.pos.x % TAM_GRID) == 0 && ((int)pacman.pos.y % TAM_GRID) == 0;
+
 //pegar o input
 if(IsKeyPressed(KEY_RIGHT))
 {
@@ -114,7 +113,8 @@ if(centro_grid == true && reverteu == false)
         }
     }
     //caso de colisao caso ele esteja andando reto em algum eixo
-    if(virou == false && (grid_mapa[grid_i+(move_y/pacman.spd)][grid_j+(move_x/pacman.spd)]) == '#')
+    //tive q adicionar grid_i != 0 na condicao por conta do caso particular em que o jogador ta no grid 0 se movimentando para cima, causando segmentation fault([0 +(-1)][])
+    if(virou == false && (grid_i != 0 && grid_i != TAM_I-1) && (grid_mapa[grid_i+(move_y/pacman.spd)][grid_j+(move_x/pacman.spd)]) == '#')
     {
         move_x = 0;
         move_y = 0;
@@ -126,7 +126,6 @@ reverteu = false;
 pacman.pos.x+= move_x; 
 pacman.pos.y+= move_y;
    
-
 //colisoes gerais
 if(centro_grid == true)
 {   
@@ -137,46 +136,47 @@ if(centro_grid == true)
             score+=10;
             grid_mapa[grid_i][grid_j] = ' ';
             totalPellets--;
-            if(totalPellets == 0)
-            {
-                //logica de vitoria(a fazer)
-            }
-            break;
+        break;
         //power pellet
         case 'o':
             //logica do power pellet(a fazer)
+            pacman.power_pellet = true;
             score+=50;
             grid_mapa[grid_i][grid_j] = ' ';
             totalPellets--;
-            if(totalPellets == 0)
-            {
-                //logica de vitoria(a fazer)
-            }
-            break;
+        break;
         //fantasma(acho que vou fazer um sistema de colisoes a parte pra ele, suspeito que nao vai ficar uma colisao discreta dessa forma)
         /*case 'F':
             //logica
-            vida_player--;
-            break;
+        break;
         */
         //portal
         case 'T':
-            if(teleporte == true)
-            { 
-                if(move_x == pacman.spd)
-                {
-                    pacman.pos.x = 1;
-                    teleporte = false;
-                    
-                }    
-                else if(move_x == -pacman.spd)
-                {
-                    //
-                }
-
+            //to atualizando a pos do pacman dps de entrar no portal usando a spd so pra continuar sendo um multiplo de 2 e n dar dor de cabeca
+            if(move_x == pacman.spd)
+            {
+                pacman.pos.x = pacman.spd;
+            }    
+            else if(move_x == -pacman.spd)
+            {
+                pacman.pos.x = TAM_GRID*(TAM_J-1) - pacman.spd;
             }
-            break;
+
+            if(move_y == -pacman.spd)
+            {
+                pacman.pos.y = TAM_GRID*(TAM_I-1) - pacman.spd;
+            }
+            else if(move_y == pacman.spd)
+            {
+                pacman.pos.y = pacman.spd;
+            }
+        break;
         
+        //CONDICAO DE VITORIA
+        if(totalPellets == 0)
+        {
+            //logica de vitoria(a fazer)
+        }
     }
     
 }
