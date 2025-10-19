@@ -186,9 +186,9 @@ BeginDrawing();
 ClearBackground(BLACK);
 drawMap(grid_mapa);
 DrawRectangle(pacman.pos.x, pacman.pos.y, TAM_GRID, TAM_GRID, YELLOW); 
-DrawText(TextFormat("Score: %d", score), 10, 10, 20, WHITE);
-DrawText(TextFormat("posx: %.2f, posy: %.2f", pacman.pos.x, pacman.pos.y), 300, 10, 20, WHITE);
-DrawText(TextFormat("pellets: %d", totalPellets), 900, 10, 20, WHITE);
+DrawText(TextFormat("Score: %d", score), 10, 810, 20, WHITE);
+DrawText(TextFormat("posx: %.2f, posy: %.2f", pacman.pos.x, pacman.pos.y), 900, 810, 20, WHITE);
+DrawText(TextFormat("pellets: %d", totalPellets), 150, 810, 20, WHITE);
 EndDrawing(); 
 }
 
