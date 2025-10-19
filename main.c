@@ -2,7 +2,7 @@
 
 //MAIN
 int main(void){
-int move_x = 0, move_y = 0, move_alvo_x = 0, move_alvo_y = 0, spd = 2, grid_i, grid_j;
+int move_x = 0, move_y = 0, move_alvo_x = 0, move_alvo_y = 0, grid_i, grid_j;
 int score = 0;
 int vida_player = 3;
 float raio = 20;
@@ -46,14 +46,14 @@ if(IsKeyPressed(KEY_RIGHT))
 {
     intencao_horizontal = true;
     intencao_vertical = false;
-    move_alvo_x = spd;
+    move_alvo_x = pacman.spd;
     move_alvo_y = 0;
 }
 if(IsKeyPressed(KEY_LEFT))
 {
     intencao_horizontal = true;
     intencao_vertical = false;
-    move_alvo_x = -spd;
+    move_alvo_x = -pacman.spd;
     move_alvo_y = 0;
 }
 if(IsKeyPressed(KEY_UP))
@@ -61,14 +61,14 @@ if(IsKeyPressed(KEY_UP))
     intencao_horizontal = false;
     intencao_vertical = true;
     move_alvo_x = 0;
-    move_alvo_y = -spd;
+    move_alvo_y = -pacman.spd;
 }
 if(IsKeyPressed(KEY_DOWN))
 {
     intencao_horizontal = false;
     intencao_vertical = true;
     move_alvo_x = 0;
-    move_alvo_y = spd;
+    move_alvo_y = pacman.spd;
 }
 
 //impedir o delay aparente(se apertar pra se mover no msm eixo, ele n espera centralizar no grid, os dois ifs sao pra isso)
@@ -94,7 +94,7 @@ if(centro_grid == true && reverteu == false)
     //há intencao de mudar de eixo(do vertical pro horizontal ne)
     if(intencao_horizontal == true)
     {
-        if((grid_mapa[grid_i][grid_j+(move_alvo_x)/spd]) != '#')
+        if((grid_mapa[grid_i][grid_j+(move_alvo_x)/pacman.spd]) != '#')
         {
             move_x = move_alvo_x;
             move_y = 0;
@@ -105,7 +105,7 @@ if(centro_grid == true && reverteu == false)
     //há intencao de mudar de eixo
     else if(intencao_vertical == true)
     {
-        if((grid_mapa[grid_i+(move_alvo_y/spd)][grid_j]) != '#')
+        if((grid_mapa[grid_i+(move_alvo_y/pacman.spd)][grid_j]) != '#')
         {
             move_y = move_alvo_y;
             move_x = 0;
@@ -114,7 +114,7 @@ if(centro_grid == true && reverteu == false)
         }
     }
     //caso de colisao caso ele esteja andando reto em algum eixo
-    if(virou == false && (grid_mapa[grid_i+(move_y/spd)][grid_j+(move_x/spd)]) == '#')
+    if(virou == false && (grid_mapa[grid_i+(move_y/pacman.spd)][grid_j+(move_x/pacman.spd)]) == '#')
     {
         move_x = 0;
         move_y = 0;
@@ -163,21 +163,20 @@ if(centro_grid == true)
         case 'T':
             if(teleporte == true)
             { 
-                if(move_x == spd)
+                if(move_x == pacman.spd)
                 {
                     pacman.pos.x = 1;
                     teleporte = false;
                     
                 }    
-                else if(move_x == -spd)
+                else if(move_x == -pacman.spd)
                 {
                     //
                 }
 
             }
             break;
-                        
-            
+        
     }
     
 }
