@@ -217,7 +217,8 @@ if(dentro_mapa == false)
 BeginDrawing(); 
 ClearBackground(BLACK);
 drawMap(grid_mapa);
-DrawRectangle(pacman.pos.x, pacman.pos.y, TAM_GRID, TAM_GRID, YELLOW); 
+DrawRectangle(pacman.pos.x, pacman.pos.y, TAM_GRID, TAM_GRID, YELLOW);
+DrawRectangle(0, 800, 1600, 40, BLACK); //desenho da HUD
 DrawText(TextFormat("Score: %d", score), 10, 810, 20, WHITE);
 DrawText(TextFormat("posx: %.2f, posy: %.2f", pacman.pos.x, pacman.pos.y), 900, 810, 20, WHITE);
 DrawText(TextFormat("pellets: %d", totalPellets), 150, 810, 20, WHITE);
