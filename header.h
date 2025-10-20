@@ -145,3 +145,43 @@ void teleportaPlayer(tJogador* pacman, int move_x, int move_y)
         pacman->pos.y = move_y - TAM_GRID;
     }    
 }
+
+
+//FANTASMAS E PLAYER
+void criaColisaoFantasma(Rectangle* colisao_fantasma, int n)
+{
+    colisao_fantasma = malloc(sizeof(Rectangle)*n);
+    for(int i = 0; i < n; i++)
+    {
+        colisao_fantasma[i].height = TAM_GRID;
+        colisao_fantasma[i].width = TAM_GRID;
+    }
+}
+void atualizaColisaoFantasma(tInimigo* fantasma, Rectangle* colisao_fantasma, int n)
+{
+    for(int i = 0; i < n; i++)
+    {
+        colisao_fantasma[i].x = fantasma[i].pos.x;
+        colisao_fantasma[i].y = fantasma[i].pos.y;
+    }
+}
+int checaColisaoFantasma(Rectangle colisao_player, Rectangle* colisao_fantasma, int n)
+{
+    for(int i = 0; i < n; i++)
+    {
+        if(CheckCollisionRecs(colisao_player, colisao_fantasma[i]))
+        {
+            return i;
+        }
+    }
+    return 0;
+}
+
+void perdeVida(tJogador* pacman, tInimigo inimigo, int n)
+{
+    if(checaColisaoFantasma != 0)
+    {
+        pacman->vida--;
+        //ativar algum estado de game over ou de reposicionar o pacman no grid
+    }
+}

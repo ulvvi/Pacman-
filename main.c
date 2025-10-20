@@ -8,7 +8,7 @@ char **grid_mapa;
 char nome_mapa[50];
 bool movimento_inicial = true, intencao_vertical = false, intencao_horizontal = false, virou = false, centro_grid = false, reverteu = false;
 bool dentro_mapa = true, teleporte = false;
-
+Rectangle *colisao_fantasma;
 //Cores custom
 Color CYAN = {0, 255, 255, 255}; 
 
