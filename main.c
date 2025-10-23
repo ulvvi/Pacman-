@@ -45,6 +45,7 @@ virou = false;
 centro_grid = ((int)pacman.pos.x % TAM_GRID) == 0 && ((int)pacman.pos.y % TAM_GRID) == 0;
 
 //input do menu de pause
+gameOver();
 if(IsKeyPressed(KEY_TAB)){
     //logica do menu
     bool unPause = false;
