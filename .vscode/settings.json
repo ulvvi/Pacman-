@@ -4,6 +4,7 @@
         "locale.h": "c",
         "stdio.h": "c",
         "string.h": "c",
-        "system.h": "c"
+        "system.h": "c",
+        "stdlib.h": "c"
     }
 }
