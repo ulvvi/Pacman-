@@ -17,6 +17,8 @@ typedef struct
     Vector2 pos;
     int spd;
     int vida;
+    int move_x;
+    int move_y;
     bool power_pellet;
 } tJogador;
 typedef struct
@@ -126,24 +128,24 @@ void centralizaPlayer(tJogador* pacman, char** grid_mapa)
     }
 }
 
-void teleportaPlayer(tJogador* pacman, int move_x, int move_y)
+void teleportaPlayer(tJogador* pacman)
 {
-    if(move_x > 0)
+    if(pacman->move_x > 0)
     {
-        pacman->pos.x = move_x - TAM_GRID;
+        pacman->pos.x = pacman->move_x - TAM_GRID;
     }    
-    else if(move_x < 0)
+    else if(pacman->move_x < 0)
     {
-        pacman->pos.x = TAM_GRID*(TAM_J) + move_x;
+        pacman->pos.x = TAM_GRID*(TAM_J) + pacman->move_x;
     }
 
-    if(move_y < 0)
+    if(pacman->move_y < 0)
     {
-        pacman->pos.y = TAM_GRID*(TAM_I) + move_y;
+        pacman->pos.y = TAM_GRID*(TAM_I) + pacman->move_y;
     }
-    else if(move_y > 0)
+    else if(pacman->move_y > 0)
     {
-        pacman->pos.y = move_y - TAM_GRID;
+        pacman->pos.y = pacman->move_y - TAM_GRID;
     }    
 }
 
@@ -156,7 +158,7 @@ void gameOver(void)
     char texto_menu[] = {"V para retornar ao MENU"};
     char texto_sair[] = {"ESC para sair do jogo"};
     bool game_over = true;
-    while(game_over = true)
+    while(game_over == true)
     {
         BeginDrawing();
         ClearBackground(BLACK);
@@ -187,6 +189,7 @@ void criaColisaoFantasma(Rectangle* colisao_fantasma, int n)
         colisao_fantasma[i].width = TAM_GRID;
     }
 }
+
 void atualizaColisaoFantasma(tInimigo* fantasma, Rectangle* colisao_fantasma, int n)
 {
     for(int i = 0; i < n; i++)
@@ -195,6 +198,7 @@ void atualizaColisaoFantasma(tInimigo* fantasma, Rectangle* colisao_fantasma, in
         colisao_fantasma[i].y = fantasma[i].pos.y;
     }
 }
+
 int checaColisaoFantasma(Rectangle colisao_player, Rectangle* colisao_fantasma, int n)
 {
     for(int i = 0; i < n; i++)
@@ -220,5 +224,137 @@ void perdeVida(tJogador* pacman, tInimigo inimigo, int n, Vector2* pos_inicial, 
         {
             gameOver();
         }
+    }
+}
+
+bool checaPlayerCentralizado(tJogador *pacman)
+{
+    return (((int)pacman->pos.x % TAM_GRID) == 0 && ((int)pacman->pos.y % TAM_GRID) == 0);
+
+}
+bool checaPlayerDentroMapa(tJogador *pacman)
+{
+    return (pacman->pos.x >= 0 && pacman->pos.x <= TAM_GRID*(TAM_J-1) && pacman->pos.y >= 0 && pacman->pos.y <= TAM_GRID*(TAM_I-1));
+}
+
+void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPellets, int grid_i, int grid_j)
+{
+    switch(grid_mapa[grid_i][grid_j])
+    {
+    //pellet
+    case '.':
+        (*score)+=10;
+        grid_mapa[grid_i][grid_j] = ' ';
+        (*totalPellets)--;
+    break;
+    //power pellet
+    case 'o':
+        //logica do power pellet(a fazer)
+        pacman->power_pellet = true;
+        (*score)+=50;
+        grid_mapa[grid_i][grid_j] = ' ';
+        (*totalPellets)--;
+    break; 
+    }
+}
+
+void movePlayer(char** grid_mapa, tJogador* pacman, int* grid_i, int* grid_j)
+{
+    static bool intencao_horizontal = false, intencao_vertical = false;
+    static int move_alvo_x = 0, move_alvo_y = 0;
+    bool reverteu = false, virou = false;
+    //pegar o input
+    if(IsKeyPressed(KEY_RIGHT))
+    {
+        intencao_horizontal = true;
+        intencao_vertical = false;
+        move_alvo_x = pacman->spd;
+        move_alvo_y = 0;
+    }
+    if(IsKeyPressed(KEY_LEFT))
+    {
+        intencao_horizontal = true;
+        intencao_vertical = false;
+        move_alvo_x = -pacman->spd;
+        move_alvo_y = 0;
+    }
+    if(IsKeyPressed(KEY_UP))
+    {
+        intencao_horizontal = false;
+        intencao_vertical = true;
+        move_alvo_x = 0;
+        move_alvo_y = -pacman->spd;
+    }
+    if(IsKeyPressed(KEY_DOWN))
+    {
+        intencao_horizontal = false;
+        intencao_vertical = true;
+        move_alvo_x = 0;
+        move_alvo_y = pacman->spd;
+    }
+
+    //impedir o delay aparente(se apertar pra se mover no msm eixo, ele n espera centralizar no grid, os dois ifs sao pra isso)
+    if(intencao_horizontal == true && move_alvo_x == - pacman->move_x)
+    {
+        pacman->move_x = move_alvo_x;
+        intencao_horizontal = false;
+        reverteu = true;
+    }
+    if(intencao_vertical == true && move_alvo_y == - pacman->move_y)
+    {
+        pacman->move_y = move_alvo_y;
+        intencao_vertical = false;
+        reverteu = true;
+    }
+
+    if(checaPlayerDentroMapa(pacman) == true)
+    {
+        //grid atual do player
+        *grid_i = (int)pacman->pos.y / TAM_GRID;
+        *grid_j = (int)pacman->pos.x / TAM_GRID;
+
+        //tomar a decisao de virar(caso seja necessario)
+        if(checaPlayerCentralizado(pacman) == true && reverteu == false)
+        {
+            //há intencao de mudar de eixo(do vertical pro horizontal ne)
+            if(intencao_horizontal == true)
+            {
+                if((grid_mapa[*grid_i][*grid_j+(move_alvo_x)/pacman->spd]) != '#')
+                {
+                    pacman->move_x = move_alvo_x;
+                    pacman->move_y = 0;
+                    intencao_horizontal = false;
+                    virou = true;
+                }
+            }
+            //há intencao de mudar de eixo
+            else if(intencao_vertical == true)
+            {
+                if((grid_mapa[*grid_i+(move_alvo_y/pacman->spd)][*grid_j]) != '#')
+                {
+                    pacman->move_y = move_alvo_y;
+                    pacman->move_x = 0;
+                    intencao_vertical = false;
+                    virou = true;
+                }
+            }
+            //caso de colisao caso ele esteja andando reto em algum eixo
+            //tive q adicionar grid_i != 0 na condicao por conta do caso particular em que o jogador ta no grid 0 se movimentando para cima, causando segmentation fault([0 +(-1)][])
+            if(virou == false && (*grid_i != 0 && *grid_i != TAM_I-1) && (grid_mapa[*grid_i+(pacman->move_y/pacman->spd)][*grid_j+(pacman->move_x/pacman->spd)]) == '#')
+            {
+                pacman->move_x = 0;
+                pacman->move_y = 0;
+            }    
+        }
+    }
+    //atualizacao da pos    
+    pacman->pos.x+= pacman->move_x; 
+    pacman->pos.y+= pacman->move_y;
+    
+    //atualizacao do grid apos se mover
+    if(checaPlayerDentroMapa(pacman) == true)
+    {
+        *grid_i = (int)pacman->pos.y / TAM_GRID;
+        *grid_j = (int)pacman->pos.x / TAM_GRID;
     }
 }
