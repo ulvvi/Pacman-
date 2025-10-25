@@ -1,4 +1,8 @@
 #include "header.h"
+#include "libs/HUD.h"
+#include "libs/map.h"
+#include "libs/system.h"
+#include "libs/player.h"
 
 //MAIN
 int main(void){
@@ -7,6 +11,7 @@ int score = 0;
 char **grid_mapa;
 char nome_mapa[50];
 Rectangle *colisao_fantasma;
+
 //Cores custom
 Color CYAN = {0, 255, 255, 255}; 
 
@@ -14,16 +19,7 @@ Color CYAN = {0, 255, 255, 255};
 tJogador pacman = {{}, 2, 3, 0, 0, false};
 
 //alocacao dinamica do tamanho do mapa
-grid_mapa = (char**)malloc(sizeof(char*)*TAM_I);
-if(grid_mapa == NULL)
-    return -1;
-
-for(int i = 0; i < TAM_I; i++)
-{
-    *(grid_mapa+i) = (char*)malloc(sizeof(char)*TAM_J);
-    if(*(grid_mapa+i) == NULL)
-        return -1;
-}
+grid_mapa = allocateMap();
 
 //Inicializações
 InitWindow(LARGURA, ALTURA, "PACMAN+"); 
@@ -63,6 +59,8 @@ if(IsKeyPressed(KEY_TAB)){
 
         if(IsKeyPressed(KEY_Q)){
             CloseWindow();
+            freeDiddy(grid_mapa);
+            return 0;
         }
     }
 }

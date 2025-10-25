@@ -13,6 +13,21 @@
 #define TAM_GRID 40
 
 //inicializa a matriz com o nome do arq
+char** allocateMap(){
+    char** grid_mapa = (char**)malloc(sizeof(char*)*TAM_I);
+    if(grid_mapa == NULL)
+        return NULL;
+
+    for(int i = 0; i < TAM_I; i++)
+    {
+        *(grid_mapa+i) = (char*)malloc(sizeof(char)*TAM_J);
+        if(*(grid_mapa+i) == NULL)
+            return NULL;
+    }
+    return grid_mapa;
+}
+
+//inicializa a matriz com o nome do arq
 int initMap(char filename[], char **mapa) {
     ///abrir
     FILE *map;
