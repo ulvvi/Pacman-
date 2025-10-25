@@ -6,6 +6,23 @@
 #include "system.h"
 
 
+void cutIn(void)
+{
+    Sound som_cut_in = LoadSound("audio/ambiente/cut_in.mp3");
+    Texture2D cut_in = LoadTexture("sprites/player/pacman_cut_in.png");
+    static int contador = 0;
+    PlaySound(som_cut_in);
+    while((float)contador/60 < 1.5)
+    {
+        BeginDrawing();
+        DrawTexture(cut_in, 0, ALTURA/2 - 640/2, WHITE);
+        EndDrawing();
+        contador++;
+    }
+    contador = 0;
+    UnloadTexture(cut_in);
+    UnloadSound(som_cut_in);
+}
 
 void drawHUD(int score, int totalPellets){
     DrawRectangle(0, 800, 1600, 40, BLACK); //desenho da HUD

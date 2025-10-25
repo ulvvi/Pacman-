@@ -7,7 +7,6 @@ int score = 0;
 char **grid_mapa;
 char nome_mapa[50];
 Rectangle *colisao_fantasma;
-
 //Cores custom
 Color CYAN = {0, 255, 255, 255}; 
 
@@ -20,6 +19,8 @@ grid_mapa = allocateMap();
 //Inicializações
 InitWindow(LARGURA, ALTURA, "PACMAN+"); 
 SetTargetFPS(60);
+InitAudioDevice();
+
 
 //inicia a matriz
 int totalPellets = initMap("maps/mapa1.txt", grid_mapa);
@@ -70,6 +71,11 @@ if(checaPlayerCentralizado(&pacman))
     colisaoPellets(&pacman, grid_mapa, &score, &totalPellets, grid_i, grid_j);
 }
 
+if(pacman.power_pellet == true)
+{
+    powerPellet(&pacman);
+}
+
 //teleporte player
 if(checaPlayerDentroMapa(&pacman) == false)
 {
@@ -83,6 +89,7 @@ if(checaPlayerDentroMapa(&pacman) == false)
 //desenhos    
 BeginDrawing(); 
 ClearBackground(BLACK);
+
 drawMap(grid_mapa);
 DrawRectangle(pacman.pos.x, pacman.pos.y, TAM_GRID, TAM_GRID, YELLOW);
 drawHUD(score, totalPellets);

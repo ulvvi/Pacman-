@@ -4,7 +4,6 @@
 #include <stdbool.h>
 #include "system.h"
 
-
 /*RETORNA TRUE OU FALSE SE O PLAYER TIVER CENTRALIZADO OU NAO*/
 bool checaPlayerCentralizado(tJogador *pacman)
 {
@@ -55,18 +54,50 @@ void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPe
         (*score)+=50;
         grid_mapa[grid_i][grid_j] = ' ';
         (*totalPellets)--;
+        cutIn();
     break; 
     }
 }
 
+/*CRONOMETRA O ESTADO E ATT A SPD*/
+void powerPellet(tJogador* pacman)
+{  
+    static int tempo_restante = 240;
+    static int cheque = 0;
+    if(cheque == 0)
+    {
+        pacman->spd = 4;
+        cheque = 1;
+    }
 
+    tempo_restante--;
+    if(tempo_restante <= 0)
+    {
+        pacman->power_pellet = false;
+        pacman->spd = 2;
+        cheque = 0;
+        tempo_restante = 240;
+    }
+}
 /*MOVIMENTACAO GERAL DO PLAYER, ATUALIZA SUA POSICAO*/
 void movePlayer(char** grid_mapa, tJogador* pacman, int* grid_i, int* grid_j)
 {
     static bool intencao_horizontal = false, intencao_vertical = false;
     static int move_alvo_x = 0, move_alvo_y = 0;
     bool reverteu = false, virou = false;
+    //CORRECAO PRA MOMENTOS EM QUE SE ATUALIZA A SPD DO PACMAN E ELE AINDA TA SE MOVENDO
+    //ANTES, AO ATUALIZAR A SPD DELE EM OUTRAS FUNCOES, SO ATUALIZAVA O MOVE_X SE HOUVESSE INPUT
+    //SOLUCAO FEIA, MAS RESOLVE. basicamente, é um sincronizador da velocidade, vai ser bem util mais a frente
+    if (pacman->move_x > 0) 
+        pacman->move_x = pacman->spd;
+    if (pacman->move_x < 0) 
+        pacman->move_x = -pacman->spd;
+    if (pacman->move_y > 0)
+         pacman->move_y = pacman->spd;
+    if (pacman->move_y < 0) 
+        pacman->move_y = -pacman->spd;
     //pegar o input
+
     if(IsKeyPressed(KEY_RIGHT))
     {
         intencao_horizontal = true;
@@ -225,23 +256,23 @@ int checaColisaoFantasma(Rectangle colisao_player, Rectangle* colisao_fantasma, 
 /*SUBTRAI A VIDA DO JOGADOR E, SE NECESSARIO, DA GAMEOVER*/
 void perdeVida(tJogador* pacman, tInimigo inimigo, int n, Vector2* pos_inicial, char **grid_mapa)
 {
-    if(checaColisaoFantasma != 0)
+    if(pacman->power_pellet == true)
     {
-        if(pacman->vida > 0)
+
+    }
+    else
+    {
+        if(checaColisaoFantasma != 0)
         {
-        pacman->vida--;
-        centralizaPlayer(pacman, grid_mapa);
-        }
-        else
-        {
-            gameOver();
+            if(pacman->vida > 0)
+            {
+            pacman->vida--;
+            centralizaPlayer(pacman, grid_mapa);
+            }
+            else
+            {
+                gameOver();
+            }
         }
     }
 }
-
-
-
-
-
-
-
