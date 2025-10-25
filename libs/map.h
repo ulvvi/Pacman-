@@ -1,9 +1,11 @@
+//map.h
 #pragma once
 #include <stdio.h>
 #include "raylib.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "system.h"
 
 //macros
 #define LARGURA 1600

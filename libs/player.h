@@ -1,7 +1,40 @@
+//player.h
 #pragma once
 #include <stdio.h>
-#include "raylib.h"
-#include <stdlib.h>
+#include <stdbool.h>
+#include "system.h"
+
+
+/*RETORNA TRUE OU FALSE SE O PLAYER TIVER CENTRALIZADO OU NAO*/
+bool checaPlayerCentralizado(tJogador *pacman)
+{
+    return (((int)pacman->pos.x % TAM_GRID) == 0 && ((int)pacman->pos.y % TAM_GRID) == 0);
+}
+
+
+/*RETORNA TRUE OU FALSE SE O PLAYER TIVER DENTRO DO MAPA OU NAO*/
+bool checaPlayerDentroMapa(tJogador *pacman)
+{
+    return (pacman->pos.x >= 0 && pacman->pos.x <= TAM_GRID*(TAM_J-1) && pacman->pos.y >= 0 && pacman->pos.y <= TAM_GRID*(TAM_I-1));
+}
+
+
+/*CENTRALIZA O PLAYER NO GRID, SO PRECISA SER CHAMADA NO INICIO DA FASE*/
+void centralizaPlayer(tJogador* pacman, char** grid_mapa)
+{   
+    for(int i = 0; i < TAM_I; i++)
+    {
+        for(int j = 0; j < TAM_J; j++)
+        {
+            if(grid_mapa[i][j] == 'P')
+            {
+                pacman->pos.x = j*TAM_GRID;
+                pacman->pos.y = i*TAM_GRID;
+                break;
+            }
+        }
+    }
+}
 
 
 /*COLISAO COM PELLETS(ATUALIZA SCORE E ESTADO AO PEGAR POWER PELLET)*/
@@ -206,33 +239,9 @@ void perdeVida(tJogador* pacman, tInimigo inimigo, int n, Vector2* pos_inicial, 
     }
 }
 
-/*RETORNA TRUE OU FALSE SE O PLAYER TIVER CENTRALIZADO OU NAO*/
-bool checaPlayerCentralizado(tJogador *pacman)
-{
-    return (((int)pacman->pos.x % TAM_GRID) == 0 && ((int)pacman->pos.y % TAM_GRID) == 0);
-}
 
-/*RETORNA TRUE OU FALSE SE O PLAYER TIVER DENTRO DO MAPA OU NAO*/
-bool checaPlayerDentroMapa(tJogador *pacman)
-{
-    return (pacman->pos.x >= 0 && pacman->pos.x <= TAM_GRID*(TAM_J-1) && pacman->pos.y >= 0 && pacman->pos.y <= TAM_GRID*(TAM_I-1));
-}
 
-/*CENTRALIZA O PLAYER NO GRID, SO PRECISA SER CHAMADA NO INICIO DA FASE*/
-void centralizaPlayer(tJogador* pacman, char** grid_mapa)
-{   
-    for(int i = 0; i < TAM_I; i++)
-    {
-        for(int j = 0; j < TAM_J; j++)
-        {
-            if(grid_mapa[i][j] == 'P')
-            {
-                pacman->pos.x = j*TAM_GRID;
-                pacman->pos.y = i*TAM_GRID;
-                break;
-            }
-        }
-    }
-}
+
+
 
 

@@ -1,5 +1,11 @@
-#include <stdio.h>
+//HUD.h
+#pragma once
 #include "raylib.h"
+#include <stdio.h>
+#include <stdbool.h>
+#include "system.h"
+
+
 
 void drawHUD(int score, int totalPellets){
     DrawRectangle(0, 800, 1600, 40, BLACK); //desenho da HUD

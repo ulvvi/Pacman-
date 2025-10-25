@@ -1,8 +1,4 @@
-#include "header.h"
-#include "libs/HUD.h"
-#include "libs/map.h"
-#include "libs/system.h"
-#include "libs/player.h"
+#include "libs/header.h"
 
 //MAIN
 int main(void){
