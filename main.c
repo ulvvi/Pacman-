@@ -1,4 +1,5 @@
 #include "header.h"
+#include "libs/map.h"
 
 //MAIN
 int main(void){
@@ -32,7 +33,7 @@ InitWindow(LARGURA, ALTURA, "PACMAN+");
 SetTargetFPS(60);
 
 //inicia a matriz
-int totalPellets = initMatrix("maps/mapa1.txt", grid_mapa);
+int totalPellets = initMap("maps/mapa1.txt", grid_mapa);
 
 //pos inicial do player
 centralizaPlayer(&pacman, grid_mapa);
@@ -227,10 +228,7 @@ EndDrawing();
 
 CloseWindow();
 
-//liberacao de memoria
-for(int i = 0; i < TAM_I; i++)
-    free(*(grid_mapa+i));
-free(grid_mapa);
+freeDiddy(grid_mapa);
 
 return 0;
 }
