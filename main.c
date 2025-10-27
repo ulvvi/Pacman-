@@ -25,8 +25,17 @@ int main(void)
     InitAudioDevice();
 
     //INICIALIZACOES DE ASSETS
-    Sound som_cut_in = LoadSound("audio/ambiente/cut_in.mp3");
+    Sound som_cut_in = LoadSound("audio/ambiente/CUTIN.mp3");
+    SetSoundVolume(som_cut_in, 0.5f);
+    Music lvlTheme = LoadMusicStream("audio/ambiente/teste.wav");
+    Music menuTheme = LoadMusicStream("audio/ambiente/menu_theme.wav");
+    SetMusicVolume(menuTheme, 0.75f);
     Texture2D cut_in = LoadTexture("sprites/player/pacman_cut_in.png"); 
+
+    PlayMusicStream(lvlTheme);
+    PlayMusicStream(menuTheme);
+    SetMusicVolume(lvlTheme, 0.75f);
+    SetMusicPitch(lvlTheme, 1.0f);
 
 
     //inicia a matriz
@@ -38,6 +47,10 @@ int main(void)
     //Laço principal do jogo
     while (!WindowShouldClose())
     {
+        //atualiza musicas
+        UpdateMusicStream(lvlTheme);
+        UpdateMusicStream(menuTheme);
+
         switch(state_atual)
         {
             //ESTADO PRINCIPAL
@@ -60,6 +73,8 @@ int main(void)
                 if(pacman.power_pellet == true)
                 {
                     powerPellet(&pacman, &state_atual);
+                }else{
+                    
                 }
 
                 //teleporte player
@@ -75,11 +90,15 @@ int main(void)
         }
 
         //desenhos
-        //layer 1    
+
+
+        //layer fundo/mapa   
         BeginDrawing(); 
         ClearBackground(BLACK);
         drawMap(grid_mapa);
+        //layer entidades
         DrawRectangle(pacman.pos.x, pacman.pos.y, TAM_GRID, TAM_GRID, YELLOW);
+        //layer main HUD
         drawHUD(score, totalPellets);
         DrawText(TextFormat("posx: %.2f, posy: %.2f", pacman.pos.x, pacman.pos.y), 900, 810, 20, WHITE);
 
@@ -87,11 +106,16 @@ int main(void)
         switch(state_atual)
         {
             case GAMEPLAY:
+                SetMusicVolume(lvlTheme, 0.75f);
+                SetMusicVolume(menuTheme, 0.00f);
                 //nao faça nada paizao
             break;
 
             case PAUSE:
                 //logica do menu
+                SetMusicVolume(lvlTheme, 0.00f);
+                SetMusicVolume(menuTheme, 0.75f);
+
                 DrawRectangle(0, 0, LARGURA, ALTURA, Fade(BLACK, 0.8f));
                 DrawText("PAUSE", 10, 10, 40, YELLOW);
                 DrawText("Aperte V para voltar", 10, 45, 20, YELLOW);
@@ -117,10 +141,15 @@ int main(void)
                 cutIn(som_cut_in, cut_in);
                 if(cronometro == 0)
                     PlaySound(som_cut_in);
+                    PauseMusicStream(lvlTheme);
+                    PauseMusicStream(menuTheme);
+                    
                 if(temporizador(&cronometro) >= 1.5)
                 {
                     cronometro = 0;
                     state_atual = GAMEPLAY;
+                    ResumeMusicStream(lvlTheme);
+                    ResumeMusicStream(menuTheme);
                 }
             break;
         }
