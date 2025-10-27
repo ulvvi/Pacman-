@@ -28,3 +28,21 @@ typedef struct
     bool vulneravel;
 } tInimigo;
 
+
+//STATE MACHINE eba memorias de guerra
+typedef enum GameState
+{
+    MENU,
+    GAMEPLAY,
+    PAUSE,
+    CUT_IN,
+    JACKPOT
+
+}GameState;
+
+/*RECEBE UM INTEIRO, REALIZA UMA DIVISAO FLUTUANTE POR 60 E RETORNA SEU VALOR EM DECIMAL. GENERICO, DA PRA USAR PRA TUDO*/
+float temporizador(int* cronometro)
+{
+    (*cronometro)++;
+    return ((float)*cronometro)/60;
+}

@@ -54,19 +54,19 @@ void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPe
         (*score)+=50;
         grid_mapa[grid_i][grid_j] = ' ';
         (*totalPellets)--;
-        cutIn();
     break; 
     }
 }
 
-/*CRONOMETRA O ESTADO E ATT A SPD*/
-void powerPellet(tJogador* pacman)
+/*CRONOMETRA O ESTADO E ATT A SPD E ATT O GAMESTATE*/
+void powerPellet(tJogador* pacman, GameState* game_state)
 {  
     static int tempo_restante = 240;
     static int cheque = 0;
     if(cheque == 0)
     {
         pacman->spd = 4;
+        *game_state = CUT_IN;
         cheque = 1;
     }
 
@@ -254,25 +254,25 @@ int checaColisaoFantasma(Rectangle colisao_player, Rectangle* colisao_fantasma, 
 
 
 /*SUBTRAI A VIDA DO JOGADOR E, SE NECESSARIO, DA GAMEOVER*/
-void perdeVida(tJogador* pacman, tInimigo inimigo, int n, Vector2* pos_inicial, char **grid_mapa)
+void ConcretizaColisao(tJogador* pacman, tInimigo inimigo, int n, Vector2* pos_inicial, char **grid_mapa, int indice)
 {
-    if(pacman->power_pellet == true)
+    //checacolisaofantasma na main
+    switch(pacman->power_pellet)
     {
+        case true:
+        
+        break;
 
-    }
-    else
-    {
-        if(checaColisaoFantasma != 0)
-        {
+        case false:
             if(pacman->vida > 0)
             {
-            pacman->vida--;
-            centralizaPlayer(pacman, grid_mapa);
+                pacman->vida--;
+                centralizaPlayer(pacman, grid_mapa);
             }
             else
             {
                 gameOver();
             }
-        }
+        break;
     }
 }

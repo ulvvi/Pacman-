@@ -6,22 +6,9 @@
 #include "system.h"
 
 
-void cutIn(void)
+void cutIn(Sound som_cut_in, Texture2D cut_in)
 {
-    Sound som_cut_in = LoadSound("audio/ambiente/cut_in.mp3");
-    Texture2D cut_in = LoadTexture("sprites/player/pacman_cut_in.png");
-    static int contador = 0;
-    PlaySound(som_cut_in);
-    while((float)contador/60 < 1.5)
-    {
-        BeginDrawing();
-        DrawTexture(cut_in, 0, ALTURA/2 - 640/2, WHITE);
-        EndDrawing();
-        contador++;
-    }
-    contador = 0;
-    UnloadTexture(cut_in);
-    UnloadSound(som_cut_in);
+    DrawTexture(cut_in, 0, ALTURA/2 - 600/2, WHITE);
 }
 
 void drawHUD(int score, int totalPellets){
