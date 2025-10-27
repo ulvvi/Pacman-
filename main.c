@@ -29,12 +29,14 @@ int main(void)
     SetSoundVolume(som_cut_in, 0.5f);
     Music lvlTheme = LoadMusicStream("audio/ambiente/teste.wav");
     Music menuTheme = LoadMusicStream("audio/ambiente/menu_theme.wav");
-    SetMusicVolume(menuTheme, 0.75f);
+    Music jackpotTheme = LoadMusicStream("audio/ambiente/pellet.wav");
     Texture2D cut_in = LoadTexture("sprites/player/pacman_cut_in.png"); 
 
     PlayMusicStream(lvlTheme);
     PlayMusicStream(menuTheme);
+    PlayMusicStream(jackpotTheme);
     SetMusicVolume(lvlTheme, 0.75f);
+    SetMusicVolume(menuTheme, 0.75f);
     SetMusicPitch(lvlTheme, 1.0f);
 
 
@@ -50,6 +52,7 @@ int main(void)
         //atualiza musicas
         UpdateMusicStream(lvlTheme);
         UpdateMusicStream(menuTheme);
+        UpdateMusicStream(jackpotTheme);
 
         switch(state_atual)
         {
@@ -108,12 +111,18 @@ int main(void)
             case GAMEPLAY:
                 SetMusicVolume(lvlTheme, 0.75f);
                 SetMusicVolume(menuTheme, 0.00f);
-                //nao faça nada paizao
+                SetMusicVolume(jackpotTheme, 0.00f);
+                if(pacman.power_pellet == true)
+                {
+                    SetMusicVolume(lvlTheme, 0.00f);
+                    SetMusicVolume(jackpotTheme, 0.75f);
+                }    
             break;
 
             case PAUSE:
                 //logica do menu
                 SetMusicVolume(lvlTheme, 0.00f);
+                SetMusicVolume(jackpotTheme, 0.00f);
                 SetMusicVolume(menuTheme, 0.75f);
 
                 DrawRectangle(0, 0, LARGURA, ALTURA, Fade(BLACK, 0.8f));
@@ -143,11 +152,13 @@ int main(void)
                     PlaySound(som_cut_in);
                     PauseMusicStream(lvlTheme);
                     PauseMusicStream(menuTheme);
+                    PauseMusicStream(jackpotTheme);
                     
                 if(temporizador(&cronometro) >= 1.5)
                 {
                     cronometro = 0;
                     state_atual = GAMEPLAY;
+                    ResumeMusicStream(jackpotTheme);
                     ResumeMusicStream(lvlTheme);
                     ResumeMusicStream(menuTheme);
                 }

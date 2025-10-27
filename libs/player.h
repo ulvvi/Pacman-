@@ -61,7 +61,7 @@ void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPe
 /*CRONOMETRA O ESTADO E ATT A SPD E ATT O GAMESTATE*/
 void powerPellet(tJogador* pacman, GameState* game_state)
 {  
-    static int tempo_restante = 240;
+    static int tempo_restante = 460;
     static int cheque = 0;
     if(cheque == 0)
     {
@@ -76,7 +76,7 @@ void powerPellet(tJogador* pacman, GameState* game_state)
         pacman->power_pellet = false;
         pacman->spd = 2;
         cheque = 0;
-        tempo_restante = 240;
+        tempo_restante = 460;
     }
 }
 /*MOVIMENTACAO GERAL DO PLAYER, ATUALIZA SUA POSICAO*/
