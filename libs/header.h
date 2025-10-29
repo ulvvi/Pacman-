@@ -9,6 +9,7 @@
 #include "map.h"
 #include "player.h"
 #include "system.h"
+#include "music.h"
 
 
 /*----------------------- FUNCOES -----------------------*/
