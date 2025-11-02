@@ -240,15 +240,15 @@ void texturaMapa(char **matriz, int**matriz_auxiliar)
             if(matriz[i][j] == '#')
             {
                 //pouca bool gracas a deus(tile ate em Tupi)
-                bool meio_aberto_baixo = (matriz[i+1][j] == '#' && matriz[i][j+1] == '#' && matriz[i][j-1] == '#'); 
-                bool meio_aberto_cima = ( (matriz[i-1][j] == '#' && matriz[i][j+1] == '#' && matriz[i][j-1] == '#'));
-                bool esquerda_para_cima = (matriz[i-1][j] == '#' && matriz[i][j+1] == '#');
-                bool cima_para_direita = (matriz[i][j+1] == '#' && matriz[i+1][j] == '#' && matriz[i][j-1] != '#');
+                bool meio_aberto_baixo = (matriz[i+1][j] == '#' && matriz[i-1][j] != '#' && matriz[i][j+1] == '#' && matriz[i][j-1] == '#'); 
+                bool meio_aberto_cima = (matriz[i+1][j] != '#' && matriz[i-1][j] == '#' && matriz[i][j+1] == '#' && matriz[i][j-1] == '#');
+                bool esquerda_para_cima = (matriz[i+1][j] != '#' && matriz[i-1][j] == '#' && matriz[i][j+1] == '#' && matriz[i][j-1] != '#');
+                bool cima_para_direita = (matriz[i][j+1] == '#' && matriz[i+1][j] == '#' && matriz[i][j-1] != '#' && matriz[i-1][j] != '#');
                 bool cima_para_esquerda = (matriz[i][j-1] == '#' && matriz[i+1][j] == '#' && matriz[i][j+1] != '#' && matriz[i-1][j] != '#');
                 bool direita_para_cima = (matriz[i][j-1] == '#' && matriz[i-1][j] == '#' && matriz[i][j+1] != '#' && matriz[i+1][j]!= '#');
                 bool vazio = (matriz[i+1][j] == '#' && matriz[i-1][j] == '#' && matriz[i][j+1] == '#' && matriz[i][j-1] == '#');
-                bool cima_aberto_esquerda = (matriz[i+1][j] == '#' && matriz[i-1][j] == '#' && matriz[i][j-1] == '#');
-                bool cima_aberto_direita = (matriz[i+1][j] == '#' && matriz[i-1][j] == '#' && matriz[i][j+1] == '#');
+                bool cima_aberto_esquerda = (matriz[i+1][j] == '#' && matriz[i-1][j] == '#' && matriz[i][j-1] == '#' && matriz[i][j+i] != '#');
+                bool cima_aberto_direita = (matriz[i+1][j] == '#' && matriz[i-1][j] == '#' && matriz[i][j+1] == '#' && matriz[i][j-1] != '#');
                 bool bloco_unico = (matriz[i+1][j] != '#' && matriz[i-1][j] != '#' && matriz[i][j+1] != '#' && matriz[i][j-1] != '#');
                 //checagem
                 if(esquerda_para_cima == true) matriz_auxiliar[i][j] = ESQUERDA_PARA_CIMA;
