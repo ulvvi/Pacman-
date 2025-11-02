@@ -3,6 +3,7 @@
 //MAIN
 int main(void)
 {
+    int** matriz_auxiliar;
     int grid_i, grid_j, cronometro = 0;
     int score = 0;
     char **grid_mapa;
@@ -18,6 +19,8 @@ int main(void)
 
     //alocacao dinamica do tamanho do mapa
     grid_mapa = allocateMap();
+    matriz_auxiliar = inicializaMatrizAux();
+   
 
     //Inicializações
     InitWindow(LARGURA, ALTURA, "PACMAN+"); 
@@ -39,9 +42,12 @@ int main(void)
     SetMusicVolume(menuTheme, 0.75f);
     SetMusicPitch(lvlTheme, 1.0f);
 
+    Rectangle spritesheet = {0, 0, 40, 40};
+    Texture2D tileset_parede = LoadTexture("sprites/ambiente/tileset_paredes.png");
 
     //inicia a matriz
     int totalPellets = initMap("maps/mapa1.txt", grid_mapa);
+    texturaMapa(grid_mapa, matriz_auxiliar);
 
     //pos inicial do player
     centralizaPlayer(&pacman, grid_mapa);
@@ -99,6 +105,7 @@ int main(void)
         BeginDrawing(); 
         ClearBackground(BLACK);
         drawMap(grid_mapa);
+        drawTexturaParede(matriz_auxiliar, tileset_parede, spritesheet);
         //layer entidades
         DrawRectangle(pacman.pos.x, pacman.pos.y, TAM_GRID, TAM_GRID, YELLOW);
         //layer main HUD
@@ -170,8 +177,10 @@ int main(void)
     //DAR UNLOAD NOS ASSETS
     UnloadTexture(cut_in);
     UnloadSound(som_cut_in);
+    UnloadTexture(tileset_parede);
 
     CloseWindow();
     freeDiddy(grid_mapa);
+    freeMatrizAux(matriz_auxiliar);
     return 0;
 }
