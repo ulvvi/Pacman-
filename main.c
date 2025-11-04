@@ -35,6 +35,12 @@ int main(void)
     
     Sound som_cut_in = LoadSound("audio/ambiente/CUTIN.mp3");
     SetSoundVolume(som_cut_in, 0.5f);
+
+    //array de musicas
+    Music stems[2];
+    stems[0] = LoadMusicStream("audio/ambiente/lvlTheme");
+    stems[1] = LoadMusicStream("audio/ambiente/menu");
+    stems[2] = LoadMusicStream("audio/ambiente/pellet");
     
     
     /*
@@ -60,9 +66,7 @@ int main(void)
     while (!WindowShouldClose())
     {
         //atualiza musicas
-        UpdateMusicStream(lvlTheme);
-        UpdateMusicStream(menuTheme);
-        UpdateMusicStream(jackpotTheme);
+        updateMusic(stems);
 
         switch(state_atual)
         {
@@ -120,9 +124,7 @@ int main(void)
         switch(state_atual)
         {
             case GAMEPLAY:
-                SetMusicVolume(lvlTheme, 0.75f);
-                SetMusicVolume(menuTheme, 0.00f);
-                SetMusicVolume(jackpotTheme, 0.00f);
+                
                 if(pacman.power_pellet == true)
                 {
                     SetMusicVolume(lvlTheme, 0.00f);
@@ -188,4 +190,5 @@ int main(void)
     freeMatrizAux(matriz_auxiliar);
     return 0;
 }
+
 
