@@ -41,7 +41,6 @@ currentChosen(cur){
 
 void menuInputs(int* index){
   if(IsKeyPressed(KEY_V) || currentChosen(*index) = BACK){
-    *index = 0;
     state_atual = GAMEPLAY;
   }
   if(IsKeyPressed(KEY_N) || currentChosen(*index) == NEW){
