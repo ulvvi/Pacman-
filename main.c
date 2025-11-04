@@ -9,16 +9,23 @@ int main(void)
     //dps mudar pro primeiro state ser o menu
     GameState state_atual = PAUSE;
     Rectangle *colisao_fantasma;
-
-    //inicializacao jogador
-
-    //alocacao dinamica do tamanho do mapa
    
-
-    //Inicializações
+    
+    /*
+    ***********************************
+            MAIN WINDOW
+    ***********************************
+    */
     InitWindow(LARGURA, ALTURA, "PACMAN+"); 
     SetTargetFPS(60);
 
+
+
+    /*
+    ***********************************
+                MENU
+    ***********************************
+    */
     int option = 0;
 
     /*
@@ -52,7 +59,7 @@ int main(void)
     ***********************************
     */
     int** matriz_auxiliar;
-    char **grid_mapa;
+    char **grid_mapa = allocateMap();
     matriz_auxiliar = inicializaMatrizAux();
     initMap("maps/mapa1.txt", grid_mapa);
     texturaMapa(grid_mapa, matriz_auxiliar);
