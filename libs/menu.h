@@ -1,4 +1,9 @@
-
+#pragma once
+#include <stdio.h>
+#include "raylib.h"
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 
 enum menuOptions{
   BACK,
