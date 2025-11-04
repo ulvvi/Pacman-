@@ -88,6 +88,7 @@ int main(void)
                 //input do menu de pause
                 if(IsKeyPressed(KEY_TAB))
                 {
+                    int index = 0;
                     state_atual = PAUSE;
                 }
 
@@ -147,7 +148,6 @@ int main(void)
 
             case PAUSE:
                 //logica do menu
-                static int index = 0;
                 switchMusic(MENU, stems);
                 menuLogic(&index);
             break;
@@ -179,6 +179,7 @@ int main(void)
     freeMatrizAux(matriz_auxiliar);
     return 0;
 }
+
 
 
 
