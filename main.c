@@ -3,30 +3,23 @@
 //MAIN
 int main(void)
 {
-    int** matriz_auxiliar;
     int grid_i, grid_j, cronometro = 0;
-    int score = 0;
-    char **grid_mapa;
-    char nome_mapa[50];
+
+
     //dps mudar pro primeiro state ser o menu
-    GameState state_atual = GAMEPLAY;
+    GameState state_atual = PAUSE;
     Rectangle *colisao_fantasma;
-    //Cores custom 
 
     //inicializacao jogador
-    tJogador pacman = {{}, 2, 3, 0, 0, false};
 
     //alocacao dinamica do tamanho do mapa
-    grid_mapa = allocateMap();
-    matriz_auxiliar = inicializaMatrizAux();
    
 
     //Inicializações
     InitWindow(LARGURA, ALTURA, "PACMAN+"); 
     SetTargetFPS(60);
-    InitAudioDevice();
 
-    int index = 0;
+    int option = 0;
 
     /*
     ***********************************
@@ -36,13 +29,10 @@ int main(void)
     
     Sound som_cut_in = LoadSound("audio/ambiente/CUTIN.mp3");
     SetSoundVolume(som_cut_in, 0.5f);
-
-    //array de musicas
     Music stems[3];
-    stems[1] = LoadMusicStream("audio/ambiente/lvl1.mp3");
-    stems[0] = LoadMusicStream("audio/ambiente/menu_theme.wav");
-    stems[2] = LoadMusicStream("audio/ambiente/pellet.wav");
-    playMusic(stems);
+    int level = 1;
+
+    initiateAudio(stems, level);
     
     
     /*
@@ -61,7 +51,10 @@ int main(void)
                 MAPA
     ***********************************
     */
-    int totalPellets = initMap("maps/mapa1.txt", grid_mapa);
+    int** matriz_auxiliar;
+    char **grid_mapa;
+    matriz_auxiliar = inicializaMatrizAux();
+    initMap("maps/mapa1.txt", grid_mapa);
     texturaMapa(grid_mapa, matriz_auxiliar);
 
     
@@ -70,7 +63,9 @@ int main(void)
                 PLAYER
     ***********************************
     */
+    tJogador pacman = {{}, 2, 3, 0, 0, false, 0, 250};
     centralizaPlayer(&pacman, grid_mapa);
+
 
     /*
     ***********************************
@@ -82,77 +77,31 @@ int main(void)
         //atualiza musicas
         updateMusic(stems);
 
-        switch(state_atual)
-        {
-            //ESTADO PRINCIPAL
-            case GAMEPLAY:
-                //input do menu de pause
-                if(IsKeyPressed(KEY_TAB))
-                {
-                    index = 0;
-                    state_atual = PAUSE;
-                }
-
-                //movimentacao
-                movePlayer(grid_mapa, &pacman, &grid_i, &grid_j);
-
-                //colisoes pellets
-                if(checaPlayerCentralizado(&pacman))
-                {   
-                    colisaoPellets(&pacman, grid_mapa, &score, &totalPellets, grid_i, grid_j);
-                }
-
-                if(pacman.power_pellet == true)
-                {
-                    powerPellet(&pacman, &state_atual);
-                }else{
-                    
-                }
-
-                //teleporte player
-                if(checaPlayerDentroMapa(&pacman) == false)
-                {
-                    bool teleporte = (pacman.pos.x == -40 || pacman.pos.x == TAM_GRID*(TAM_J) || pacman.pos.y == -40 || pacman.pos.y == TAM_GRID*(TAM_I));
-                    if(teleporte == true)
-                    {
-                        teleportaPlayer(&pacman);
-                    }
-                }
-            break;
-        }
-
         //desenhos
-
-
-        //layer fundo/mapa   
-        BeginDrawing(); 
-        ClearBackground(BLACK);
-        drawMap(grid_mapa);
-        drawTexturaParede(matriz_auxiliar, tileset_parede, spritesheet);
-        //layer entidades
-        DrawRectangle(pacman.pos.x, pacman.pos.y, TAM_GRID, TAM_GRID, YELLOW);
-        //layer main HUD
-        drawHUD(score, totalPellets);
-        DrawText(TextFormat("posx: %.2f, posy: %.2f", pacman.pos.x, pacman.pos.y), 900, 810, 20, WHITE);
+        drawBackground(grid_mapa, tileset_parede, spritesheet, pacman, state_atual, matriz_auxiliar);
 
         //RESTANTE DOS LAYERS(NUMA STATE MACHINE)
         switch(state_atual)
         {
-            case GAMEPLAY:
+            case GAMEPLAY:            
                 switchMusic(GAMEPLAY, stems);
-                
+                updateLogic(&pacman, grid_mapa, &grid_i, &grid_j, &state_atual, option);
+
+                //ta aqui so de meme depous eu tiro
                 if(pacman.power_pellet == true)
                 {
                     switchMusic(JACKPOT, stems);
-                }    
+                }
+
             break;
 
             case PAUSE:
-                //logica do menu
                 switchMusic(MENU, stems);
-                menuLogic(&index, &state_atual, grid_mapa);
-            break;
+                menuLogic(&option, &state_atual, grid_mapa);
 
+            break;
+            
+            //deuixar pa tu refatorar taylor
             case CUT_IN:
                 cutIn(som_cut_in, cut_in);
                 if(cronometro == 0)
@@ -167,8 +116,7 @@ int main(void)
                 }
             break;
         }
-        //fim dos desenhos
-        EndDrawing(); 
+        EndDrawing();
     }
     //DAR UNLOAD NOS ASSETS
     UnloadTexture(cut_in);

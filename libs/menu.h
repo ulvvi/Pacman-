@@ -45,7 +45,6 @@ void menuInputs(int* index, GameState* state_atual, char** grid_mapa){
   }
   if(IsKeyPressed(KEY_Q) || currentChosen(*index) == QUIT){
     CloseWindow();
-    freeDiddy(grid_mapa);
     return;
   }
 }

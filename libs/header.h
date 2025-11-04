@@ -11,7 +11,7 @@
 #include "system.h"
 #include "music.h"
 #include "menu.h"
-
+#include "gameplay.h"
 
 /*----------------------- FUNCOES -----------------------*/
 

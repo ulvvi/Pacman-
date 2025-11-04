@@ -18,6 +18,9 @@ typedef struct
     int move_x;
     int move_y;
     bool power_pellet;
+    int score;
+    int remainingPellets;
+
 } tJogador;
 typedef struct
 {
