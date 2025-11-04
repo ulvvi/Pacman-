@@ -38,9 +38,9 @@ int main(void)
 
     //array de musicas
     Music stems[2];
-    stems[0] = LoadMusicStream("audio/ambiente/lvlTheme");
-    stems[1] = LoadMusicStream("audio/ambiente/menu");
-    stems[2] = LoadMusicStream("audio/ambiente/pellet");
+    stems[0] = LoadMusicStream("audio/ambiente/lvl1.mp3);
+    stems[1] = LoadMusicStream("audio/ambiente/menu_theme.wav");
+    stems[2] = LoadMusicStream("audio/ambiente/pellet.wav");
     playMusic(stems);
     
     
@@ -197,6 +197,7 @@ int main(void)
     freeMatrizAux(matriz_auxiliar);
     return 0;
 }
+
 
 
 
