@@ -2,6 +2,7 @@
 
 enum menuOptions{
   BACK,
+  NEW,
   SAVE,
   LOAD,
   QUIT
@@ -15,25 +16,29 @@ void menuLogic(){
   DrawText("C: Carregar", 10, 150, 20, ORANGE);
   DrawText("S: Salvar", 10, 200, 20, CYAN);
   DrawText("Q: Sair", 10, 250, 20, RED);
+  menuInputs();
 }
 
-void isHighlighted(){
-  
+currentChosen(cur){
+  if(IsKeyPressed(KEY_ENTER)){
+    return cur
+  }
+  else
+  {
+    return -1
+  }
 }
 
-void menuInputs(){
-  if(IsKeyPressed(KEY_V)){
+void menuInputs(int* index){
+  if(IsKeyPressed(KEY_V) || currentChosen = BACK){
     state_atual = GAMEPLAY;
   }
-  if(IsKeyPressed(KEY_N) ||){
+  if(IsKeyPressed(KEY_N) || currentChosen == NEW){
     //resetGameState();
   }
-  
-  if(IsKeyPressed(KEY_Q)){
+  if(IsKeyPressed(KEY_Q) || currentChosen == QUIT){
     CloseWindow();
     freeDiddy(grid_mapa);
     return 0;
   }
-
 }
-
