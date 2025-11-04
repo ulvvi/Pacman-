@@ -27,20 +27,24 @@ int main(void)
     SetTargetFPS(60);
     InitAudioDevice();
 
-    //INICIALIZACOES DE ASSETS
+    /*
+    ***********************************
+        AUDIO
+    ***********************************
+    */
+    
     Sound som_cut_in = LoadSound("audio/ambiente/CUTIN.mp3");
     SetSoundVolume(som_cut_in, 0.5f);
-    Music lvlTheme = LoadMusicStream("audio/ambiente/teste.wav");
-    Music menuTheme = LoadMusicStream("audio/ambiente/menu_theme.wav");
-    Music jackpotTheme = LoadMusicStream("audio/ambiente/pellet.wav");
-    Texture2D cut_in = LoadTexture("sprites/player/pacman_cut_in.png"); 
+    
+    
+    /*
+    ***********************************
+        TEXTURAS
+    ***********************************
+    */
+    Texture2D cut_in = LoadTexture("sprites/player/pacman_cut_in.png");
 
-    PlayMusicStream(lvlTheme);
-    PlayMusicStream(menuTheme);
-    PlayMusicStream(jackpotTheme);
-    SetMusicVolume(lvlTheme, 0.75f);
-    SetMusicVolume(menuTheme, 0.75f);
-    SetMusicPitch(lvlTheme, 1.0f);
+    
 
     Rectangle spritesheet = {0, 0, 40, 40};
     Texture2D tileset_parede = LoadTexture("sprites/ambiente/tileset_paredes.png");
@@ -184,3 +188,4 @@ int main(void)
     freeMatrizAux(matriz_auxiliar);
     return 0;
 }
+
