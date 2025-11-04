@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "header.h"
+
+Color CYAN = {0, 255, 255, 255};
 
 enum menuOptions{
   BACK,
@@ -13,13 +16,7 @@ enum menuOptions{
   QUIT
 };
 
-void menuLogic(int* index){
-  drawMenu(index);
-  printf("%d", *index);
-  menuInputs(index);
-}
-
-drawMenu(int* index){
+void drawMenu(int* index){
   DrawRectangle(0, 0, LARGURA, ALTURA, Fade(BLACK, 0.8f));
   DrawText("PAUSE", 10, 10, 40, YELLOW);
   DrawText("Aperte V para voltar", 10, 45, 20, YELLOW);
@@ -29,7 +26,7 @@ drawMenu(int* index){
   DrawText("Q: Sair", 10, 250, 20, RED);
 }
 
-currentChosen(cur){
+int currentChosen(int cur){
   if(IsKeyPressed(KEY_ENTER)){
     return cur;
   }
@@ -39,9 +36,9 @@ currentChosen(cur){
   }
 }
 
-void menuInputs(int* index){
-  if(IsKeyPressed(KEY_V) || currentChosen(*index) = BACK){
-    state_atual = GAMEPLAY;
+void menuInputs(int* index, GameState* state_atual, char** grid_mapa){
+  if(IsKeyPressed(KEY_V) || currentChosen(*index) == BACK){
+    *state_atual = GAMEPLAY;
   }
   if(IsKeyPressed(KEY_N) || currentChosen(*index) == NEW){
     //resetGameState();
@@ -49,6 +46,12 @@ void menuInputs(int* index){
   if(IsKeyPressed(KEY_Q) || currentChosen(*index) == QUIT){
     CloseWindow();
     freeDiddy(grid_mapa);
-    return 0;
+    return;
   }
+}
+
+void menuLogic(int* index, GameState* state_atual, char** grid_mapa){
+  drawMenu(index);
+  printf("%d", *index);
+  menuInputs(index, state_atual, grid_mapa);
 }

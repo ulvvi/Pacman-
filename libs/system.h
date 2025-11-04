@@ -34,9 +34,9 @@ typedef enum GameState
 {
     MENU,
     GAMEPLAY,
+    JACKPOT,
     PAUSE,
-    CUT_IN,
-    JACKPOT
+    CUT_IN
 
 }GameState;
 

@@ -4,24 +4,20 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "system.h"
+
 
 /*
     A ideia geral é ter um vetor com as 4 musicas, que serão trocadas dinamicamente de acordo com o jogo
 */
 
 // para serem passados para o switchMusic
-enum {
-    NORMAL,
-    MENU,
-    POWER,
-    JACKPOT
-};
 
 //volume normal
 float normalVolume = 1.00f;
 
 //recebe o conjunto de musicas e inicia todas ao mesmo tempo para ser dinamico
-void playMusic(Music* stems){
+void playMusic(Music stems[]){
     for(int i = 0; i < 3; i++){
         PlayMusicStream(stems[i]);
     }
@@ -29,28 +25,28 @@ void playMusic(Music* stems){
 }
 
 //pega o conjunto de musicas e atualiza elas00
-void updateMusic(Music* stems){
+void updateMusic(Music stems[]){
     for(int i = 0; i < 3; i++){
         UpdateMusicStream(stems[i]);
     }
     return;
 }
 
-void pauseAllMusic(Music* stems){
+void pauseAllMusic(Music stems[]){
     for(int i = 0; i < 3; i++){
         PauseMusicStream(stems[i]);
     }
     return;
 }
 
-void resumeAllMusic(Music* stems){
+void resumeAllMusic(Music stems[]){
     for(int i = 0; i < 3; i++){
         ResumeMusicStream(stems[i]);
     }
     return;
 }
 
-void stopAllMusic(Music* stems){
+void stopAllMusic(Music stems[]){
     for(int i = 0; i < 3; i++){
         StopMusicStream(stems[i]);
     }
@@ -58,9 +54,9 @@ void stopAllMusic(Music* stems){
 }
 
 /*
-    Função recebe um estado que foi dado no enum acima e troca a musica;
+    Função recebe um estado e troca a musica;
 */
-void switchMusic(int state, Music* stems){
+void switchMusic(GameState state, Music stems[]){
     for(int i = 0; i < 3; i++){
          if(i == state){
              SetMusicVolume(stems[i], normalVolume);

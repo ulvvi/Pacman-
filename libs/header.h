@@ -10,6 +10,7 @@
 #include "player.h"
 #include "system.h"
 #include "music.h"
+#include "menu.h"
 
 
 /*----------------------- FUNCOES -----------------------*/

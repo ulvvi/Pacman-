@@ -11,8 +11,7 @@ int main(void)
     //dps mudar pro primeiro state ser o menu
     GameState state_atual = GAMEPLAY;
     Rectangle *colisao_fantasma;
-    //Cores custom
-    Color CYAN = {0, 255, 255, 255}; 
+    //Cores custom 
 
     //inicializacao jogador
     tJogador pacman = {{}, 2, 3, 0, 0, false};
@@ -27,6 +26,8 @@ int main(void)
     SetTargetFPS(60);
     InitAudioDevice();
 
+    int index = 0;
+
     /*
     ***********************************
                 AUDIO
@@ -37,9 +38,9 @@ int main(void)
     SetSoundVolume(som_cut_in, 0.5f);
 
     //array de musicas
-    Music stems[2];
-    stems[0] = LoadMusicStream("audio/ambiente/lvl1.mp3);
-    stems[1] = LoadMusicStream("audio/ambiente/menu_theme.wav");
+    Music stems[3];
+    stems[1] = LoadMusicStream("audio/ambiente/lvl1.mp3");
+    stems[0] = LoadMusicStream("audio/ambiente/menu_theme.wav");
     stems[2] = LoadMusicStream("audio/ambiente/pellet.wav");
     playMusic(stems);
     
@@ -88,7 +89,7 @@ int main(void)
                 //input do menu de pause
                 if(IsKeyPressed(KEY_TAB))
                 {
-                    int index = 0;
+                    index = 0;
                     state_atual = PAUSE;
                 }
 
@@ -138,31 +139,31 @@ int main(void)
         switch(state_atual)
         {
             case GAMEPLAY:
-                switchMusic(NORMAL, stems);
+                switchMusic(GAMEPLAY, stems);
                 
                 if(pacman.power_pellet == true)
                 {
-                    switchMusic(POWER, stems);
+                    switchMusic(JACKPOT, stems);
                 }    
             break;
 
             case PAUSE:
                 //logica do menu
                 switchMusic(MENU, stems);
-                menuLogic(&index);
+                menuLogic(&index, &state_atual, grid_mapa);
             break;
 
             case CUT_IN:
                 cutIn(som_cut_in, cut_in);
                 if(cronometro == 0)
                     PlaySound(som_cut_in);
-                    pauseAllMusic(stems)
+                    pauseAllMusic(stems);
                     
                 if(temporizador(&cronometro) >= 1.5)
                 {
                     cronometro = 0;
                     state_atual = GAMEPLAY;
-                    resumeAllMusic(stems)
+                    resumeAllMusic(stems);
                 }
             break;
         }
