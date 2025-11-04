@@ -10,10 +10,10 @@ enum {
     MENU,
     POWER,
     JACKPOT
-}
+};
 
 //volume normal
-float normalVolume = 1.00f
+float normalVolume = 1.00f;
 
 //recebe o conjunto de musicas e inicia todas ao mesmo tempo para ser dinamico
 void playMusic(Music* stems){
