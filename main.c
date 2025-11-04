@@ -147,8 +147,9 @@ int main(void)
 
             case PAUSE:
                 //logica do menu
+                static int index = 0;
                 switchMusic(MENU, stems);
-                menuLogic();
+                menuLogic(&index);
             break;
 
             case CUT_IN:
@@ -178,6 +179,7 @@ int main(void)
     freeMatrizAux(matriz_auxiliar);
     return 0;
 }
+
 
 
 
