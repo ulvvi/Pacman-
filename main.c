@@ -29,7 +29,7 @@ int main(void)
 
     /*
     ***********************************
-        AUDIO
+                AUDIO
     ***********************************
     */
     
@@ -41,28 +41,41 @@ int main(void)
     stems[0] = LoadMusicStream("audio/ambiente/lvlTheme");
     stems[1] = LoadMusicStream("audio/ambiente/menu");
     stems[2] = LoadMusicStream("audio/ambiente/pellet");
+    playMusic(stems);
     
     
     /*
     ***********************************
-        TEXTURAS
+                TEXTURAS
     ***********************************
     */
     Texture2D cut_in = LoadTexture("sprites/player/pacman_cut_in.png");
-
-    
-
     Rectangle spritesheet = {0, 0, 40, 40};
     Texture2D tileset_parede = LoadTexture("sprites/ambiente/tileset_paredes.png");
 
-    //inicia a matriz
+
+        
+    /*
+    ***********************************
+                MAPA
+    ***********************************
+    */
     int totalPellets = initMap("maps/mapa1.txt", grid_mapa);
     texturaMapa(grid_mapa, matriz_auxiliar);
 
-    //pos inicial do player
+    
+    /*
+    ***********************************
+                PLAYER
+    ***********************************
+    */
     centralizaPlayer(&pacman, grid_mapa);
 
-    //Laço principal do jogo
+    /*
+    ***********************************
+                JOGO
+    ***********************************
+    */
     while (!WindowShouldClose())
     {
         //atualiza musicas
@@ -124,19 +137,17 @@ int main(void)
         switch(state_atual)
         {
             case GAMEPLAY:
+                switchMusic(NORMAL, stems);
                 
                 if(pacman.power_pellet == true)
                 {
-                    SetMusicVolume(lvlTheme, 0.00f);
-                    SetMusicVolume(jackpotTheme, 0.75f);
+                    switchMusic(POWER, stems);
                 }    
             break;
 
             case PAUSE:
                 //logica do menu
-                SetMusicVolume(lvlTheme, 0.00f);
-                SetMusicVolume(jackpotTheme, 0.00f);
-                SetMusicVolume(menuTheme, 0.75f);
+                switchMusic(MENU, stems);
 
                 DrawRectangle(0, 0, LARGURA, ALTURA, Fade(BLACK, 0.8f));
                 DrawText("PAUSE", 10, 10, 40, YELLOW);
@@ -163,17 +174,13 @@ int main(void)
                 cutIn(som_cut_in, cut_in);
                 if(cronometro == 0)
                     PlaySound(som_cut_in);
-                    PauseMusicStream(lvlTheme);
-                    PauseMusicStream(menuTheme);
-                    PauseMusicStream(jackpotTheme);
+                    pauseAllMusic(stems)
                     
                 if(temporizador(&cronometro) >= 1.5)
                 {
                     cronometro = 0;
                     state_atual = GAMEPLAY;
-                    ResumeMusicStream(jackpotTheme);
-                    ResumeMusicStream(lvlTheme);
-                    ResumeMusicStream(menuTheme);
+                    resumeAllMusic(stems)
                 }
             break;
         }
@@ -190,5 +197,6 @@ int main(void)
     freeMatrizAux(matriz_auxiliar);
     return 0;
 }
+
 
 
