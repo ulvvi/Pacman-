@@ -1,4 +1,9 @@
-//funçôes da musica
+#pragma once
+#include <stdio.h>
+#include "raylib.h"
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 
 /*
     A ideia geral é ter um vetor com as 4 musicas, que serão trocadas dinamicamente de acordo com o jogo
