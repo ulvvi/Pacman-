@@ -1,10 +1,7 @@
 //HUD.h
 #pragma once
-#include "raylib.h"
-#include <stdio.h>
-#include <stdbool.h>
-#include "system.h"
-
+#include "header.h"
+#include "./MainSystem/system.h"
 
 void cutIn(Sound som_cut_in, Texture2D cut_in)
 {

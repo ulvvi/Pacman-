@@ -1,10 +1,5 @@
 #pragma once
-#include <stdio.h>
-#include "raylib.h"
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include "system.h"
+#include "header.h"
 
 
 /*
@@ -65,4 +60,18 @@ void switchMusic(GameState state, Music stems[]){
              SetMusicVolume(stems[i], 0.00f);
          }   
     }
+}
+
+void initiateAudio(Music stems[], int level){
+
+    InitAudioDevice();
+
+    switch(level){
+        case 1:
+            stems[0] = LoadMusicStream("audio/ambiente/teste.wav");
+            stems[1] = LoadMusicStream("audio/ambiente/menu_theme.wav");
+            stems[2] = LoadMusicStream("audio/ambiente/pellet.wav");
+        break;
+    }
+    return;
 }

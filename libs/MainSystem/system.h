@@ -1,8 +1,6 @@
 //system.h
 #pragma once
-#include <stdio.h>
-#include "raylib.h"
-#include <stdlib.h>
+#include "../header.h"
 
 //macros
 #define LARGURA 1600
@@ -10,6 +8,8 @@
 #define TAM_I 20
 #define TAM_J 40
 #define TAM_GRID 40
+
+
 typedef struct
 {
     Vector2 pos;
@@ -77,3 +77,8 @@ typedef struct
     int grid_final[2];
 }tCordenada;
 
+
+void initializeWindow(){
+    InitWindow(LARGURA, ALTURA, "PACMAN+"); 
+    SetTargetFPS(90);
+}

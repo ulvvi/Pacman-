@@ -1,18 +1,7 @@
 //map.h
 #pragma once
-#include <stdio.h>
-#include "raylib.h"
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include "system.h"
-
-//macros
-#define LARGURA 1600
-#define ALTURA 840
-#define TAM_I 20
-#define TAM_J 40
-#define TAM_GRID 40
+#include "header.h"
+#include "./MainSystem/system.h"
 
 //inicializa a matriz com o nome do arq
 char** allocateMap(){

@@ -1,8 +1,6 @@
 //player.h
 #pragma once
-#include <stdio.h>
-#include <stdbool.h>
-#include "system.h"
+#include "header.h"
 
 /*RETORNA TRUE OU FALSE SE O PLAYER TIVER CENTRALIZADO OU NAO*/
 bool checaPlayerCentralizado(tJogador *pacman)

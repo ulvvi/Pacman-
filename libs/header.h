@@ -5,13 +5,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "./MainSystem/system.h"
 #include "HUD.h"
 #include "map.h"
 #include "player.h"
-#include "system.h"
 #include "music.h"
-#include "menu.h"
-#include "gameplay.h"
+#include "./MainSystem/menu.h"
+#include "./MainSystem/gameplay.h"
 
 /*----------------------- FUNCOES -----------------------*/
 

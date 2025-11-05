@@ -1,10 +1,5 @@
 #pragma once
-#include <stdio.h>
-#include "raylib.h"
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include "header.h"
+#include "../header.h"
 
 Color CYAN = {0, 255, 255, 255};
 
