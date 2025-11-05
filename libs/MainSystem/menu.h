@@ -45,7 +45,7 @@ void menuInputs(int* index, GameState* state_atual, char** grid_mapa){
 }
 
 void menuLogic(int* index, GameState* state_atual, char** grid_mapa){
-  drawMenu(index);
-  printf("%d", *index);
-  menuInputs(index, state_atual, grid_mapa);
+    drawMenu(index);
+    printf("%d", *index);
+    menuInputs(index, state_atual, grid_mapa);
 }

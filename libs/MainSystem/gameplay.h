@@ -18,11 +18,11 @@ void drawGame(char** grid_mapa, Texture2D tileset_parede, Rectangle spritesheet,
 }
 
 
-void updateLogic(tJogador* pacman, char** grid_mapa, int* grid_i, int* grid_j, GameState* state_atual, int option){
+void updateLogic(tJogador* pacman, char** grid_mapa, int* grid_i, int* grid_j, GameState* state_atual, int *option){
 
     if(IsKeyPressed(KEY_TAB))
     {
-        option = 0;
+        *option = 0;
         *state_atual = PAUSE;
     }
 
@@ -51,6 +51,17 @@ void updateLogic(tJogador* pacman, char** grid_mapa, int* grid_i, int* grid_j, G
     }
 }
 
+void cleanup(char** grid_mapa, int** matriz_auxiliar, Texture2D cut_in, Sound som_cut_in, Texture2D tileset_parede){  
+     //DAR UNLOAD NOS ASSETS
+    UnloadTexture(cut_in);
+    UnloadSound(som_cut_in);
+    UnloadTexture(tileset_parede);
+    CloseAudioDevice();
+
+    //liberar memoria
+    freeDiddy(grid_mapa);
+    freeMatrizAux(matriz_auxiliar);
+}
 
 
 void gameLevel(int level){
@@ -142,7 +153,7 @@ void gameLevel(int level){
         {
             case GAMEPLAY:            
                 switchMusic(GAMEPLAY, stems);
-                updateLogic(&pacman, grid_mapa, &grid_i, &grid_j, &state_atual, option);
+                updateLogic(&pacman, grid_mapa, &grid_i, &grid_j, &state_atual, &option);
             break;
 
             case PAUSE:
@@ -168,13 +179,6 @@ void gameLevel(int level){
         EndDrawing();
     }
 
-    //DAR UNLOAD NOS ASSETS
-    UnloadTexture(cut_in);
-    UnloadSound(som_cut_in);
-    UnloadTexture(tileset_parede);
-    CloseAudioDevice();
-
-    freeDiddy(grid_mapa);
-    freeMatrizAux(matriz_auxiliar);
+    cleanup(grid_mapa, matriz_auxiliar, cut_in, som_cut_in, tileset_parede);
     return;
 }
