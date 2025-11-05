@@ -13,12 +13,12 @@ void initiateAudio(Music stems[], int level){
 
     switch(level){
         case 1:
-            stems[1] = LoadMusicStream("audio/ambiente/lvl1.mp3");
-            stems[0] = LoadMusicStream("audio/ambiente/menu_theme.wav");
+            stems[0] = LoadMusicStream("audio/ambiente/teste.wav");
+            stems[1] = LoadMusicStream("audio/ambiente/menu_theme.wav");
             stems[2] = LoadMusicStream("audio/ambiente/pellet.wav");
         break;
     }
-    playMusic(stems);
+    return;
 }
 
 

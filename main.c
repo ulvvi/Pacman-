@@ -7,7 +7,7 @@ int main(void)
 
 
     //dps mudar pro primeiro state ser o menu
-    GameState state_atual = PAUSE;
+    GameState state_atual = GAMEPLAY;
     Rectangle *colisao_fantasma;
    
     
@@ -17,7 +17,7 @@ int main(void)
     ***********************************
     */
     InitWindow(LARGURA, ALTURA, "PACMAN+"); 
-    SetTargetFPS(60);
+    SetTargetFPS(90);
 
 
 
@@ -33,13 +33,14 @@ int main(void)
                 AUDIO
     ***********************************
     */
-    
-    Sound som_cut_in = LoadSound("audio/ambiente/CUTIN.mp3");
-    SetSoundVolume(som_cut_in, 0.5f);
     Music stems[3];
     int level = 1;
 
     initiateAudio(stems, level);
+    playMusic(stems);
+    
+    Sound som_cut_in = LoadSound("audio/ambiente/CUTIN.mp3");
+    SetSoundVolume(som_cut_in, 0.5f);
     
     
     /*
@@ -86,6 +87,7 @@ int main(void)
 
         //desenhos
         drawBackground(grid_mapa, tileset_parede, spritesheet, pacman, state_atual, matriz_auxiliar);
+        DrawFPS(10, 10);
 
         //RESTANTE DOS LAYERS(NUMA STATE MACHINE)
         switch(state_atual)
