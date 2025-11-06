@@ -154,6 +154,9 @@ void gameLevel(int level){
             case GAMEPLAY:            
                 switchMusic(GAMEPLAY, stems);
                 updateLogic(&pacman, grid_mapa, &grid_i, &grid_j, &state_atual, &option);
+                if(pacman.power_pellet == true){
+                    switchMusic(JACKPOT, stems);
+                }
             break;
 
             case PAUSE:
@@ -168,7 +171,7 @@ void gameLevel(int level){
                     PlaySound(som_cut_in);
                     pauseAllMusic(stems);
                     
-                if(temporizador(&cronometro) >= 1.5)
+                if(temporizador(&cronometro) >= 1.0)
                 {
                     cronometro = 0;
                     state_atual = GAMEPLAY;

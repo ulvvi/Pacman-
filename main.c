@@ -4,7 +4,7 @@
 int main(void)
 {
     //mainMenu();
-    gameLevel(1);
+    gameLevel(2);
     //wonLevel();
 
     CloseWindow();
