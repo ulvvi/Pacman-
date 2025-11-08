@@ -12,7 +12,7 @@ bool checaPlayerCentralizado(tJogador *pacman)
 /*RETORNA TRUE OU FALSE SE O PLAYER TIVER DENTRO DO MAPA OU NAO*/
 bool checaPlayerDentroMapa(tJogador *pacman)
 {
-    return (pacman->pos.x >= 0 && pacman->pos.x <= TAM_GRID*(TAM_J-1) && pacman->pos.y >= 0 && pacman->pos.y <= TAM_GRID*(TAM_I-1));
+    return (pacman->pos.x > 0 && pacman->pos.x < TAM_GRID*(TAM_J-1) && pacman->pos.y > 0 && pacman->pos.y < TAM_GRID*(TAM_I-1));
 }
 
 

@@ -52,7 +52,7 @@ void updateLogic(tJogador* pacman, char** grid_mapa, int* grid_i, int* grid_j, G
 }
 
 void cleanup(char** grid_mapa, int** matriz_auxiliar, int* mapa_mascaras, Texture2D cut_in, Sound som_cut_in, Texture2D tileset_parede){  
-     //DAR UNLOAD NOS ASSETS
+    //DAR UNLOAD NOS ASSETS
     UnloadTexture(cut_in);
     UnloadSound(som_cut_in);
     UnloadTexture(tileset_parede);
