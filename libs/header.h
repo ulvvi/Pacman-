@@ -10,6 +10,7 @@
 #include "map.h"
 #include "player.h"
 #include "music.h"
+#include "texturing.h"
 #include "./MainSystem/menu.h"
 #include "./MainSystem/gameplay.h"
 

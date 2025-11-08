@@ -4,7 +4,7 @@
 #pragma once
 
 
-void drawGame(char** grid_mapa, Texture2D tileset_parede, Rectangle spritesheet, tJogador pacman, GameState state_atual, int** matriz_auxiliar){
+void drawGame(int** matriz_auxiliar, char** grid_mapa, Texture2D tileset_parede, Rectangle spritesheet, tJogador pacman, GameState state_atual, int* mapa_mascaras){
     //layer fundo/mapa   
     BeginDrawing(); 
     ClearBackground(BLACK);
@@ -51,7 +51,7 @@ void updateLogic(tJogador* pacman, char** grid_mapa, int* grid_i, int* grid_j, G
     }
 }
 
-void cleanup(char** grid_mapa, int** matriz_auxiliar, Texture2D cut_in, Sound som_cut_in, Texture2D tileset_parede){  
+void cleanup(char** grid_mapa, int** matriz_auxiliar, int* mapa_mascaras, Texture2D cut_in, Sound som_cut_in, Texture2D tileset_parede){  
      //DAR UNLOAD NOS ASSETS
     UnloadTexture(cut_in);
     UnloadSound(som_cut_in);
@@ -59,6 +59,7 @@ void cleanup(char** grid_mapa, int** matriz_auxiliar, Texture2D cut_in, Sound so
     CloseAudioDevice();
 
     //liberar memoria
+    freeMascaras(mapa_mascaras);
     freeDiddy(grid_mapa);
     freeMatrizAux(matriz_auxiliar);
 }
@@ -113,17 +114,24 @@ void gameLevel(int level){
     Texture2D tileset_parede = LoadTexture("sprites/ambiente/tileset_paredes.png");
 
 
+
         
     /*
     ***********************************
                 MAPA
     ***********************************
     */
+   
     int** matriz_auxiliar;
+    int* mapa_mascaras;
     char **grid_mapa = allocateMap();
+    
+    mapa_mascaras = malloc(sizeof(int)*256);
+    inicializaMapeamento(mapa_mascaras, 256);
     matriz_auxiliar = inicializaMatrizAux();
     initMap("maps/mapa1.txt", grid_mapa);
-    texturaMapa(grid_mapa, matriz_auxiliar);
+    texturizaMapa(matriz_auxiliar, mapa_mascaras, grid_mapa);
+    
 
     
     /*
@@ -146,7 +154,7 @@ void gameLevel(int level){
         updateMusic(stems);
 
         //desenhos
-        drawGame(grid_mapa, tileset_parede, spritesheet, pacman, state_atual, matriz_auxiliar);
+        drawGame(matriz_auxiliar, grid_mapa, tileset_parede, spritesheet, pacman, state_atual, mapa_mascaras);
 
         //RESTANTE DOS LAYERS(NUMA STATE MACHINE)
         switch(state_atual)
@@ -182,6 +190,6 @@ void gameLevel(int level){
         EndDrawing();
     }
 
-    cleanup(grid_mapa, matriz_auxiliar, cut_in, som_cut_in, tileset_parede);
+    cleanup(grid_mapa, matriz_auxiliar, mapa_mascaras, cut_in, som_cut_in, tileset_parede);
     return;
 }
