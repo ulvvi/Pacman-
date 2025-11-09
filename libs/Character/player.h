@@ -239,7 +239,7 @@ void atualizaColisaoFantasma(tInimigo* fantasma, Rectangle* colisao_fantasma, in
     }
 }
 
-/*CHECA COLISAO ENTRE O PLAYER E O FINAL, RETORNA O INDICE DO FANTASMA QUE FOI COLIDIDO, OU 0 SE NAO HOUVE COLISAO*/
+/*CHECA COLISAO ENTRE O PLAYER E O FINAL, RETORNA O INDICE DO FANTASMA QUE FOI COLIDIDO, OU -1 SE NAO HOUVE COLISAO*/
 int checaColisaoFantasma(Rectangle colisao_player, Rectangle* colisao_fantasma, int n)
 {
     for(int i = 0; i < n; i++)
@@ -250,7 +250,7 @@ int checaColisaoFantasma(Rectangle colisao_player, Rectangle* colisao_fantasma, 
             return i;
         }
     }
-    return 0;
+    return -1;
 }
 
 
