@@ -1,4 +1,4 @@
-# Pacman-
+# Pacman+
 como compilar
 ______________________
 
