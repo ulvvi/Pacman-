@@ -6,13 +6,13 @@
 #include <string.h>
 #include <stdbool.h>
 #include "./MainSystem/system.h"
-#include "HUD.h"
-#include "map.h"
-#include "player.h"
-#include "music.h"
-#include "texturing.h"
-#include "./MainSystem/menu.h"
-#include "./MainSystem/gameplay.h"
+#include "Hud/HUD.h"
+#include "Map/map.h"
+#include "Character/player.h"
+#include "Audio/music.h"
+#include "Map/texturing.h"
+#include "MainSystem/menu.h"
+#include "MainSystem/gameplay.h"
 
 /*----------------------- FUNCOES -----------------------*/
 

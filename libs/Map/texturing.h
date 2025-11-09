@@ -1,7 +1,7 @@
 #pragma once
 #include <math.h>
 #include <stdbool.h>
-#include "MainSystem/system.h"
+#include "../MainSystem/system.h"
 
 //enumeracoes dos tiles(mais pra debugar msm)
 enum 

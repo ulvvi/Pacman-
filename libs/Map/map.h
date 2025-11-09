@@ -1,6 +1,6 @@
 //map.h
 #pragma once
-#include "header.h"
+#include "../header.h"
 
 //inicializa a matriz com o nome do arq
 char** allocateMap(){
