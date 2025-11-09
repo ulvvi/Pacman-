@@ -18,8 +18,9 @@ void drawGame(int** matriz_auxiliar, char** grid_mapa, Texture2D tileset_parede,
 }
 
 
-void updateLogic(tJogador* pacman, char** grid_mapa, GameState* state_atual, int *option){
-
+void updateLogic(tJogador* pacman, char** grid_mapa, GameState* state_atual, int *option, tInimigo* fantasma, Rectangle* colisao_fantasma, int numero_fantasma){
+    static int frame_counter = 0;
+    frame_counter++;
     if(IsKeyPressed(KEY_TAB))
     {
         *option = 0;
@@ -49,6 +50,15 @@ void updateLogic(tJogador* pacman, char** grid_mapa, GameState* state_atual, int
             teleportaPlayer(pacman);
         }
     }
+
+    //fantasmas
+    for(int i = 0; i < numero_fantasma; i++)
+    {
+        fantasma[i] = moveFantasma(fantasma[i], grid_mapa, frame_counter);
+    }
+    atualizaColisaoFantasma(fantasma, colisao_fantasma, numero_fantasma);
+
+
 }
 
 void cleanup(char** grid_mapa, int** matriz_auxiliar, int* mapa_mascaras, Texture2D cut_in, Sound som_cut_in, Texture2D tileset_parede){  
@@ -68,11 +78,11 @@ void cleanup(char** grid_mapa, int** matriz_auxiliar, int* mapa_mascaras, Textur
 void gameLevel(int level){
 
     int cronometro = 0;
-
+    
 
     //dps mudar pro primeiro state ser o menu
     GameState state_atual = GAMEPLAY;
-    Rectangle *colisao_fantasma;
+    Rectangle colisao_player = {0,0,40,40};
    
     
     /*
@@ -142,6 +152,19 @@ void gameLevel(int level){
     */
     tJogador pacman = {{}, 2, 3, 0, 0, false, 0, 250, 1};
     centralizaPlayer(&pacman, grid_mapa);
+    
+
+    /*
+    ***********************************
+                INIMIGO
+    ***********************************
+    */  
+    int numero_fantasmas = calculaFantasmas(grid_mapa);
+    Rectangle *colisao_fantasma = criaColisaoFantasma(numero_fantasmas);
+    tInimigo* fantasmas = malloc(sizeof(tInimigo)*numero_fantasmas);
+    inicializaFantasmas(fantasmas, grid_mapa);
+
+
 
 
     /*
@@ -155,13 +178,17 @@ void gameLevel(int level){
         updateMusic(stems);
         //desenhos
         drawGame(matriz_auxiliar, grid_mapa, tileset_parede, spritesheet, pacman, state_atual, mapa_mascaras);
-
+        for(int i = 0; i < numero_fantasmas; i++)
+        {
+            DrawRectangle(fantasmas[i].pos.x, fantasmas[i].pos.y, TAM_GRID, TAM_GRID, WHITE);
+            DrawRectangleLinesEx(colisao_fantasma[i], 1.0,RED);
+        }
         //RESTANTE DOS LAYERS(NUMA STATE MACHINE)
         switch(state_atual)
         {
             case GAMEPLAY:            
                 switchMusic(GAMEPLAY, stems);
-                updateLogic(&pacman, grid_mapa, &state_atual, &option);
+                updateLogic(&pacman, grid_mapa, &state_atual, &option, fantasmas,colisao_fantasma,numero_fantasmas);
                 if(pacman.power_pellet == true){
                     switchMusic(JACKPOT, stems);
                 }

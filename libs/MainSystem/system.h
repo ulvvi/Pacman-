@@ -21,16 +21,9 @@ typedef struct
     int score;
     int remainingPellets;
     int dir;
+    Rectangle colisao_player;
 
 } tJogador;
-typedef struct
-{
-    //vai ter q criar um array dessa struct se pa na main, dinamicamente
-    //vector2 tem os campos x e y
-    Vector2 pos;
-    int spd;
-    bool vulneravel;
-} tInimigo;
 
 
 //STATE MACHINE eba memorias de guerra

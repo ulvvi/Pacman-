@@ -8,11 +8,13 @@
 #include "./MainSystem/system.h"
 #include "Hud/HUD.h"
 #include "Map/map.h"
+#include "fantasma.h"
 #include "Character/player.h"
 #include "Audio/music.h"
 #include "Map/texturing.h"
 #include "MainSystem/menu.h"
 #include "MainSystem/gameplay.h"
+
 
 /*----------------------- FUNCOES -----------------------*/
 

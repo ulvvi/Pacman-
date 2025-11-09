@@ -9,6 +9,13 @@
         "raylib.h": "c",
         "music.h": "c",
         "gameplay.h": "c",
-        "texturing.h": "c"
+        "texturing.h": "c",
+        "map.h": "c",
+        "hud.h": "c",
+        "header.h": "c",
+        "stdbool.h": "c",
+        "player.h": "c",
+        "menu.h": "c",
+        "fantasma.h": "c"
     }
 }

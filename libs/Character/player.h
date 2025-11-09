@@ -26,7 +26,7 @@ void centralizaPlayer(tJogador* pacman, char** grid_mapa)
             if(grid_mapa[i][j] == 'P')
             {
                 pacman->pos.x = j*TAM_GRID;
-                pacman->pos.y = i*TAM_GRID;
+                pacman->pos.y = i*TAM_GRID;     
                 break;
             }
         }
@@ -81,6 +81,13 @@ void powerPellet(tJogador* pacman, GameState* game_state)
         tempo_restante = 460;
     }
 }
+
+void atualizaColisaoPlayer(tJogador* pacman)
+{
+    pacman->colisao_player.x = pacman->pos.x;
+    pacman->colisao_player.y = pacman->pos.y;
+}
+
 /*MOVIMENTACAO GERAL DO PLAYER, ATUALIZA SUA POSICAO*/
 void movePlayer(char** grid_mapa, tJogador* pacman)
 {
@@ -145,6 +152,7 @@ void movePlayer(char** grid_mapa, tJogador* pacman)
     //att da pos
     pacman->pos.x += pacman->move_x;
     pacman->pos.y += pacman->move_y;
+    atualizaColisaoPlayer(pacman);
 }
 
 
@@ -170,66 +178,4 @@ void teleportaPlayer(tJogador* pacman)
     }    
 }
 
-
-/*CRIACAO DE RETANGULOS DE COLISAO FANTASMA*/
-Rectangle* criaColisaoFantasma(int n)
-{
-    Rectangle* colisao_fantasma = malloc(sizeof(Rectangle)*n);
-    for(int i = 0; i < n; i++)
-    {
-        colisao_fantasma[i].height = TAM_GRID;
-        colisao_fantasma[i].width = TAM_GRID;
-    }
-    //retorna o endereco da struct alocada
-    return colisao_fantasma;
-}
-
-
-/*ATUALIZA COLISAO FANTASMA*/
-void atualizaColisaoFantasma(tInimigo* fantasma, Rectangle* colisao_fantasma, int n)
-{
-    for(int i = 0; i < n; i++)
-    {
-        colisao_fantasma[i].x = fantasma[i].pos.x;
-        colisao_fantasma[i].y = fantasma[i].pos.y;
-    }
-}
-
-/*CHECA COLISAO ENTRE O PLAYER E O FINAL, RETORNA O INDICE DO FANTASMA QUE FOI COLIDIDO, OU -1 SE NAO HOUVE COLISAO*/
-int checaColisaoFantasma(Rectangle colisao_player, Rectangle* colisao_fantasma, int n)
-{
-    for(int i = 0; i < n; i++)
-    {
-        //funcao booleana, retorne true ou false
-        if(CheckCollisionRecs(colisao_player, colisao_fantasma[i]))
-        {
-            return i;
-        }
-    }
-    return -1;
-}
-
-
-/*SUBTRAI A VIDA DO JOGADOR E, SE NECESSARIO, DA GAMEOVER*/
-void ConcretizaColisao(tJogador* pacman, tInimigo inimigo, int n, Vector2* pos_inicial, char **grid_mapa, int indice)
-{
-    switch(pacman->power_pellet)
-    {
-        case true:
-            //logica de comer o fantasma
-        break;
-
-        case false:
-            if(pacman->vida > 0)
-            {
-                pacman->vida--;
-                centralizaPlayer(pacman, grid_mapa);
-            }
-            else
-            {
-                gameOver();
-            }
-        break;
-    }
-}
 
