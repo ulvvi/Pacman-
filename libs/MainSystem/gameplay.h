@@ -102,7 +102,8 @@ void gameLevel(int level){
     
     Sound som_cut_in = LoadSound("audio/ambiente/CUTIN.mp3");
     SetSoundVolume(som_cut_in, 0.5f);
-    
+    Sound menuClick = LoadSound("audio/menuSFX/menu1.wav");
+    SetSoundVolume(menuClick, 1.2f);
     
     /*
     ***********************************
@@ -152,7 +153,6 @@ void gameLevel(int level){
     {
         //atualiza musicas
         updateMusic(stems);
-
         //desenhos
         drawGame(matriz_auxiliar, grid_mapa, tileset_parede, spritesheet, pacman, state_atual, mapa_mascaras);
 
@@ -169,7 +169,7 @@ void gameLevel(int level){
 
             case PAUSE:
                 switchMusic(MENU, stems);
-                menuLogic(&option, &state_atual, grid_mapa);
+                menuLogic(&option, &state_atual, grid_mapa, menuClick);
             break;
             
             //deuixar pa tu refatorar taylor
