@@ -216,14 +216,16 @@ void teleportaPlayer(tJogador* pacman)
 
 
 /*CRIACAO DE RETANGULOS DE COLISAO FANTASMA*/
-void criaColisaoFantasma(Rectangle* colisao_fantasma, int n)
+Rectangle* criaColisaoFantasma(int n)
 {
-    colisao_fantasma = malloc(sizeof(Rectangle)*n);
+    Rectangle* colisao_fantasma = malloc(sizeof(Rectangle)*n);
     for(int i = 0; i < n; i++)
     {
         colisao_fantasma[i].height = TAM_GRID;
         colisao_fantasma[i].width = TAM_GRID;
     }
+    //retorna o endereco da struct alocada
+    return colisao_fantasma;
 }
 
 
@@ -242,6 +244,7 @@ int checaColisaoFantasma(Rectangle colisao_player, Rectangle* colisao_fantasma, 
 {
     for(int i = 0; i < n; i++)
     {
+        //funcao booleana, retorne true ou false
         if(CheckCollisionRecs(colisao_player, colisao_fantasma[i]))
         {
             return i;
@@ -254,11 +257,10 @@ int checaColisaoFantasma(Rectangle colisao_player, Rectangle* colisao_fantasma, 
 /*SUBTRAI A VIDA DO JOGADOR E, SE NECESSARIO, DA GAMEOVER*/
 void ConcretizaColisao(tJogador* pacman, tInimigo inimigo, int n, Vector2* pos_inicial, char **grid_mapa, int indice)
 {
-    //checacolisaofantasma na main
     switch(pacman->power_pellet)
     {
         case true:
-        
+            //logica de comer o fantasma
         break;
 
         case false:
