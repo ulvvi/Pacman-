@@ -20,6 +20,7 @@ typedef struct
     bool power_pellet;
     int score;
     int remainingPellets;
+    int dir;
 
 } tJogador;
 typedef struct

@@ -18,7 +18,7 @@ void drawGame(int** matriz_auxiliar, char** grid_mapa, Texture2D tileset_parede,
 }
 
 
-void updateLogic(tJogador* pacman, char** grid_mapa, int* grid_i, int* grid_j, GameState* state_atual, int *option){
+void updateLogic(tJogador* pacman, char** grid_mapa, GameState* state_atual, int *option){
 
     if(IsKeyPressed(KEY_TAB))
     {
@@ -27,12 +27,12 @@ void updateLogic(tJogador* pacman, char** grid_mapa, int* grid_i, int* grid_j, G
     }
 
     //movimentacao
-    movePlayer(grid_mapa, pacman, grid_i, grid_j);
+    movePlayer(grid_mapa, pacman);
 
     //colisoes pellets
-    if(checaPlayerCentralizado(pacman))
+    if(checaPlayerCentralizado(pacman) && checaPlayerDentroMapa(pacman))
     {   
-        colisaoPellets(pacman, grid_mapa, &pacman->score, &pacman->remainingPellets, *grid_i, *grid_j);
+        colisaoPellets(pacman, grid_mapa, &pacman->score, &pacman->remainingPellets);
     }
 
     if(pacman->power_pellet == true)
@@ -67,7 +67,7 @@ void cleanup(char** grid_mapa, int** matriz_auxiliar, int* mapa_mascaras, Textur
 
 void gameLevel(int level){
 
-    int grid_i, grid_j, cronometro = 0;
+    int cronometro = 0;
 
 
     //dps mudar pro primeiro state ser o menu
@@ -140,7 +140,7 @@ void gameLevel(int level){
                 PLAYER
     ***********************************
     */
-    tJogador pacman = {{}, 2, 3, 0, 0, false, 0, 250};
+    tJogador pacman = {{}, 2, 3, 0, 0, false, 0, 250, 1};
     centralizaPlayer(&pacman, grid_mapa);
 
 
@@ -161,7 +161,7 @@ void gameLevel(int level){
         {
             case GAMEPLAY:            
                 switchMusic(GAMEPLAY, stems);
-                updateLogic(&pacman, grid_mapa, &grid_i, &grid_j, &state_atual, &option);
+                updateLogic(&pacman, grid_mapa, &state_atual, &option);
                 if(pacman.power_pellet == true){
                     switchMusic(JACKPOT, stems);
                 }

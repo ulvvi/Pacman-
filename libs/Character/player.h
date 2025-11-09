@@ -35,8 +35,12 @@ void centralizaPlayer(tJogador* pacman, char** grid_mapa)
 
 
 /*COLISAO COM PELLETS(ATUALIZA SCORE E ESTADO AO PEGAR POWER PELLET)*/
-void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPellets, int grid_i, int grid_j)
+void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPellets)
 {
+    //grid atual
+    int grid_i = pacman->pos.y/TAM_GRID;
+    int grid_j = pacman->pos.x/TAM_GRID;
+
     switch(grid_mapa[grid_i][grid_j])
     {
     //pellet
@@ -78,117 +82,69 @@ void powerPellet(tJogador* pacman, GameState* game_state)
     }
 }
 /*MOVIMENTACAO GERAL DO PLAYER, ATUALIZA SUA POSICAO*/
-void movePlayer(char** grid_mapa, tJogador* pacman, int* grid_i, int* grid_j)
+void movePlayer(char** grid_mapa, tJogador* pacman)
 {
-    static bool intencao_horizontal = false, intencao_vertical = false;
-    static int move_alvo_x = 0, move_alvo_y = 0;
-    bool reverteu = false, virou = false;
-    //CORRECAO PRA MOMENTOS EM QUE SE ATUALIZA A SPD DO PACMAN E ELE AINDA TA SE MOVENDO
-    //ANTES, AO ATUALIZAR A SPD DELE EM OUTRAS FUNCOES, SO ATUALIZAVA O MOVE_X SE HOUVESSE INPUT
-    //SOLUCAO FEIA, MAS RESOLVE. basicamente, é um sincronizador da velocidade, vai ser bem util mais a frente
-    if (pacman->move_x > 0) 
-        pacman->move_x = pacman->spd;
-    if (pacman->move_x < 0) 
-        pacman->move_x = -pacman->spd;
-    if (pacman->move_y > 0)
-         pacman->move_y = pacman->spd;
-    if (pacman->move_y < 0) 
-        pacman->move_y = -pacman->spd;
-    //pegar o input
+    //agora essas duas var servem mais pra indicar a dir no eixo horizontal e vertical(podem ser -1,0,1)
+    static int move_alvo_x = 0;
+    static int move_alvo_y = 0;
 
-    if(IsKeyPressed(KEY_RIGHT))
+    //att da move_x caso haja atualizacao externa da spd
+    if(pacman->move_x > 0) pacman->move_x = pacman->spd;
+    else if(pacman->move_x < 0) pacman->move_x = -pacman->spd;
+    else if(pacman->move_y > 0) pacman->move_y = pacman->spd;
+    else if(pacman->move_y < 0) pacman->move_y = -pacman->spd; 
+         
+    //input horizontal
+    if(IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_LEFT))
     {
-        intencao_horizontal = true;
-        intencao_vertical = false;
-        move_alvo_x = pacman->spd;
+        pacman->dir = IsKeyPressed(KEY_RIGHT) - IsKeyPressed(KEY_LEFT);
+        move_alvo_x = pacman->dir;
         move_alvo_y = 0;
     }
-    if(IsKeyPressed(KEY_LEFT))
+    //input vertical
+    if(IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN))
     {
-        intencao_horizontal = true;
-        intencao_vertical = false;
-        move_alvo_x = -pacman->spd;
-        move_alvo_y = 0;
-    }
-    if(IsKeyPressed(KEY_UP))
-    {
-        intencao_horizontal = false;
-        intencao_vertical = true;
+        pacman->dir =  IsKeyPressed(KEY_DOWN) - IsKeyPressed(KEY_UP);
         move_alvo_x = 0;
-        move_alvo_y = -pacman->spd;
+        move_alvo_y = pacman->dir;
     }
-    if(IsKeyPressed(KEY_DOWN))
+    
+    //inversao imediata de posicao(no msm eixo)
+    if(abs(pacman->move_x) == abs(move_alvo_x*pacman->spd))
+        pacman->move_x = move_alvo_x*pacman->spd;
+    if(abs(pacman->move_y) == abs(move_alvo_y*pacman->spd))
+        pacman->move_y = move_alvo_y*pacman->spd;
+    
+    //troca de eixo
+    if(checaPlayerCentralizado(pacman) && checaPlayerDentroMapa(pacman))
     {
-        intencao_horizontal = false;
-        intencao_vertical = true;
-        move_alvo_x = 0;
-        move_alvo_y = pacman->spd;
-    }
+        //calculo grid atual
+        int grid_i = pacman->pos.y/TAM_GRID;
+        int grid_j = pacman->pos.x/TAM_GRID;    
 
-    //impedir o delay aparente(se apertar pra se mover no msm eixo, ele n espera centralizar no grid, os dois ifs sao pra isso)
-    if(intencao_horizontal == true && move_alvo_x == - pacman->move_x)
-    {
-        pacman->move_x = move_alvo_x;
-        intencao_horizontal = false;
-        reverteu = true;
-    }
-    if(intencao_vertical == true && move_alvo_y == - pacman->move_y)
-    {
-        pacman->move_y = move_alvo_y;
-        intencao_vertical = false;
-        reverteu = true;
-    }
-
-    if(checaPlayerDentroMapa(pacman) == true)
-    {
-        //grid atual do player
-        *grid_i = (int)pacman->pos.y / TAM_GRID;
-        *grid_j = (int)pacman->pos.x / TAM_GRID;
-
-        //tomar a decisao de virar(caso seja necessario)
-        if(checaPlayerCentralizado(pacman) == true && reverteu == false)
+        if(move_alvo_y != 0 && grid_mapa[grid_i+move_alvo_y][grid_j] != '#')
         {
-            //há intencao de mudar de eixo(do vertical pro horizontal ne)
-            if(intencao_horizontal == true)
-            {
-                if((grid_mapa[*grid_i][*grid_j+(move_alvo_x)/pacman->spd]) != '#')
-                {
-                    pacman->move_x = move_alvo_x;
-                    pacman->move_y = 0;
-                    intencao_horizontal = false;
-                    virou = true;
-                }
-            }
-            //há intencao de mudar de eixo
-            else if(intencao_vertical == true)
-            {
-                if((grid_mapa[*grid_i+(move_alvo_y/pacman->spd)][*grid_j]) != '#')
-                {
-                    pacman->move_y = move_alvo_y;
-                    pacman->move_x = 0;
-                    intencao_vertical = false;
-                    virou = true;
-                }
-            }
-            //caso de colisao caso ele esteja andando reto em algum eixo
-            //tive q adicionar grid_i != 0 na condicao por conta do caso particular em que o jogador ta no grid 0 se movimentando para cima, causando segmentation fault([0 +(-1)][])
-            if(virou == false && (*grid_i != 0 && *grid_i != TAM_I-1) && (grid_mapa[*grid_i+(pacman->move_y/pacman->spd)][*grid_j+(pacman->move_x/pacman->spd)]) == '#')
-            {
-                pacman->move_x = 0;
-                pacman->move_y = 0;
-            }    
+            pacman->move_y = move_alvo_y*pacman->spd;
+            pacman->move_x = 0;
+            move_alvo_y = 0;
+            
+        }
+        else if(move_alvo_x != 0 && grid_mapa[grid_i][grid_j+move_alvo_x] != '#')
+        {
+            pacman->move_x = move_alvo_x*pacman->spd;
+            pacman->move_y = 0;
+            move_alvo_x = 0;
+        }
+        //caso em que nao se aperta pra virar em uma intersecao(continua no msm eixo andando reto)
+        if(grid_mapa[(grid_i+pacman->move_y/pacman->spd)][grid_j+(pacman->move_x/pacman->spd)] == '#')
+        {
+            pacman->move_x = 0;
+            pacman->move_y = 0;
         }
     }
-    //atualizacao da pos    
-    pacman->pos.x+= pacman->move_x; 
-    pacman->pos.y+= pacman->move_y;
-    
-    //atualizacao do grid apos se mover
-    if(checaPlayerDentroMapa(pacman) == true)
-    {
-        *grid_i = (int)pacman->pos.y / TAM_GRID;
-        *grid_j = (int)pacman->pos.x / TAM_GRID;
-    }
+    //att da pos
+    pacman->pos.x += pacman->move_x;
+    pacman->pos.y += pacman->move_y;
 }
 
 
@@ -276,3 +232,4 @@ void ConcretizaColisao(tJogador* pacman, tInimigo inimigo, int n, Vector2* pos_i
         break;
     }
 }
+
