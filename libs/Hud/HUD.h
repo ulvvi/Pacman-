@@ -5,10 +5,23 @@
 #pragma once
 #include "../header.h"
 
-#define MENU_SPACING 100
-#define SpaceBetweenOptions 50
+#define MENU_SPACING_X 100 
+#define MENU_PADDING_Y 20  
 #define OPTION_HEIGHT 40
-#define OPTION_WIDTH 270
+#define OPTION_WIDTH 300
+#define TITLE_FONT_SIZE 60
+#define OPTION_FONT_SIZE 30
+#define OPTION_COUNT 5
+
+
+#define COLOR_BACKGROUND_OVERLAY  Fade(BLACK, 0.8f)
+#define COLOR_TITLE_BG            BLUE
+#define COLOR_TITLE_TEXT          RAYWHITE
+#define COLOR_OPTION_NORMAL_BG    BLACK
+#define COLOR_OPTION_NORMAL_TEXT  RAYWHITE
+#define COLOR_OPTION_HIGHLIGHT_BG LIGHTGRAY
+#define COLOR_OPTION_HIGHLIGHT_TEXT BLACK
+#define COLOR_SELECTOR            RAYWHITE
 
 Color CYAN = {0, 255, 255, 255};
 
@@ -73,21 +86,46 @@ void gameOver(void)
 
 
 void drawMenu(int* index){
-  DrawRectangle(0, 0, LARGURA, ALTURA, Fade(BLACK, 0.8f));
-  DrawRectangle(MENU_SPACING - 10, 90, MeasureText("PAUSE", 60) + 20, 70, CYAN);
-  DrawText("PAUSE", MENU_SPACING, 100, 60, BLACK);
+    DrawRectangle(0, 0, LARGURA, ALTURA, COLOR_BACKGROUND_OVERLAY);
 
-  for(int i = BACK; i <= QUIT; i++){
-    if(i == *index){
-      DrawText(">", MENU_SPACING - 20, 203 + i * SpaceBetweenOptions, OPTION_HEIGHT, WHITE);
-      DrawRectangle(MENU_SPACING, 196 + i * SpaceBetweenOptions, OPTION_WIDTH*1.2, OPTION_HEIGHT*1.2, LIGHTGRAY);
-      DrawText(menuOptionsText[i], MENU_SPACING + 10, 206 + i * SpaceBetweenOptions, 30, BLACK);
-      continue;
+    const char* titleText = "PAUSE";
+    int titleWidth = MeasureText(titleText, TITLE_FONT_SIZE);
+    int titleY = 100;
+
+    DrawRectangle(MENU_SPACING_X - 5, titleY - 5, titleWidth + 30, TITLE_FONT_SIZE + 30, DARKBLUE);
+    DrawRectangle(MENU_SPACING_X - 10, titleY - 10, titleWidth + 20, TITLE_FONT_SIZE + 20, COLOR_TITLE_BG);
+
+    DrawText(titleText, MENU_SPACING_X, titleY, TITLE_FONT_SIZE, COLOR_TITLE_TEXT);
+
+
+    int startY = titleY + TITLE_FONT_SIZE + 50; 
+    
+    for(int i = BACK; i <= QUIT; i++){
+
+        int currentY = startY + i * (OPTION_HEIGHT + MENU_PADDING_Y);
+        
+        if(i == *index){
+            int expandedWidth = OPTION_WIDTH * 1.1; 
+            int expandedHeight = OPTION_HEIGHT * 1.1;
+            int xOffset = (expandedWidth - OPTION_WIDTH) / 2;
+            int yOffset = (expandedHeight - OPTION_HEIGHT) / 2;
+
+            DrawRectangle(MENU_SPACING_X - xOffset, currentY - yOffset, expandedWidth + 5, expandedHeight + 5, DARKGRAY);
+            DrawRectangle(MENU_SPACING_X - xOffset, currentY - yOffset, expandedWidth, expandedHeight, COLOR_OPTION_HIGHLIGHT_BG);
+
+
+            DrawText(menuOptionsText[i], MENU_SPACING_X, currentY + (expandedHeight - OPTION_FONT_SIZE) / 2, OPTION_FONT_SIZE, COLOR_OPTION_HIGHLIGHT_TEXT);
+            
+            DrawText(">", MENU_SPACING_X - 30, currentY + (expandedHeight - OPTION_FONT_SIZE) / 2, OPTION_FONT_SIZE, COLOR_SELECTOR);
+            
+        } 
+        else{
+            DrawRectangle(MENU_SPACING_X, currentY, OPTION_WIDTH + 5, OPTION_HEIGHT + 5, DARKGRAY);
+            DrawRectangle(MENU_SPACING_X, currentY, OPTION_WIDTH, OPTION_HEIGHT, COLOR_OPTION_NORMAL_BG);
+            
+            DrawText(menuOptionsText[i], MENU_SPACING_X + 10, currentY + (OPTION_HEIGHT - 20) / 2, OPTION_FONT_SIZE - 10, COLOR_OPTION_NORMAL_TEXT);
+        }
     }
-    DrawRectangle(MENU_SPACING, 200 + i * SpaceBetweenOptions, OPTION_WIDTH, OPTION_HEIGHT, DARKGRAY);
-    DrawText(menuOptionsText[i], MENU_SPACING + 10, 210 + i * SpaceBetweenOptions, 20, WHITE);
-  }
-
 }
 
 int currentChosen(int cur){

@@ -1,6 +1,6 @@
 //inclusões
-#include "MainSystem/system.h"
-#include "Character/player.h"
+#include "../MainSystem/system.h"
+#include "../Character/player.h"
 #include "stdbool.h"
 #include <math.h>
 #include <stdio.h>
