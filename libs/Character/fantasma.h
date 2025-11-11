@@ -1,3 +1,6 @@
+//inclusões
+#include "../MainSystem/system.h"
+#include "../Character/player.h"
 #include "../header.h"
 #pragma once
 

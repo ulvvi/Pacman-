@@ -50,6 +50,14 @@ typedef struct
 
 }tMapa;
 
+
+typedef struct
+{
+    Sound stems[4];
+    Sound menu[4];
+
+}tGameSounds;
+
 /*RECEBE UM INTEIRO, REALIZA UMA DIVISAO FLUTUANTE POR 60 E RETORNA SEU VALOR EM DECIMAL. GENERICO, DA PRA USAR PRA TUDO*/
 float temporizador(int* cronometro)
 {
