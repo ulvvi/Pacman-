@@ -58,6 +58,9 @@ void updateLogic(tJogador* pacman, char** grid_mapa, GameState* state_atual, int
     }
     atualizaColisaoFantasma(fantasma, colisao_fantasma, numero_fantasma);
 
+    //frutas
+    fruitSpawn(grid_mapa);
+
 
 }
 

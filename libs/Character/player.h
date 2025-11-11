@@ -56,7 +56,12 @@ void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPe
         (*score)+=50;
         grid_mapa[grid_i][grid_j] = ' ';
         (*totalPellets)--;
-    break; 
+    break;
+
+    case 'U':
+        //logica da fruta
+        (*score)+=100;
+        grid_mapa[grid_i][grid_j] = ' ';
     }
 }
 

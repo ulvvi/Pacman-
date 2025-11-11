@@ -88,6 +88,10 @@ void drawMap(char** mapa)
                 //desenhar(ou n kkkkkkkkkkkkk) os vazios
                 case ' ':
                     break;
+                //desenhar fruta
+                case 'U':
+                    DrawCircle(center_x, center_y, 8, RED);
+                    break;
                 //bizzarrices
                 default:
                     break;
@@ -141,3 +145,18 @@ void freeMatrizAux(int** matriz_auxiliar)
     return;
 }
 
+
+
+void fruitSpawn(char** gridMapa){
+    int spawnChance = GetRandomValue(1, 10000);
+    if(spawnChance <= 5)
+    {
+        int x, y;
+        do {
+            x = GetRandomValue(1, TAM_J - 2);
+            y = GetRandomValue(1, TAM_I - 2);
+        } while(gridMapa[y][x] != ' ');
+
+        gridMapa[y][x] = 'U';
+    }
+}
