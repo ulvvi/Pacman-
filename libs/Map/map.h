@@ -2,6 +2,7 @@
 #pragma once
 #include "../header.h"
 
+
 //inicializa a matriz com o nome do arq
 char** allocateMap(){
     char** grid_mapa = (char**)malloc(sizeof(char*)*TAM_I);
@@ -144,6 +145,8 @@ void freeMatrizAux(int** matriz_auxiliar)
     free(matriz_auxiliar);
     return;
 }
+
+
 
 
 

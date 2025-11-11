@@ -55,12 +55,22 @@ enum
     BLOCO_UNICO,
 };
 
+void trocaCorEXT(tMapa* mapa, int cor)
+{
+    mapa->spritesheet.y = 40*cor;
+}
+void trocaCor(tMapa* mapa)
+{
+
+    mapa->spritesheet.y = 40*GetRandomValue(0, mapa->tamanho_spritesheet);
+}
+
 //funcao auxiliar, pra ajudar a identificar paredes
-bool checaParede(char** matriz, int i, int j)
+bool checaParede(char** grid_mapa, int i, int j)
 {
     if(i < 0 || i >= TAM_I || j < 0 || j >= TAM_J)
         return false;
-    return matriz[i][j] == '#';
+    return grid_mapa[i][j] == '#';
 }
 
 //mapeamento dos tiles de acordo com seu bitmask. os indices indicam o bitmask dos tiles
@@ -132,16 +142,16 @@ void inicializaMapeamento(int* mapa_mascaras, int tam)
 //255 = 46, 0 = 47
 
 //realiza o calculo da mascara de acordo com o tile central. olha pros 8 blocos adjacentes ao centro pra realizar esse calculo
-int calculaMascara(char **matriz, int i, int j)
+int calculaMascara(char** grid_mapa, int i, int j)
 {   
     //esses vizinhos cardeais é pq tipo, num tile set 8 bit sao 2^8 combinacoes de tile, porem, tem uma repeticao
     //dentro dessas combinacoes todas de tiles, ent de fato so se usa 47. caso um dos cantos do grid 3x3 n tenha vizinhos
     //cardeais, ou seja, nao seja conectado de forma alguma com o tile P central, n tem pq levar ele em consideracao na contagem
     //de pesos, e é isso q evita redundancia e evita tbm ter q mapear 256 tiles com repeticao. com isso, so precisamo de 47(amem)
-    bool vizinho_cardeal_no = checaParede(matriz, i-1, j) && checaParede(matriz, i, j-1);
-    bool vizinho_cardeal_ne = checaParede(matriz, i-1, j) && checaParede(matriz, i, j+1);
-    bool vizinho_cardeal_so = checaParede(matriz, i+1, j) && checaParede(matriz, i, j-1);
-    bool vizinho_cardeal_se = checaParede(matriz, i+1, j) && checaParede(matriz, i, j+1);
+    bool vizinho_cardeal_no = checaParede(grid_mapa, i-1, j) && checaParede(grid_mapa, i, j-1);
+    bool vizinho_cardeal_ne = checaParede(grid_mapa, i-1, j) && checaParede(grid_mapa, i, j+1);
+    bool vizinho_cardeal_so = checaParede(grid_mapa, i+1, j) && checaParede(grid_mapa, i, j-1);
+    bool vizinho_cardeal_se = checaParede(grid_mapa, i+1, j) && checaParede(grid_mapa, i, j+1);
     //PESOS: 
     //1   2   4
     //8   P   16
@@ -150,44 +160,46 @@ int calculaMascara(char **matriz, int i, int j)
     int somatorio_pesos = 0;
 
     //noroeste
-    if(checaParede(matriz, i-1, j-1) && vizinho_cardeal_no) somatorio_pesos+=1;
+    if(checaParede(grid_mapa, i-1, j-1) && vizinho_cardeal_no) somatorio_pesos+=1;
     //norte
-    if(checaParede(matriz, i-1, j)) somatorio_pesos+=2;
+    if(checaParede(grid_mapa, i-1, j)) somatorio_pesos+=2;
     //nordeste
-    if(checaParede(matriz, i-1, j+1) && vizinho_cardeal_ne) somatorio_pesos+=4;
+    if(checaParede(grid_mapa, i-1, j+1) && vizinho_cardeal_ne) somatorio_pesos+=4;
     //oeste
-    if(checaParede(matriz, i, j-1)) somatorio_pesos+=8;
+    if(checaParede(grid_mapa, i, j-1)) somatorio_pesos+=8;
     //no centro obviamente nao tem peso, é a parede em si que estamos analisando(é o 'P' ali da tabela de pesos)
     //leste
-    if(checaParede(matriz, i, j+1)) somatorio_pesos+=16;
+    if(checaParede(grid_mapa, i, j+1)) somatorio_pesos+=16;
     //sudoeste
-    if(checaParede(matriz, i+1, j-1) && vizinho_cardeal_so) somatorio_pesos+=32;
+    if(checaParede(grid_mapa, i+1, j-1) && vizinho_cardeal_so) somatorio_pesos+=32;
     //sul
-    if(checaParede(matriz, i+1, j)) somatorio_pesos+=64;
+    if(checaParede(grid_mapa, i+1, j)) somatorio_pesos+=64;
     //sudeste
-    if(checaParede(matriz, i+1, j+1) && vizinho_cardeal_se) somatorio_pesos+=128;
+    if(checaParede(grid_mapa, i+1, j+1) && vizinho_cardeal_se) somatorio_pesos+=128;
     
     return somatorio_pesos;
 }
 
 //alocacao dos tiles no mapa atual em uma matriz(pra n precisar ficar calculando toda hr a cada frame). essa func so deve rodar em inicializacoes ou troca de mapas
-void texturizaMapa(int** matriz_auxiliar, int* mapa_mascaras, char** matriz)
+void texturizaMapa(tMapa* mapa)
 {
     for(int i = 0; i < TAM_I; i++)
     {
         for(int j = 0; j < TAM_J; j++)
         {
-            if(matriz[i][j] == '#')
+            if(mapa->grid_mapa[i][j] == '#')
             {
                 //atribuicao da matriz auxiliar[i][j] a uma respectiva mascara
-                matriz_auxiliar[i][j] = mapa_mascaras[calculaMascara(matriz, i, j)];
+                mapa->matriz_auxiliar[i][j] = mapa->mapa_mascaras[calculaMascara(mapa->grid_mapa, i, j)];
+                
             }
         }
     }
+    trocaCor(mapa);
 }
 
 //desenhos dos tiles de acordo com a matriz_auxiliar ja "texturizada"(com as mascaras ja calculadas)
-void drawTexturaParede(int** matriz_auxiliar, Texture2D tileset, Rectangle spritesheet)
+void drawTexturaParede(tMapa mapa)
 {
     Vector2 pos;
     for(int i = 0; i < TAM_I; i++) 
@@ -196,12 +208,12 @@ void drawTexturaParede(int** matriz_auxiliar, Texture2D tileset, Rectangle sprit
         {
             pos.x = j * TAM_GRID;
             pos.y = i * TAM_GRID;
-            if(matriz_auxiliar[i][j] != -1)
+            if(mapa.matriz_auxiliar[i][j] != -1)
             {
                 //isso da certo pq todos os tiles estao na mesma coluna, vou manter esse padrao   
-                spritesheet.x += 40*matriz_auxiliar[i][j];
-                DrawTextureRec(tileset, spritesheet, pos, WHITE);
-                spritesheet.x = 0;
+                mapa.spritesheet.x += 40*mapa.matriz_auxiliar[i][j];
+                DrawTextureRec(mapa.tileset_parede, mapa.spritesheet, pos, WHITE);
+                mapa.spritesheet.x = 0;
             }
         }
     }
@@ -210,4 +222,23 @@ void drawTexturaParede(int** matriz_auxiliar, Texture2D tileset, Rectangle sprit
 void freeMascaras(int* mapa_mascaras)
 {
     free(mapa_mascaras);
+}
+
+//Inicializa tudo em relacao ao mapa junto de suas texturas
+void inicializaMapa(tMapa* mapa)
+{
+    //mapa em si
+    mapa->grid_mapa = allocateMap();
+    mapa->pellets_totais = initMap("maps/mapa1.txt", mapa->grid_mapa);
+
+    //texturas
+    mapa->mapa_mascaras = malloc(sizeof(int)*256);
+    mapa->matriz_auxiliar = inicializaMatrizAux();
+    inicializaMapeamento(mapa->mapa_mascaras, 256);
+    mapa->tamanho_spritesheet = 7;
+    mapa->spritesheet.x = 0;
+    mapa->spritesheet.y = 0;
+    mapa->spritesheet.height = 40;
+    mapa->spritesheet.width = 40;
+    texturizaMapa(mapa);
 }
