@@ -16,6 +16,8 @@ typedef struct
     float spd;
     bool vulneravel;
     int direcao;
+    Rectangle colisao_fantasma;
+    Vector2 pos_inicial;
 } tInimigo;
 
 //usei essa func so q pro player, n sei se vai ajudar, mas ta ai
@@ -24,6 +26,15 @@ bool checaFantasmaDentroMapa(tInimigo fantasma)
     return (fantasma.pos.x > 0 && fantasma.pos.x < TAM_GRID*(TAM_J-1) && fantasma.pos.y > 0 && fantasma.pos.y < TAM_GRID*(TAM_I-1));
 }
 
+void centralizaFantasma(tInimigo* fantasma, int numero_fantasma)
+{
+    for(int i = 0; i < numero_fantasma; i++)
+    {
+        fantasma[i].pos.x = fantasma[i].pos_inicial.x;
+        fantasma[i].pos.y = fantasma[i].pos_inicial.y;
+        fantasma[i].direcao = 0;
+    }
+}
 
 int validaDirecao(tInimigo fantasma, char** grid_mapa, int dir){
         switch(dir)
@@ -218,44 +229,35 @@ void inicializaFantasmas(tInimigo* fantasma, char** grid_mapa)
                 fantasma[contador].spd = 2;
                 fantasma[contador].vulneravel = false;
                 fantasma[contador].direcao = 0;
+                fantasma[contador].colisao_fantasma.height = TAM_GRID;
+                fantasma[contador].colisao_fantasma.width = TAM_GRID;
+                fantasma[contador].colisao_fantasma.x = fantasma[contador].pos.x;
+                fantasma[contador].colisao_fantasma.y = fantasma[contador].pos.y;
+                fantasma[contador].pos_inicial.x = fantasma[contador].pos.x;
+                fantasma[contador].pos_inicial.y = fantasma[contador].pos.y;
                 contador++;
             }
         }
     }
 }
 
-
-/*CRIACAO DE RETANGULOS DE COLISAO FANTASMA*/
-Rectangle* criaColisaoFantasma(int n)
-{
-    Rectangle* colisao_fantasma = malloc(sizeof(Rectangle)*n);
-    for(int i = 0; i < n; i++)
-    {
-        colisao_fantasma[i].height = TAM_GRID;
-        colisao_fantasma[i].width = TAM_GRID;
-    }
-    //retorna o endereco da struct alocada
-    return colisao_fantasma;
-}
-
-
 /*ATUALIZA COLISAO FANTASMA*/
-void atualizaColisaoFantasma(tInimigo* fantasma, Rectangle* colisao_fantasma, int n)
+void atualizaColisaoFantasma(tInimigo* fantasma, int n)
 {
     for(int i = 0; i < n; i++)
     {
-        colisao_fantasma[i].x = fantasma[i].pos.x;
-        colisao_fantasma[i].y = fantasma[i].pos.y;
+        fantasma[i].colisao_fantasma.x = fantasma[i].pos.x;
+        fantasma[i].colisao_fantasma.y = fantasma[i].pos.y;
     }
 }
 
 /*CHECA COLISAO ENTRE O PLAYER E O FINAL, RETORNA O INDICE DO FANTASMA QUE FOI COLIDIDO, OU -1 SE NAO HOUVE COLISAO*/
-int checaColisaoFantasma(Rectangle colisao_player, Rectangle* colisao_fantasma, int n)
+int checaColisaoFantasma(Rectangle colisao_player, tInimigo* fantasma, int n)
 {
     for(int i = 0; i < n; i++)
     {
         //funcao booleana, retorne true ou false
-        if(CheckCollisionRecs(colisao_player, colisao_fantasma[i]))
+        if(CheckCollisionRecs(colisao_player, fantasma[i].colisao_fantasma))
         {
             return i;
         }
@@ -265,8 +267,10 @@ int checaColisaoFantasma(Rectangle colisao_player, Rectangle* colisao_fantasma, 
 
 
 /*SUBTRAI A VIDA DO JOGADOR E, SE NECESSARIO, DA GAMEOVER*/
-void ConcretizaColisao(tJogador* pacman, tInimigo inimigo, int n, Vector2* pos_inicial, char **grid_mapa, int indice)
+void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, int indice, int numero_fantasma)
 {
+    if (indice == -1)
+        return;
     switch(pacman->power_pellet)
     {
         case true:
@@ -274,15 +278,17 @@ void ConcretizaColisao(tJogador* pacman, tInimigo inimigo, int n, Vector2* pos_i
         break;
 
         case false:
-            if(pacman->vida > 0)
-            {
-                pacman->vida--;
-                centralizaPlayer(pacman, grid_mapa);
-            }
-            else
+            if(pacman->vida == 1)
             {
                 gameOver();
             }
+            else
+            {
+                pacman->vida--;
+                
+                centralizaPlayer(pacman, grid_mapa);
+                centralizaFantasma(fantasma, numero_fantasma);
+            }   
         break;
     }
 }

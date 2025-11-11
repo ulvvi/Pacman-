@@ -33,11 +33,22 @@ typedef enum GameState
     GAMEPLAY,
     JACKPOT,
     PAUSE,
-    CUT_IN
+    CUT_IN,
+    PRIMEIRO_MOVIMENTO
 
 }GameState;
 
+typedef struct 
+{
+    char** grid_mapa;
+    int **matriz_auxiliar;
+    int *mapa_mascaras;
+    Texture2D tileset_parede; 
+    Rectangle spritesheet;
+    int tamanho_spritesheet;
+    int pellets_totais;
 
+}tMapa;
 
 /*RECEBE UM INTEIRO, REALIZA UMA DIVISAO FLUTUANTE POR 60 E RETORNA SEU VALOR EM DECIMAL. GENERICO, DA PRA USAR PRA TUDO*/
 float temporizador(int* cronometro)

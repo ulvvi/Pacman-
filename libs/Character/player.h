@@ -26,11 +26,31 @@ void centralizaPlayer(tJogador* pacman, char** grid_mapa)
             if(grid_mapa[i][j] == 'P')
             {
                 pacman->pos.x = j*TAM_GRID;
-                pacman->pos.y = i*TAM_GRID;     
+                pacman->pos.y = i*TAM_GRID;   
+                pacman->colisao_player.x = pacman->pos.x;
+                pacman->colisao_player.y = pacman->pos.y;
+                pacman->move_x = 0;
+                pacman->move_y = 0;
                 break;
+               
             }
         }
     }
+}
+
+void inicializaPlayer(tJogador* pacman, int pellets)
+{
+    pacman->colisao_player.height = 40;
+    pacman->colisao_player.width= 40;
+    pacman->dir = 1;
+    pacman->power_pellet = false;
+    pacman->score = 0;
+    pacman->spd = 2;
+    pacman->vida = 3; 
+    pacman->remainingPellets = pellets;
+    pacman->move_x = 0;
+    pacman-> move_y = 0;
+    
 }
 
 
@@ -67,7 +87,6 @@ void powerPellet(tJogador* pacman, GameState* game_state)
     static int cheque = 0;
     if(cheque == 0)
     {
-        pacman->spd = 4;
         *game_state = CUT_IN;
         cheque = 1;
     }
@@ -76,7 +95,6 @@ void powerPellet(tJogador* pacman, GameState* game_state)
     if(tempo_restante <= 0)
     {
         pacman->power_pellet = false;
-        pacman->spd = 2;
         cheque = 0;
         tempo_restante = 460;
     }
