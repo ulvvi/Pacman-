@@ -54,6 +54,8 @@ void drawHUD(int score, int totalPellets){
     DrawText(TextFormat("pellets: %d", totalPellets), 150, 810, 20, WHITE);
 }
 
+
+//gameOver não ficaria aqui
 void gameOver(void)
 {
     int tam_over = 80;
