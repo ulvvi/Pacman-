@@ -132,11 +132,11 @@ void gameLevel(int level){
 
 
 
-    /*
-    ***********************************
+    /************************************
                 JOGO
-    ***********************************
-    */
+    ************************************/
+
+    //tentei ate refatorar mas ficaria mt retardado
     while (!WindowShouldClose())
     {
         //atualiza musicas
