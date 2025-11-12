@@ -260,7 +260,7 @@ int checaColisaoFantasma(Rectangle colisao_player, tInimigo* fantasma, int n)
 
 
 /*SUBTRAI A VIDA DO JOGADOR E, SE NECESSARIO, DA GAMEOVER*/
-void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, int indice, int numero_fantasma)
+void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, int indice, int numero_fantasma, GameState* state_atual)
 {
     if (indice == -1)
         return;
@@ -278,9 +278,9 @@ void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, i
             else
             {
                 pacman->vida--;
-                
                 centralizaPlayer(pacman, grid_mapa);
                 centralizaFantasma(fantasma, numero_fantasma);
+                *state_atual = PRIMEIRO_MOVIMENTO;
             }   
         break;
     }
