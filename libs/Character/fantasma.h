@@ -32,6 +32,47 @@ void centralizaFantasma(tInimigo* fantasma, int numero_fantasma)
     }
 }
 
+
+int saindoMapa(tInimigo fantasma)
+{
+    if(fantasma.pos.x == TAM_GRID*(TAM_J)&& fantasma.direcao==2)//portal na direita
+    {
+        return fantasma.direcao;
+    }
+    else if(fantasma.pos.x ==-40 && fantasma.direcao==4)//portal na esquerda
+    {
+        return fantasma.direcao;
+    }
+    else if(fantasma.pos.y ==-40 && fantasma.direcao==1)//portal acima
+    {
+        return fantasma.direcao;
+    }
+    else if(fantasma.pos.y == TAM_GRID*(TAM_I) && fantasma.direcao==3)//portal abaixo
+    {
+        return fantasma.direcao;
+    }
+    else {return -1;}  
+}
+Vector2 teleportaFantasma(tInimigo fantasma){
+
+    switch (fantasma.direcao)
+    {
+        case 1:
+            fantasma.pos.y=TAM_GRID*(TAM_I)-fantasma.spd;
+            break;
+        case 2:
+            fantasma.pos.x=fantasma.spd-TAM_GRID;
+            break;
+        case 3:
+            fantasma.pos.y=fantasma.spd-TAM_GRID;
+            break;
+        case 4:
+            fantasma.pos.x=TAM_GRID*(TAM_J)-fantasma.spd;
+            break;
+    }
+    return fantasma.pos;
+}
+
 int validaDirecao(tInimigo fantasma, char** grid_mapa, int dir){
         switch(dir)
             {
@@ -93,7 +134,7 @@ int escolheDirecao(tInimigo fantasma,char** grid_mapa)
     int dirAtual = fantasma.direcao;
     int dir;
 
-        if(fantasma.direcao>=5 || fantasma.direcao==NULL)//primeira vez: Tem que ser a mesma probabilidade para todos
+        if(fantasma.direcao<1 )//primeira vez: Tem que ser a mesma probabilidade para todos
         {
             do{
                 dir = GetRandomValue(1,4);
@@ -148,8 +189,12 @@ int escolheDirecao(tInimigo fantasma,char** grid_mapa)
 }
 
 tInimigo moveFantasma(tInimigo fantasma,char** grid_mapa, int indice){
-
-    if(indice%20==0){
+    
+    if(saindoMapa(fantasma)!=-1){
+        fantasma.pos=teleportaFantasma(fantasma);
+    }
+    
+    if(indice%20==0 && (fantasma.pos.x>=40 && fantasma.pos.x<=1520) && (fantasma.pos.y>=40 && fantasma.pos.y<=720)){
         fantasma.direcao=escolheDirecao(fantasma, grid_mapa);
     }
 
@@ -159,40 +204,27 @@ tInimigo moveFantasma(tInimigo fantasma,char** grid_mapa, int indice){
             fantasma.pos.y-=fantasma.spd;
             }
             break;
+
         case 2:
-
-        if((int)fantasma.pos.y%40==0 ){
-
-            fantasma.pos.x+=fantasma.spd;}
-
+            if((int)fantasma.pos.y%40==0 ){
+                fantasma.pos.x+=fantasma.spd;
+            }
             break;
-
-       
 
         case 3:
-
-        if((int)fantasma.pos.x%40==0 ){
-
-            fantasma.pos.y+=fantasma.spd;}
-
+            if((int)fantasma.pos.x%40==0 ){
+                fantasma.pos.y+=fantasma.spd;
+            }
             break;
-
-       
 
         case 4:
-
             if((int)fantasma.pos.y%40==0 ){
-
-            fantasma.pos.x-=fantasma.spd;}
-
+            fantasma.pos.x-=fantasma.spd;
+            }
             break;
-
         }
         return fantasma;
         
-        
-   
-
 }
 
 int calculaFantasmas(char** grid_mapa)
@@ -288,4 +320,3 @@ void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, i
         break;
     }
 }
-

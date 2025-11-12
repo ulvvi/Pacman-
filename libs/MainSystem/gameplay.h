@@ -4,7 +4,7 @@
 #pragma once
 
 
-void drawGame(tMapa mapa, tJogador pacman, GameState state_atual){
+void drawGame(tMapa mapa, tJogador pacman, GameState state_atual,int numero_fantasmas, tInimigo *fantasmas){
     //layer fundo/mapa   
     BeginDrawing(); 
     ClearBackground(DARKGRAY);
@@ -13,6 +13,13 @@ void drawGame(tMapa mapa, tJogador pacman, GameState state_atual){
     //layer entidades
     DrawRectangleLinesEx(pacman.colisao_player, 4.0,RED);
     DrawRectangle(pacman.pos.x, pacman.pos.y, TAM_GRID, TAM_GRID, YELLOW);
+    //jaja refatoro isso, é so q por enqt ainda to debuggando 
+        for(int i = 0; i < numero_fantasmas; i++)
+        {
+            DrawRectangle(fantasmas[i].pos.x, fantasmas[i].pos.y, TAM_GRID, TAM_GRID, WHITE);
+            DrawRectangleLinesEx(fantasmas[i].colisao_fantasma, 1.0,RED);
+            
+        }
     //layer main HUD
     drawHUD(pacman.score, pacman.remainingPellets);
     DrawText(TextFormat("posx: %.2f, posy: %.2f, vida: %d", pacman.pos.x, pacman.pos.y, pacman.vida), 900, 810, 20, WHITE);
@@ -142,15 +149,8 @@ void gameLevel(int level){
         //atualiza musicas
         updateMusic(stems);
         //desenhos
-        drawGame(mapa, pacman, state_atual);
+        drawGame(mapa, pacman, state_atual,numero_fantasmas,fantasmas);
         
-        //jaja refatoro isso, é so q por enqt ainda to debuggando 
-        for(int i = 0; i < numero_fantasmas; i++)
-        {
-            DrawRectangle(fantasmas[i].pos.x, fantasmas[i].pos.y, TAM_GRID, TAM_GRID, WHITE);
-            DrawRectangleLinesEx(fantasmas[i].colisao_fantasma, 1.0,RED);
-            
-        }
  
         //RESTANTE DOS LAYERS(NUMA STATE MACHINE)
         switch(state_atual)
