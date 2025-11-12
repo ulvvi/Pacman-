@@ -65,7 +65,7 @@ void updateLogic(tJogador* pacman, char** grid_mapa, GameState* state_atual, int
         fantasma[i] = moveFantasma(fantasma[i], grid_mapa, frame_counter);
     }
     atualizaColisaoFantasma(fantasma, numero_fantasma);
-    ConcretizaColisao(pacman, fantasma, grid_mapa, checaColisaoFantasma(pacman->colisao_player, fantasma, numero_fantasma), numero_fantasma);
+    ConcretizaColisao(pacman, fantasma, grid_mapa, checaColisaoFantasma(pacman->colisao_player, fantasma, numero_fantasma), numero_fantasma, state_atual);
 }
 
 void cleanup(tMapa* mapa, Texture2D cut_in, Sound som_cut_in){  
@@ -86,7 +86,7 @@ void gameLevel(int level){
 
     int cronometro = 0;
     //dps mudar pro primeiro state ser o menu
-    GameState state_atual = GAMEPLAY;
+    GameState state_atual = PRIMEIRO_MOVIMENTO;
 
     /************************************
                 MENU
@@ -164,6 +164,14 @@ void gameLevel(int level){
                 }
             break;
 
+            case PRIMEIRO_MOVIMENTO:
+                bool input = IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN);
+                if(input == true)
+                {
+                    updateLogic(&pacman, mapa.grid_mapa, &state_atual, &option, fantasmas, numero_fantasmas);
+                    state_atual = GAMEPLAY;
+                }
+            break;
             case PAUSE:
                 switchMusic(MENU, stems);
                 menuLogic(&option, &state_atual, mapa.grid_mapa, menuClick);
