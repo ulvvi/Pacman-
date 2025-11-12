@@ -27,8 +27,8 @@ void centralizaPlayer(tJogador* pacman, char** grid_mapa)
             {
                 pacman->pos.x = j*TAM_GRID;
                 pacman->pos.y = i*TAM_GRID;   
-                pacman->colisao_player.x = pacman->pos.x;
-                pacman->colisao_player.y = pacman->pos.y;
+                pacman->colisao_player.x = pacman->pos.x + (TAM_GRID - pacman->colisao_player.width)/2;;
+                pacman->colisao_player.y = pacman->pos.y + (TAM_GRID - pacman->colisao_player.height)/2;;
                 pacman->move_x = 0;
                 pacman->move_y = 0;
                 break;
@@ -40,8 +40,8 @@ void centralizaPlayer(tJogador* pacman, char** grid_mapa)
 
 void inicializaPlayer(tJogador* pacman, int pellets)
 {
-    pacman->colisao_player.height = 40;
-    pacman->colisao_player.width= 40;
+    pacman->colisao_player.height = 30;
+    pacman->colisao_player.width= 30;
     pacman->dir = 1;
     pacman->power_pellet = false;
     pacman->score = 0;
@@ -50,9 +50,31 @@ void inicializaPlayer(tJogador* pacman, int pellets)
     pacman->remainingPellets = pellets;
     pacman->move_x = 0;
     pacman-> move_y = 0;
-    
 }
 
+void trocaSpritePacman(tJogador* pacman)
+{
+    switch(pacman->dir)
+    {
+        case -1: 
+            if(pacman->move_x != 0)
+                pacman->spritesheet.x = 40;
+            if(pacman->move_y != 0)
+                pacman->spritesheet.x = 120;
+        break;
+
+        case 1: 
+            if(pacman->move_x != 0)
+                pacman->spritesheet.x = 0;
+            if(pacman->move_y != 0)
+                pacman->spritesheet.x = 80;
+        break;
+
+        default:
+            pacman->spritesheet.x = 0;
+        break;
+    }
+}
 
 /*COLISAO COM PELLETS(ATUALIZA SCORE E ESTADO AO PEGAR POWER PELLET)*/
 void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPellets)
@@ -107,8 +129,9 @@ void powerPellet(tJogador* pacman, GameState* game_state)
 
 void atualizaColisaoPlayer(tJogador* pacman)
 {
-    pacman->colisao_player.x = pacman->pos.x;
-    pacman->colisao_player.y = pacman->pos.y;
+    
+    pacman->colisao_player.x = pacman->pos.x + (TAM_GRID - pacman->colisao_player.width)/2;
+    pacman->colisao_player.y = pacman->pos.y + (TAM_GRID - pacman->colisao_player.height)/2;
 }
 
 /*MOVIMENTACAO GERAL DO PLAYER, ATUALIZA SUA POSICAO*/
@@ -127,24 +150,28 @@ void movePlayer(char** grid_mapa, tJogador* pacman)
     //input horizontal
     if(IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_LEFT))
     {
-        pacman->dir = IsKeyPressed(KEY_RIGHT) - IsKeyPressed(KEY_LEFT);
-        move_alvo_x = pacman->dir;
+        move_alvo_x = IsKeyPressed(KEY_RIGHT) - IsKeyPressed(KEY_LEFT);
         move_alvo_y = 0;
     }
     //input vertical
     if(IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN))
     {
-        pacman->dir =  IsKeyPressed(KEY_DOWN) - IsKeyPressed(KEY_UP);
+        move_alvo_y = IsKeyPressed(KEY_DOWN) - IsKeyPressed(KEY_UP);
         move_alvo_x = 0;
-        move_alvo_y = pacman->dir;
     }
+
     
     //inversao imediata de posicao(no msm eixo)
-    if(abs(pacman->move_x) == abs(move_alvo_x*pacman->spd))
+    if(pacman->move_x != 0 && abs(pacman->move_x) == abs(move_alvo_x*pacman->spd))
+    {
         pacman->move_x = move_alvo_x*pacman->spd;
-    if(abs(pacman->move_y) == abs(move_alvo_y*pacman->spd))
+        pacman->dir = move_alvo_x;
+    }
+    if(pacman->move_y != 0 && abs(pacman->move_y) == abs(move_alvo_y*pacman->spd))
+    {
         pacman->move_y = move_alvo_y*pacman->spd;
-    
+        pacman->dir = move_alvo_y;
+    }
     //troca de eixo
     if(checaPlayerCentralizado(pacman) && checaPlayerDentroMapa(pacman))
     {
@@ -155,13 +182,16 @@ void movePlayer(char** grid_mapa, tJogador* pacman)
         if(move_alvo_y != 0 && grid_mapa[grid_i+move_alvo_y][grid_j] != '#')
         {
             pacman->move_y = move_alvo_y*pacman->spd;
+            pacman->dir = move_alvo_y;
             pacman->move_x = 0;
             move_alvo_y = 0;
+                
             
         }
         else if(move_alvo_x != 0 && grid_mapa[grid_i][grid_j+move_alvo_x] != '#')
         {
             pacman->move_x = move_alvo_x*pacman->spd;
+            pacman->dir = move_alvo_x;
             pacman->move_y = 0;
             move_alvo_x = 0;
         }
@@ -175,6 +205,10 @@ void movePlayer(char** grid_mapa, tJogador* pacman)
     //att da pos
     pacman->pos.x += pacman->move_x;
     pacman->pos.y += pacman->move_y;
+
+
+    trocaSpritePacman(pacman);
+
     atualizaColisaoPlayer(pacman);
 }
 

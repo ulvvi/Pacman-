@@ -21,7 +21,10 @@ typedef struct
     int score;
     int remainingPellets;
     int dir;
+
     Rectangle colisao_player;
+    Rectangle spritesheet;
+    Texture2D sprite;
 
 } tJogador;
 

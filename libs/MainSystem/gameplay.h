@@ -11,11 +11,12 @@ void drawGame(tMapa mapa, tJogador pacman, GameState state_atual){
     drawMap(mapa.grid_mapa);
     drawTexturaParede(mapa);
     //layer entidades
+    
+    DrawTextureRec(pacman.sprite, pacman.spritesheet, pacman.pos, WHITE);
     DrawRectangleLinesEx(pacman.colisao_player, 4.0,RED);
-    DrawRectangle(pacman.pos.x, pacman.pos.y, TAM_GRID, TAM_GRID, YELLOW);
     //layer main HUD
     drawHUD(pacman.score, pacman.remainingPellets);
-    DrawText(TextFormat("posx: %.2f, posy: %.2f, vida: %d", pacman.pos.x, pacman.pos.y, pacman.vida), 900, 810, 20, WHITE);
+    DrawText(TextFormat("posx: %.2f, posy: %.2f, vida: %d, dir: %d", pacman.pos.x, pacman.pos.y, pacman.vida, pacman.dir), 900, 810, 20, WHITE);
 }
 
 
@@ -106,14 +107,6 @@ void gameLevel(int level){
     tMapa mapa;
     inicializaMapa(&mapa);
     
-    
-
-    /************************************
-                TEXTURAS
-    ************************************/
-    Texture2D cut_in = LoadTexture("sprites/player/pacman_cut_in.png");
-    mapa.tileset_parede = LoadTexture("sprites/ambiente/tileset_paredes.png");
-
 
     /************************************
                 PLAYER
@@ -128,8 +121,29 @@ void gameLevel(int level){
     int numero_fantasmas = calculaFantasmas(mapa.grid_mapa);
     tInimigo* fantasmas = malloc(sizeof(tInimigo)*numero_fantasmas);
     inicializaFantasmas(fantasmas, mapa.grid_mapa);
+    
 
 
+        
+    /************************************
+                TEXTURAS
+    ************************************/
+    Texture2D cut_in = LoadTexture("sprites/player/pacman_cut_in.png");
+    mapa.tileset_parede = LoadTexture("sprites/ambiente/tileset_paredes.png");
+    //jaja refatoro essas coisas da textura
+    pacman.sprite = LoadTexture("sprites/player/pacman_spritesheet.png");
+    pacman.spritesheet.height = 40;
+    pacman.spritesheet.width = 40;
+    pacman.spritesheet.x = 0;
+    pacman.spritesheet.y = 0;
+    for(int i = 0; i < numero_fantasmas; i++)
+    {
+        fantasmas[i].sprite = LoadTexture("sprites/inimigo/fantasma_spritesheet.png");
+        fantasmas[i].spritesheet.height = 40;
+        fantasmas[i].spritesheet.width = 40;
+        fantasmas[i].spritesheet.x = 0;
+        fantasmas[i].spritesheet.y = 0;
+    }
 
 
     /************************************

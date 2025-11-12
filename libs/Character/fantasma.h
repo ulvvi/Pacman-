@@ -14,12 +14,31 @@ typedef struct
     int direcao;
     Rectangle colisao_fantasma;
     Vector2 pos_inicial;
+
+    Texture2D sprite;
+    Rectangle spritesheet;
 } tInimigo;
 
-//usei essa func so q pro player, n sei se vai ajudar, mas ta ai
-bool checaFantasmaDentroMapa(tInimigo fantasma)
-{
-    return (fantasma.pos.x > 0 && fantasma.pos.x < TAM_GRID*(TAM_J-1) && fantasma.pos.y > 0 && fantasma.pos.y < TAM_GRID*(TAM_I-1));
+void trocaSpriteFantasma(tInimigo* fantasma)
+{ 
+    switch(fantasma->direcao)
+    {
+        case 1:
+            fantasma->spritesheet.x = 40;
+        break;
+
+        case 2:
+            fantasma->spritesheet.x = 80;
+        break;
+
+        case 3:
+            fantasma->spritesheet.x = 0;
+        break;
+
+        case 4:
+            fantasma->spritesheet.x = 120;
+        break;
+    }    
 }
 
 void centralizaFantasma(tInimigo* fantasma, int numero_fantasma)
