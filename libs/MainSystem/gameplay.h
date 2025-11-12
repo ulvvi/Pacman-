@@ -59,11 +59,6 @@ void updateLogic(tJogador* pacman, char** grid_mapa, GameState* state_atual, int
     }
     atualizaColisaoFantasma(fantasma, numero_fantasma);
     ConcretizaColisao(pacman, fantasma, grid_mapa, checaColisaoFantasma(pacman->colisao_player, fantasma, numero_fantasma), numero_fantasma, state_atual);
-
-    //frutas
-    fruitSpawn(grid_mapa);
-
-
 }
 
 void cleanup(tMapa* mapa, Texture2D cut_in, Sound som_cut_in){  
@@ -83,32 +78,17 @@ void cleanup(tMapa* mapa, Texture2D cut_in, Sound som_cut_in){
 void gameLevel(int level){
 
     int cronometro = 0;
-    
-
     //dps mudar pro primeiro state ser o menu
     GameState state_atual = PRIMEIRO_MOVIMENTO;
-   
-    
-    /*
-    ***********************************
-            MAIN WINDOW
-    ***********************************
-    */
-    initializeWindow();
 
-
-    /*
-    ***********************************
+    /************************************
                 MENU
-    ***********************************
-    */
+    ************************************/
     int option = 0;
 
-    /*
-    ***********************************
+    /***********************************
                 AUDIO
-    ***********************************
-    */
+    ************************************/
     Music stems[3];
 
     initiateAudio(stems, level);
@@ -120,39 +100,31 @@ void gameLevel(int level){
     SetSoundVolume(menuClick, 1.2f);
     
 
-/*
-    ***********************************
+    /************************************
                 MAPA
-    ***********************************
-    */
+    ************************************/
     tMapa mapa;
     inicializaMapa(&mapa);
     
     
 
-    /*
-    ***********************************
+    /************************************
                 TEXTURAS
-    ***********************************
-    */
+    ************************************/
     Texture2D cut_in = LoadTexture("sprites/player/pacman_cut_in.png");
     mapa.tileset_parede = LoadTexture("sprites/ambiente/tileset_paredes.png");
 
 
-    /*
-    ***********************************
+    /************************************
                 PLAYER
-    ***********************************
-    */
+    ************************************/
     tJogador pacman;
     inicializaPlayer(&pacman, mapa.pellets_totais);
     centralizaPlayer(&pacman, mapa.grid_mapa);
     
-    /*
-    ***********************************
+    /************************************
                 INIMIGO
-    ***********************************
-    */  
+    ************************************/  
     int numero_fantasmas = calculaFantasmas(mapa.grid_mapa);
     tInimigo* fantasmas = malloc(sizeof(tInimigo)*numero_fantasmas);
     inicializaFantasmas(fantasmas, mapa.grid_mapa);
@@ -160,11 +132,11 @@ void gameLevel(int level){
 
 
 
-    /*
-    ***********************************
+    /************************************
                 JOGO
-    ***********************************
-    */
+    ************************************/
+
+    //tentei ate refatorar mas ficaria mt retardado
     while (!WindowShouldClose())
     {
         //atualiza musicas
@@ -186,6 +158,7 @@ void gameLevel(int level){
             case GAMEPLAY:            
                 switchMusic(GAMEPLAY, stems);
                 updateLogic(&pacman, mapa.grid_mapa, &state_atual, &option, fantasmas, numero_fantasmas);
+                //depois tem que trocar essa porra
                 if(pacman.power_pellet == true){
                     switchMusic(JACKPOT, stems);
                 }

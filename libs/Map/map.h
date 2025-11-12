@@ -155,10 +155,10 @@ void fruitSpawn(char** gridMapa){
     if(spawnChance <= 5)
     {
         int x, y;
-        do {
+        while(gridMapa[y][x] != ' '){
             x = GetRandomValue(1, TAM_J - 2);
             y = GetRandomValue(1, TAM_I - 2);
-        } while(gridMapa[y][x] != ' ');
+        }
 
         gridMapa[y][x] = 'U';
     }
