@@ -19,26 +19,29 @@ typedef struct
     Rectangle spritesheet;
 } tInimigo;
 
-void trocaSpriteFantasma(tInimigo* fantasma)
+void trocaSpriteFantasma(tInimigo* fantasma, int numero_fantasma)
 { 
-    switch(fantasma->direcao)
+    for(int i = 0; i < numero_fantasma; i++)
     {
-        case 1:
-            fantasma->spritesheet.x = 40;
-        break;
+        switch(fantasma[i].direcao)
+        {
+            case 1:
+                fantasma[i].spritesheet.x = 40;
+            break;
 
-        case 2:
-            fantasma->spritesheet.x = 80;
-        break;
+            case 2:
+                fantasma[i].spritesheet.x = 80;
+            break;
 
-        case 3:
-            fantasma->spritesheet.x = 0;
-        break;
+            case 3:
+                fantasma[i].spritesheet.x = 0;
+            break;
 
-        case 4:
-            fantasma->spritesheet.x = 120;
-        break;
-    }    
+            case 4:
+                fantasma[i].spritesheet.x = 120;
+            break;
+        }    
+    }
 }
 
 void centralizaFantasma(tInimigo* fantasma, int numero_fantasma)
@@ -208,7 +211,6 @@ int escolheDirecao(tInimigo fantasma,char** grid_mapa)
 }
 
 tInimigo moveFantasma(tInimigo fantasma,char** grid_mapa, int indice){
-    
     if(saindoMapa(fantasma)!=-1){
         fantasma.pos=teleportaFantasma(fantasma);
     }
@@ -332,6 +334,8 @@ void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, i
             else
             {
                 pacman->vida--;
+                //voltar o pacman pro sprite original
+                pacman->spritesheet.x = 0;
                 centralizaPlayer(pacman, grid_mapa);
                 centralizaFantasma(fantasma, numero_fantasma);
                 *state_atual = PRIMEIRO_MOVIMENTO;

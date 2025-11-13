@@ -7,19 +7,17 @@
 void drawGame(tMapa mapa, tJogador pacman, GameState state_atual,int numero_fantasmas, tInimigo *fantasmas){
     //layer fundo/mapa   
     BeginDrawing(); 
-    ClearBackground(DARKGRAY);
+    ClearBackground(WHITE);
     drawMap(mapa.grid_mapa);
     drawTexturaParede(mapa);
     //layer entidades
     
     DrawTextureRec(pacman.sprite, pacman.spritesheet, pacman.pos, WHITE);
-    DrawRectangleLinesEx(pacman.colisao_player, 4.0,RED);
-    DrawRectangle(pacman.pos.x, pacman.pos.y, TAM_GRID, TAM_GRID, YELLOW);
+    //DrawRectangleLinesEx(pacman.colisao_player, 4.0,RED);
     //jaja refatoro isso, é so q por enqt ainda to debuggando 
         for(int i = 0; i < numero_fantasmas; i++)
         {
-            DrawRectangle(fantasmas[i].pos.x, fantasmas[i].pos.y, TAM_GRID, TAM_GRID, WHITE);
-            DrawRectangleLinesEx(fantasmas[i].colisao_fantasma, 1.0,RED);
+            DrawTextureRec(fantasmas[i].sprite, fantasmas[i].spritesheet, fantasmas[i].pos, WHITE);
             
         }
     //layer main HUD
@@ -68,6 +66,8 @@ void updateLogic(tJogador* pacman, char** grid_mapa, GameState* state_atual, int
     }
     atualizaColisaoFantasma(fantasma, numero_fantasma);
     ConcretizaColisao(pacman, fantasma, grid_mapa, checaColisaoFantasma(pacman->colisao_player, fantasma, numero_fantasma), numero_fantasma, state_atual);
+    //n consegui encaixar esse troca sprite dentro da func do alexandre, por ela n receber um pointer
+    trocaSpriteFantasma(fantasma, numero_fantasma);
 }
 
 void cleanup(tMapa* mapa, Texture2D cut_in, Sound som_cut_in){  
@@ -150,7 +150,7 @@ void gameLevel(int level){
         fantasmas[i].spritesheet.height = 40;
         fantasmas[i].spritesheet.width = 40;
         fantasmas[i].spritesheet.x = 0;
-        fantasmas[i].spritesheet.y = 0;
+        fantasmas[i].spritesheet.y = 40*i;
     }
 
 
