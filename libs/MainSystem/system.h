@@ -8,6 +8,9 @@
 #define TAM_I 20
 #define TAM_J 40
 #define TAM_GRID 40
+#define MAP_SIZE (TAM_I * TAM_J)
+#define MASK_SIZE ((TAM_I/2) * (TAM_J/2))
+
 
 
 typedef struct
