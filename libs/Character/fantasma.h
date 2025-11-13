@@ -1,8 +1,11 @@
 //inclusões
-#include "../MainSystem/system.h"
-#include "../Character/player.h"
-#include "../header.h"
 #pragma once
+#include "../MainSystem/system.h"
+#include "../header.h"
+
+//forward declaration
+void gameOver();
+
 
 typedef struct
 {

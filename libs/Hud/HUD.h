@@ -2,8 +2,8 @@
 #pragma once
 #include "../header.h"
 #include "../MainSystem/system.h"
-#pragma once
-#include "../header.h"
+#include "../MainSystem/saveAndLoad.h"
+
 
 #define MENU_SPACING_X 100 
 #define MENU_PADDING_Y 20  
@@ -54,9 +54,8 @@ void drawHUD(int score, int totalPellets){
     DrawText(TextFormat("pellets: %d", totalPellets), 150, 810, 20, WHITE);
 }
 
-
 //gameOver não ficaria aqui
-void gameOver(void)
+void gameOver()
 {
     int tam_over = 80;
     int tam_resto = 20;
@@ -140,19 +139,22 @@ int currentChosen(int cur){
   }
 }
 
-void menuInputs(int* index, GameState* state_atual, char** grid_mapa, Sound menuClick){
+void menuInputs(int* index, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo* ghosts, Sound menuClick){
   if(IsKeyPressed(KEY_V) || currentChosen(*index) == BACK){
     *state_atual = GAMEPLAY;
   }
   if(IsKeyPressed(KEY_N) || currentChosen(*index) == NEW){
-    //resetGameState();
+
   }
   if(IsKeyPressed(KEY_Q) || currentChosen(*index) == QUIT){
     CloseWindow();
     return;
   }
   if(IsKeyPressed(KEY_S) || currentChosen(*index) == SAVE){
-    //saveGameState(grid_mapa);
+    save(pacman, ghosts, map, 1); //salva no slot 1 por enquanto
+  }
+  if(IsKeyPressed(KEY_L) || currentChosen(*index) == LOAD){
+    load(pacman, ghosts, map, 1); //carrega do slot 1 por enquanto
   }
 
   //verifica o input para mudar a opcao selecionada
@@ -172,7 +174,7 @@ void menuInputs(int* index, GameState* state_atual, char** grid_mapa, Sound menu
   }
 }
 
-void menuLogic(int* index, GameState* state_atual, char** grid_mapa, Sound menuClick){
+void menuLogic(int* index, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo* ghosts, Sound menuClick){
     drawMenu(index);
-    menuInputs(index, state_atual, grid_mapa, menuClick);
+    menuInputs(index, state_atual, map, pacman, ghosts, menuClick);
 }

@@ -1,7 +1,5 @@
-
-#include "../header.h"
-
 #pragma once
+#include "../header.h"
 
 
 void drawGame(tMapa mapa, tJogador pacman, GameState state_atual,int numero_fantasmas, tInimigo *fantasmas){
@@ -24,6 +22,8 @@ void drawGame(tMapa mapa, tJogador pacman, GameState state_atual,int numero_fant
     drawHUD(pacman.score, pacman.remainingPellets);
     DrawText(TextFormat("posx: %.2f, posy: %.2f, vida: %d, dir: %d", pacman.pos.x, pacman.pos.y, pacman.vida, pacman.dir), 900, 810, 20, WHITE);
 }
+
+
 
 
 void updateLogic(tJogador* pacman, char** grid_mapa, GameState* state_atual, int *option, tInimigo* fantasma, int numero_fantasma){
@@ -82,6 +82,7 @@ void cleanup(tMapa* mapa, Texture2D cut_in, Sound som_cut_in){
     freeDiddy(mapa->grid_mapa);
     freeMatrizAux(mapa->matriz_auxiliar);
 }
+
 
 
 void gameLevel(int level){
@@ -189,7 +190,7 @@ void gameLevel(int level){
             break;
             case PAUSE:
                 switchMusic(MENU, stems);
-                menuLogic(&option, &state_atual, mapa.grid_mapa, menuClick);
+                menuLogic(&option, &state_atual, &mapa, &pacman, fantasmas, menuClick);
             break;
             
             //deuixar pa tu refatorar taylor

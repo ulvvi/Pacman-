@@ -80,3 +80,4 @@ void initializeWindow(){
     InitWindow(LARGURA, ALTURA, "PACMAN+"); 
     SetTargetFPS(90);
 }
+
