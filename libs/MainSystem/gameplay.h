@@ -5,7 +5,7 @@
 void drawGame(tMapa mapa, tJogador pacman, GameState state_atual,int numero_fantasmas, tInimigo *fantasmas){
     //layer fundo/mapa   
     BeginDrawing(); 
-    ClearBackground(WHITE);
+    ClearBackground(BLACK);
     drawMap(mapa.grid_mapa);
     drawTexturaParede(mapa);
     //layer entidades
@@ -22,8 +22,6 @@ void drawGame(tMapa mapa, tJogador pacman, GameState state_atual,int numero_fant
     drawHUD(pacman.score, pacman.remainingPellets);
     DrawText(TextFormat("posx: %.2f, posy: %.2f, vida: %d, dir: %d", pacman.pos.x, pacman.pos.y, pacman.vida, pacman.dir), 900, 810, 20, WHITE);
 }
-
-
 
 
 void updateLogic(tJogador* pacman, char** grid_mapa, GameState* state_atual, int *option, tInimigo* fantasma, int numero_fantasma){
