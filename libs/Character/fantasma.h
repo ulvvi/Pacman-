@@ -22,22 +22,14 @@ typedef struct
     Rectangle spritesheet;
 } tInimigo;
 
-
-
 void alinhaFantasmaAoGrid(tInimigo* fantasma)
 {
     int grid_j = (int)((fantasma->pos.x + TAM_GRID / 2.0f) / TAM_GRID);
     int grid_i = (int)((fantasma->pos.y + TAM_GRID / 2.0f) / TAM_GRID);
-    
-    if (fantasma->direcao == 1 || fantasma->direcao == 3) { 
-        fantasma->pos.x = grid_j * TAM_GRID;
-    } 
-
-    else if (fantasma->direcao == 2 || fantasma->direcao == 4) { 
-        fantasma->pos.y = grid_i * TAM_GRID;
-    }
+    fantasma->pos.x = grid_j * TAM_GRID;
+    fantasma->pos.y = grid_i * TAM_GRID;
+    fantasma->direcao = 0; 
 }
-
 
 void trocaSpriteFantasma(tInimigo* fantasma, int numero_fantasma)
 { 
