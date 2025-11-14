@@ -87,6 +87,7 @@ void readFromBin(char* path, tJogador* pacman, tInimigo* ghosts, tMapa* map){
 
     for(int i = 0; i < calculaFantasmas(map->grid_mapa); i++){
         fread(&ghosts[i], sizeof(tInimigo), 1, arq);
+        centralizaFantasma(ghosts, calculaFantasmas(map->grid_mapa));
     }
 
     fclose(arq);
