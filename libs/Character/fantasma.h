@@ -6,28 +6,12 @@
 //forward declaration
 void gameOver();
 
-
-typedef struct
-{
-    //vai ter q criar um array dessa struct se pa na main, dinamicamente
-    //vector2 tem os campos x e y
-    Vector2 pos;
-    float spd;
-    bool vulneravel;
-    int direcao;
-    Rectangle colisao_fantasma;
-    Vector2 pos_inicial;
-
-    Texture2D sprite;
-    Rectangle spritesheet;
-} tInimigo;
-
 void alinhaFantasmaAoGrid(tInimigo* fantasma)
 {
-    int grid_j = (int)((fantasma->pos.x + TAM_GRID / 2.0f) / TAM_GRID);
-    int grid_i = (int)((fantasma->pos.y + TAM_GRID / 2.0f) / TAM_GRID);
-    fantasma->pos.x = grid_j * TAM_GRID;
-    fantasma->pos.y = grid_i * TAM_GRID;
+    //int grid_j = (int)((fantasma->pos.x + TAM_GRID / 2.0f) / TAM_GRID);
+    //int grid_i = (int)((fantasma->pos.y + TAM_GRID / 2.0f) / TAM_GRID);
+    //fantasma->pos.x = grid_j * TAM_GRID;
+    //fantasma->pos.y = grid_i * TAM_GRID;
     //fantasma->direcao = 0; 
 }
 

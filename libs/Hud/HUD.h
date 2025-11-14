@@ -52,7 +52,6 @@ void drawHUD(int score, int totalPellets){
     DrawRectangle(0, 800, 1600, 40, BLACK); //desenho da HUD
     DrawText(TextFormat("Score: %d", score), 10, 810, 20, WHITE);
     DrawText(TextFormat("pellets: %d", totalPellets), 150, 810, 20, WHITE);
-    DrawFPS(1500, 810);
 }
 
 //gameOver não ficaria aqui

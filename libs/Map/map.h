@@ -51,6 +51,7 @@ int initMap(char filename[], char **mapa) {
             p++;//conta os pellets
         } 
     }
+
     ///fechar
     fclose(map);
     return p;  

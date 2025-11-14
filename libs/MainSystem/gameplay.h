@@ -24,9 +24,8 @@ void drawGame(tMapa mapa, tJogador pacman, GameState state_atual,int numero_fant
 }
 
 
-void updateLogic(tJogador* pacman, char** grid_mapa, GameState* state_atual, int *option, tInimigo* fantasma, int numero_fantasma){
-    static int frame_counter = 0;
-    frame_counter++;
+void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, int *option, tInimigo* fantasma, int numero_fantasma){
+    mapa->frame_counter++;
     if(IsKeyPressed(KEY_TAB))
     {
         *option = 0;
@@ -34,12 +33,12 @@ void updateLogic(tJogador* pacman, char** grid_mapa, GameState* state_atual, int
     }
 
     //movimentacao
-    movePlayer(grid_mapa, pacman);
+    movePlayer(mapa->grid_mapa, pacman);
 
     //colisoes pellets
     if(checaPlayerCentralizado(pacman) && checaPlayerDentroMapa(pacman))
     {   
-        colisaoPellets(pacman, grid_mapa, &pacman->score, &pacman->remainingPellets);
+        colisaoPellets(pacman, mapa->grid_mapa, &pacman->score, &pacman->remainingPellets);
     }
 
     if(pacman->power_pellet == true)
@@ -60,10 +59,10 @@ void updateLogic(tJogador* pacman, char** grid_mapa, GameState* state_atual, int
     //fantasmas
     for(int i = 0; i < numero_fantasma; i++)
     {
-        fantasma[i] = moveFantasma(fantasma[i], grid_mapa, frame_counter);
+        fantasma[i] = moveFantasma(fantasma[i], mapa->grid_mapa, mapa->frame_counter);
     }
     atualizaColisaoFantasma(fantasma, numero_fantasma);
-    ConcretizaColisao(pacman, fantasma, grid_mapa, checaColisaoFantasma(pacman->colisao_player, fantasma, numero_fantasma), numero_fantasma, state_atual);
+    ConcretizaColisao(pacman, fantasma, mapa->grid_mapa, checaColisaoFantasma(pacman->colisao_player, fantasma, numero_fantasma), numero_fantasma, state_atual);
     //n consegui encaixar esse troca sprite dentro da func do alexandre, por ela n receber um pointer
     trocaSpriteFantasma(fantasma, numero_fantasma);
 }
@@ -176,14 +175,14 @@ void gameLevel(int level){
                 if(pacman.power_pellet == true){
                     switchMusic(JACKPOT, stems);
                 }
-                updateLogic(&pacman, mapa.grid_mapa, &state_atual, &option, fantasmas, numero_fantasmas);
+                updateLogic(&pacman, &mapa, &state_atual, &option, fantasmas, numero_fantasmas);
 
                 //depois tem que trocar essa porr
             break;
 
             case PRIMEIRO_MOVIMENTO:
                 pauseAllMusic(stems);
-                trocaCor(&mapa);
+                //trocaCor(&mapa);
                 if(cronometro == 0){
                     PlaySound(jingle);
                 }
