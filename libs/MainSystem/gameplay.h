@@ -135,8 +135,10 @@ void gameLevel(int level){
     /************************************
                 TEXTURAS
     ************************************/
-    Texture2D cut_in = LoadTexture("sprites/player/pacman_cut_in.png");
+    Texture2D cut_in = LoadTexture("sprites/player/pacman_cut_in-Sheet");
+
     mapa.tileset_parede = LoadTexture("sprites/ambiente/tileset_paredes.png");
+
     //jaja refatoro essas coisas da textura
     pacman.sprite = LoadTexture("sprites/player/pacman_spritesheet.png");
     pacman.spritesheet.height = 40;
@@ -151,7 +153,7 @@ void gameLevel(int level){
         fantasmas[i].spritesheet.x = 0;
         fantasmas[i].spritesheet.y = 40*i;
     }
-
+    tAnimacao obj_cut_in = {0, 26, 0.075, 0, LoadTexture("sprites/player/pacman_cut_in-Sheet.png"), {0,0,LARGURA, 600},  {0, ALTURA/2 - 600/2}};
 
     /************************************
                 JOGO
@@ -193,22 +195,26 @@ void gameLevel(int level){
             
             //deuixar pa tu refatorar taylor
             case CUT_IN:
+                static bool primeira_vez = true;
                 static int cor_atual;
-                cutIn(som_cut_in, cut_in);
-                if(cronometro == 0)
+                //cutIn(som_cut_in, cut_in);
+                if(primeira_vez)
                 {
                     cor_atual = mapa.spritesheet.y/40;
                     PlaySound(som_cut_in);
                     pauseAllMusic(stems);
-                    trocaCorEXT(&mapa, 8);
-                }    
-                if(temporizador(&cronometro) >= 1.0)
+                    trocaCorEXT(&mapa, 8);  
+                    primeira_vez = false;
+                }
+                DrawRectangle(0,0, LARGURA, ALTURA, Fade(BLACK, 0.5f));
+                cutscene(&obj_cut_in, &state_atual, GAMEPLAY);
+                
+                //a func cutscene ja troca o state quando acabar, logo, so sera gameplay apos a ultima chamada da func cutscene
+                if(state_atual == GAMEPLAY)
                 {
-                    cronometro = 0;
-                    state_atual = GAMEPLAY;
                     resumeAllMusic(stems);
-                    trocaCorEXT(&mapa, cor_atual);
-                    
+                    trocaCorEXT(&mapa, cor_atual);     
+                    primeira_vez = true;        
                 }
                 
             break;

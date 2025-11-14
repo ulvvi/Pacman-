@@ -31,6 +31,7 @@ void alinhaFantasmaAoGrid(tInimigo* fantasma)
     fantasma->direcao = 0; 
 }
 
+
 void trocaSpriteFantasma(tInimigo* fantasma, int numero_fantasma)
 { 
     for(int i = 0; i < numero_fantasma; i++)
