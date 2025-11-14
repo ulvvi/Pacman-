@@ -16,6 +16,7 @@
         "stdbool.h": "c",
         "player.h": "c",
         "menu.h": "c",
-        "fantasma.h": "c"
+        "fantasma.h": "c",
+        "saveandload.h": "c"
     }
 }

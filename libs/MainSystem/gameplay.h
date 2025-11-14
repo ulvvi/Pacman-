@@ -104,6 +104,8 @@ void gameLevel(int level){
     
     Sound som_cut_in = LoadSound("audio/ambiente/CUTIN.mp3");
     SetSoundVolume(som_cut_in, 0.5f);
+    Sound jingle = LoadSound("audio/ambiente/jingle.wav");
+    SetSoundVolume(jingle, 0.5f);
     Sound menuClick = LoadSound("audio/menuSFX/menu1.wav");
     SetSoundVolume(menuClick, 1.2f);
     
@@ -171,20 +173,33 @@ void gameLevel(int level){
         {
             case GAMEPLAY:            
                 switchMusic(GAMEPLAY, stems);
-                updateLogic(&pacman, mapa.grid_mapa, &state_atual, &option, fantasmas, numero_fantasmas);
-                //depois tem que trocar essa porra
                 if(pacman.power_pellet == true){
                     switchMusic(JACKPOT, stems);
                 }
+                updateLogic(&pacman, mapa.grid_mapa, &state_atual, &option, fantasmas, numero_fantasmas);
+
+                //depois tem que trocar essa porr
             break;
 
             case PRIMEIRO_MOVIMENTO:
-                bool input = IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN);
-                if(input == true)
+                pauseAllMusic(stems);
+                trocaCor(&mapa);
+                if(cronometro == 0){
+                    PlaySound(jingle);
+                }
+
+                if(temporizador(&cronometro) >= 4.5)
+                {
+                    cronometro = 0;
+                    state_atual = GAMEPLAY;
+                    resumeAllMusic(stems);
+                }
+                //bool input = IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN);
+                /*if(input == true)
                 {
                     updateLogic(&pacman, mapa.grid_mapa, &state_atual, &option, fantasmas, numero_fantasmas);
                     state_atual = GAMEPLAY;
-                }
+                }*/
             break;
             case PAUSE:
                 switchMusic(MENU, stems);
@@ -209,8 +224,7 @@ void gameLevel(int level){
                     resumeAllMusic(stems);
                     trocaCorEXT(&mapa, cor_atual);
                     
-                }
-                
+                }    
             break;
         }
         EndDrawing();

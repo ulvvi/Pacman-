@@ -2,6 +2,7 @@
 #pragma once
 #include "../header.h"
 
+Color PEL = {255, 213, 65, 255};
 
 //inicializa a matriz com o nome do arq
 char** allocateMap(){
@@ -75,12 +76,12 @@ void drawMap(char** mapa)
                     break;
                 //desenhar pellet
                 case '.':
-                    DrawCircle(center_x, center_y, 5, ORANGE);
+                    DrawCircle(center_x, center_y, 5, PEL);
 
                     break;
                 //desenhar super pellet
                 case 'o':
-                    DrawCircle(center_x, center_y, 10, ORANGE);
+                    DrawCircle(center_x, center_y, 10, PEL);
 
                     break;
                 case 'T':

@@ -68,7 +68,7 @@ typedef struct
 float temporizador(int* cronometro)
 {
     (*cronometro)++;
-    return ((float)*cronometro)/60;
+    return ((float)*cronometro)/90;
 }
 
 //acho que vou remover essa struct, mas enfim, coisa pra depois
