@@ -230,6 +230,7 @@ void inicializaMapa(tMapa* mapa)
     //mapa em si
     mapa->grid_mapa = allocateMap();
     mapa->pellets_totais = initMap("maps/mapa1.txt", mapa->grid_mapa);
+    mapa->frame_counter = 0;
 
     //texturas
     mapa->mapa_mascaras = malloc(sizeof(int)*256);

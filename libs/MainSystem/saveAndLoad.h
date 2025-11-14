@@ -12,6 +12,7 @@ void save_map(tMapa* mapa, FILE* fp) {
     fwrite(&mapa->spritesheet, sizeof(Rectangle), 1, fp);
     fwrite(&mapa->tamanho_spritesheet, sizeof(int), 1, fp);
     fwrite(&mapa->pellets_totais, sizeof(int), 1, fp);
+    fwrite(&mapa->frame_counter, sizeof(int), 1, fp);
 
     for (int i = 0; i < TAM_I; i++) {
         if (mapa->grid_mapa && mapa->grid_mapa[i]) {
@@ -57,6 +58,7 @@ void load_map(tMapa* mapa, FILE* fp) {
     fread(&mapa->spritesheet, sizeof(Rectangle), 1, fp);
     fread(&mapa->tamanho_spritesheet, sizeof(int), 1, fp);
     fread(&mapa->pellets_totais, sizeof(int), 1, fp);
+    fread(&mapa->frame_counter, sizeof(int), 1, fp);
 
     for (int i = 0; i < TAM_I; i++) {
 

@@ -53,8 +53,24 @@ typedef struct
     Rectangle spritesheet;
     int tamanho_spritesheet;
     int pellets_totais;
+    int frame_counter;
 
 }tMapa;
+
+typedef struct
+{
+    //vai ter q criar um array dessa struct se pa na main, dinamicamente
+    //vector2 tem os campos x e y
+    Vector2 pos;
+    float spd;
+    bool vulneravel;
+    int direcao;
+    Rectangle colisao_fantasma;
+    Vector2 pos_inicial;
+
+    Texture2D sprite;
+    Rectangle spritesheet;
+} tInimigo;
 
 
 typedef struct
@@ -68,7 +84,7 @@ typedef struct
 float temporizador(int* cronometro)
 {
     (*cronometro)++;
-    return ((float)*cronometro)/60;
+    return ((float)*cronometro)/90;
 }
 
 //acho que vou remover essa struct, mas enfim, coisa pra depois
