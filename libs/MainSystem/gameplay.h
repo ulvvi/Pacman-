@@ -2,15 +2,25 @@
 #include "../header.h"
 
 
-void drawGame(tMapa mapa, tJogador pacman, GameState state_atual,int numero_fantasmas, tInimigo *fantasmas){
+void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual,int numero_fantasmas, tInimigo *fantasmas){
     //layer fundo/mapa   
     BeginDrawing(); 
     ClearBackground(BLACK);
     drawMap(mapa.grid_mapa);
     drawTexturaParede(mapa);
     //layer entidades
-    
-    DrawTextureRec(pacman.sprite, pacman.spritesheet, pacman.pos, WHITE);
+    //if(pacman.desenho == true) 
+    if(pacman->desenho == true)
+    {
+        if(pacman->move_x != 0 || pacman->move_y != 0)
+        {
+            animaObjeto(&pacman->comendo);
+        }
+        else
+        {
+            DrawTextureRec(pacman->sprite, pacman->spritesheet, pacman->pos, WHITE);
+        }
+    }
     //DrawRectangleLinesEx(pacman.colisao_player, 4.0,RED);
     //jaja refatoro isso, é so q por enqt ainda to debuggando 
         for(int i = 0; i < numero_fantasmas; i++)
@@ -19,13 +29,15 @@ void drawGame(tMapa mapa, tJogador pacman, GameState state_atual,int numero_fant
             
         }
     //layer main HUD
-    drawHUD(pacman.score, pacman.remainingPellets);
-    DrawText(TextFormat("posx: %.2f, posy: %.2f, vida: %d, dir: %d", pacman.pos.x, pacman.pos.y, pacman.vida, pacman.dir), 900, 810, 20, WHITE);
+    drawHUD(pacman->score, pacman->remainingPellets);
+    DrawText(TextFormat("posx: %.2f, posy: %.2f, vida: %d, dir: %d", pacman->pos.x, pacman->pos.y, pacman->vida, pacman->dir), 900, 810, 20, WHITE);
 }
 
 
 void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, int *option, tInimigo* fantasma, int numero_fantasma){
+    //contabilizador de frames pro fantasma 
     mapa->frame_counter++;
+
     if(IsKeyPressed(KEY_TAB))
     {
         *option = 0;
@@ -67,9 +79,8 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, int *opt
     trocaSpriteFantasma(fantasma, numero_fantasma);
 }
 
-void cleanup(tMapa* mapa, Texture2D cut_in, Sound som_cut_in){  
-    //DAR UNLOAD NOS ASSETS
-    UnloadTexture(cut_in);
+void cleanup(tMapa* mapa, Sound som_cut_in){  
+    //unload nos assets
     UnloadSound(som_cut_in);
     UnloadTexture(mapa->tileset_parede);
     CloseAudioDevice();
@@ -136,25 +147,10 @@ void gameLevel(int level){
     /************************************
                 TEXTURAS
     ************************************/
-    Texture2D cut_in = LoadTexture("sprites/player/pacman_cut_in-Sheet");
 
     mapa.tileset_parede = LoadTexture("sprites/ambiente/tileset_paredes.png");
+    tAnimacao obj_cut_in = {0, 26, 0.075, 0, LoadTexture("sprites/player/pacman_cut_in-Sheet.png"), {0,0,LARGURA, 600},  {0, ALTURA/2 - 600/2}, 0};
 
-    //jaja refatoro essas coisas da textura
-    pacman.sprite = LoadTexture("sprites/player/pacman_spritesheet.png");
-    pacman.spritesheet.height = 40;
-    pacman.spritesheet.width = 40;
-    pacman.spritesheet.x = 0;
-    pacman.spritesheet.y = 0;
-    for(int i = 0; i < numero_fantasmas; i++)
-    {
-        fantasmas[i].sprite = LoadTexture("sprites/inimigo/fantasma_spritesheet.png");
-        fantasmas[i].spritesheet.height = 40;
-        fantasmas[i].spritesheet.width = 40;
-        fantasmas[i].spritesheet.x = 0;
-        fantasmas[i].spritesheet.y = 40*i;
-    }
-    tAnimacao obj_cut_in = {0, 26, 0.075, 0, LoadTexture("sprites/player/pacman_cut_in-Sheet.png"), {0,0,LARGURA, 600},  {0, ALTURA/2 - 600/2}};
 
     /************************************
                 JOGO
@@ -166,29 +162,30 @@ void gameLevel(int level){
         //atualiza musicas
         updateMusic(stems);
         //desenhos
-        drawGame(mapa, pacman, state_atual,numero_fantasmas,fantasmas);
+        drawGame(mapa, &pacman, state_atual,numero_fantasmas,fantasmas);
         
  
         //RESTANTE DOS LAYERS(NUMA STATE MACHINE)
         switch(state_atual)
         {
-            case GAMEPLAY:            
+            case GAMEPLAY:          
                 switchMusic(GAMEPLAY, stems);
                 if(pacman.power_pellet == true){
                     switchMusic(JACKPOT, stems);
                 }
                 updateLogic(&pacman, &mapa, &state_atual, &option, fantasmas, numero_fantasmas);
+                pacman.comendo.pos.x = pacman.pos.x;
+                pacman.comendo.pos.y = pacman.pos.y;
+
 
                 //depois tem que trocar essa porr
             break;
 
             case PRIMEIRO_MOVIMENTO:
                 pauseAllMusic(stems);
-                //trocaCor(&mapa);
                 if(cronometro == 0){
                     PlaySound(jingle);
                 }
-
                 if(temporizador(&cronometro) >= 4.5)
                 {
                     cronometro = 0;
@@ -202,6 +199,20 @@ void gameLevel(int level){
                     state_atual = GAMEPLAY;
                 }*/
             break;
+
+            case MORTE:
+                pacman.cutscene_morte.pos.x = pacman.pos.x;
+                pacman.cutscene_morte.pos.y = pacman.pos.y;
+                pacman.desenho = false;
+                //a func cutscene ja troca o state quando acabar, logo, so sera gameplay apos a ultima chamada da func cutscene
+                cutscene(&pacman.cutscene_morte, &state_atual, PRIMEIRO_MOVIMENTO);
+                if(state_atual == PRIMEIRO_MOVIMENTO)
+                {
+                    centralizaPlayer(&pacman, mapa.grid_mapa);
+                    centralizaFantasma(fantasmas, numero_fantasmas);
+                    pacman.desenho = true;
+                }
+            break;
             case PAUSE:
                 switchMusic(MENU, stems);
                 menuLogic(&option, &state_atual, &mapa, &pacman, fantasmas, menuClick);
@@ -211,7 +222,6 @@ void gameLevel(int level){
             case CUT_IN:
                 static bool primeira_vez = true;
                 static int cor_atual;
-                //cutIn(som_cut_in, cut_in);
                 if(primeira_vez)
                 {
                     cor_atual = mapa.spritesheet.y/40;
@@ -222,7 +232,6 @@ void gameLevel(int level){
                 }
                 DrawRectangle(0,0, LARGURA, ALTURA, Fade(BLACK, 0.5f));
                 cutscene(&obj_cut_in, &state_atual, GAMEPLAY);
-                
                 //a func cutscene ja troca o state quando acabar, logo, so sera gameplay apos a ultima chamada da func cutscene
                 if(state_atual == GAMEPLAY)
                 {
@@ -236,6 +245,6 @@ void gameLevel(int level){
         EndDrawing();
     }
 
-    cleanup(&mapa, cut_in, som_cut_in);
+    cleanup(&mapa, som_cut_in);
     return;
 }
