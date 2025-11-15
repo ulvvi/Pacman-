@@ -50,12 +50,13 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, int *opt
     //colisoes pellets
     if(checaPlayerCentralizado(pacman) && checaPlayerDentroMapa(pacman))
     {   
-        colisaoPellets(pacman, mapa->grid_mapa, &pacman->score, &pacman->remainingPellets);
+        colisaoPellets(pacman, mapa->grid_mapa, &pacman->score, &pacman->remainingPellets, state_atual);
     }
 
+    //cronometro do power pellet
     if(pacman->power_pellet == true)
     {
-        powerPellet(pacman, state_atual);
+        powerPellet(pacman);
     }
 
     //teleporte player
@@ -213,6 +214,7 @@ void gameLevel(int level){
                     pacman.desenho = true;
                 }
             break;
+
             case PAUSE:
                 switchMusic(MENU, stems);
                 menuLogic(&option, &state_atual, &mapa, &pacman, fantasmas, menuClick);

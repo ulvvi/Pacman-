@@ -56,6 +56,7 @@ void inicializaPlayer(tJogador* pacman, int pellets)
     pacman->vida = 10; 
     pacman->remainingPellets = pellets;
     pacman->desenho = true;
+    pacman->tempo_power_pellet = 0;
 
     //sprite base pacman
     pacman->sprite = LoadTexture("sprites/player/pacman_spritesheet.png");
@@ -125,7 +126,7 @@ void trocaSpritePacman(tJogador* pacman)
 }
 
 /*COLISAO COM PELLETS(ATUALIZA SCORE E ESTADO AO PEGAR POWER PELLET)*/
-void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPellets)
+void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPellets, GameState* state)
 {
     //grid atual
     int grid_i = pacman->pos.y/TAM_GRID;
@@ -141,11 +142,12 @@ void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPe
     break;
     //power pellet
     case 'o':
-        //logica do power pellet(a fazer)
+        if(pacman->power_pellet == false) *state = CUT_IN;
         pacman->power_pellet = true;
         (*score)+=50;
         grid_mapa[grid_i][grid_j] = ' ';
         (*totalPellets)--;
+        pacman->tempo_power_pellet+= 5;
     break;
 
     case 'U':
@@ -155,24 +157,12 @@ void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPe
     }
 }
 
-/*CRONOMETRA O ESTADO E ATT A SPD E ATT O GAMESTATE*/
-void powerPellet(tJogador* pacman, GameState* game_state)
+/*apenas cronometra o tempo de power pellet e o desativa. independe do framerate, o tempo é medido em segundos*/
+void powerPellet(tJogador* pacman)
 {  
-    static int tempo_restante = 460;
-    static int cheque = 0;
-    if(cheque == 0)
-    {
-        *game_state = CUT_IN;
-        cheque = 1;
-    }
-
-    tempo_restante--;
-    if(tempo_restante <= 0)
-    {
-        pacman->power_pellet = false;
-        cheque = 0;
-        tempo_restante = 460;
-    }
+     pacman->tempo_power_pellet -= GetFrameTime();
+        if(pacman->tempo_power_pellet <= 0)
+            pacman->power_pellet = false;
 }
 
 /*atualiza colisao do player*/

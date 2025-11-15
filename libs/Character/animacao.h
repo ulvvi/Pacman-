@@ -67,4 +67,3 @@ void cutscene(tAnimacao* objeto, GameState* state_atual, GameState state_final)
     
     
 }
-

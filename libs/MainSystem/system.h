@@ -36,6 +36,7 @@ typedef struct
     int move_x;
     int move_y;
     bool power_pellet;
+    float tempo_power_pellet;
     int score;
     int remainingPellets;
     int dir;
