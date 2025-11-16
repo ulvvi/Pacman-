@@ -243,3 +243,4 @@ void inicializaMapa(tMapa* mapa)
     mapa->spritesheet.width = 40;
     texturizaMapa(mapa);
 }
+

@@ -15,6 +15,7 @@ void alinhaFantasmaAoGrid(tInimigo* fantasma)
     //fantasma->direcao = 0; 
 }
 
+
 void trocaSpriteFantasma(tInimigo* fantasma, int numero_fantasma)
 { 
     for(int i = 0; i < numero_fantasma; i++)
@@ -269,17 +270,26 @@ void inicializaFantasmas(tInimigo* fantasma, char** grid_mapa)
         {
             if(grid_mapa[i][j] == 'F')
             {
-                fantasma[contador].pos.x = j*TAM_GRID;
-                fantasma[contador].pos.y = i*TAM_GRID;
+                //movimentacao
                 fantasma[contador].spd = 2;
                 fantasma[contador].vulneravel = false;
                 fantasma[contador].direcao = 0;
+                //colisao
                 fantasma[contador].colisao_fantasma.height = TAM_GRID;
                 fantasma[contador].colisao_fantasma.width = TAM_GRID;
                 fantasma[contador].colisao_fantasma.x = fantasma[contador].pos.x;
                 fantasma[contador].colisao_fantasma.y = fantasma[contador].pos.y;
+                //posicao
+                fantasma[contador].pos.x = j*TAM_GRID;
+                fantasma[contador].pos.y = i*TAM_GRID;
                 fantasma[contador].pos_inicial.x = fantasma[contador].pos.x;
                 fantasma[contador].pos_inicial.y = fantasma[contador].pos.y;
+                //sprites base
+                fantasma[contador].sprite = LoadTexture("sprites/inimigo/fantasma_spritesheet.png");
+                fantasma[contador].spritesheet.height = 40;
+                fantasma[contador].spritesheet.width = 40;
+                fantasma[contador].spritesheet.x = 0;
+                fantasma[contador].spritesheet.y = 40*contador;
                 contador++;
             }
         }
@@ -332,9 +342,7 @@ void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, i
                 pacman->vida--;
                 //voltar o pacman pro sprite original
                 pacman->spritesheet.x = 0;
-                centralizaPlayer(pacman, grid_mapa);
-                centralizaFantasma(fantasma, numero_fantasma);
-                *state_atual = PRIMEIRO_MOVIMENTO;
+                *state_atual = MORTE;
             }   
         break;
     }

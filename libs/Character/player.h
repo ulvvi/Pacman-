@@ -1,5 +1,6 @@
 //player.h
 #pragma once
+#include <math.h>
 #include "../header.h"
 
 /*RETORNA TRUE OU FALSE SE O PLAYER TIVER CENTRALIZADO OU NAO*/
@@ -38,46 +39,94 @@ void centralizaPlayer(tJogador* pacman, char** grid_mapa)
     }
 }
 
+/*tudo que precisa ser inicializado do pacman ta ai*/
 void inicializaPlayer(tJogador* pacman, int pellets)
 {
+    //colisao
     pacman->colisao_player.height = 30;
     pacman->colisao_player.width= 30;
+    //movimentacao
     pacman->dir = 1;
-    pacman->power_pellet = false;
-    pacman->score = 0;
-    pacman->spd = 2;
-    pacman->vida = 3; 
-    pacman->remainingPellets = pellets;
     pacman->move_x = 0;
     pacman-> move_y = 0;
+    pacman->spd = 2;
+    //coisas gerais
+    pacman->power_pellet = false;
+    pacman->score = 0;
+    pacman->vida = 10; 
+    pacman->remainingPellets = pellets;
+    pacman->desenho = true;
+    pacman->tempo_power_pellet = 0;
+
+    //sprite base pacman
+    pacman->sprite = LoadTexture("sprites/player/pacman_spritesheet.png");
+    pacman->spritesheet.height = 40;
+    pacman->spritesheet.width = 40;
+    pacman->spritesheet.x = 0;
+    pacman->spritesheet.y = 0;
+
+    //animacao comendo
+    pacman->comendo.frame_atual = 0;
+    pacman->comendo.total_frames = 4;
+    pacman->comendo.tempo_frame = 0.045;
+    pacman->comendo.contador = 0;
+    pacman->comendo.sprite = LoadTexture("sprites/player/animacao_pacman-Sheet.png");
+    pacman->comendo.spritesheet.height = TAM_GRID;
+    pacman->comendo.spritesheet.width = TAM_GRID;
+    pacman->comendo.spritesheet.x = 0;
+    pacman->comendo.spritesheet.y = 0;
+    pacman->comendo.pos.x = 0;
+    pacman->comendo.pos.y = 0;
+
+    //animacao morte
+    pacman->cutscene_morte.frame_atual = 0;
+    pacman->cutscene_morte.total_frames = 20;
+    pacman->cutscene_morte.tempo_frame = 0.100;
+    pacman->cutscene_morte.contador = 0;
+    pacman->cutscene_morte.sprite = LoadTexture("sprites/player/pacman_morte-Sheet.png");
+    pacman->cutscene_morte.spritesheet.height = TAM_GRID;
+    pacman->cutscene_morte.spritesheet.width = TAM_GRID;
+    pacman->cutscene_morte.spritesheet.x = 0;
+    pacman->cutscene_morte.spritesheet.y = 0;
+        //a pos do objeto cutscene n precisa inicializar, pra ela tanto faz, vai ser atualizada por frame
+    pacman->cutscene_morte.rotacao = 0.0;
 }
 
+/*realiza as trocas de sprites a depender de pra onde o pacman ta indo*/
 void trocaSpritePacman(tJogador* pacman)
 {
-    switch(pacman->dir)
+    pacman->cutscene_morte.spritesheet.width = abs(pacman->cutscene_morte.spritesheet.width);
+    pacman->comendo.spritesheet.width = abs(pacman->comendo.spritesheet.width);
+    pacman->cutscene_morte.rotacao = 0;
+    pacman->comendo.rotacao = 0;
+    if(pacman->move_x > 0)
     {
-        case -1: 
-            if(pacman->move_x != 0)
-                pacman->spritesheet.x = 40;
-            if(pacman->move_y != 0)
-                pacman->spritesheet.x = 120;
-        break;
+        pacman->spritesheet.x = 0;
 
-        case 1: 
-            if(pacman->move_x != 0)
-                pacman->spritesheet.x = 0;
-            if(pacman->move_y != 0)
-                pacman->spritesheet.x = 80;
-        break;
-
-        default:
-            pacman->spritesheet.x = 0;
-        break;
     }
+    if(pacman->move_x < 0)
+    {
+        pacman->spritesheet.x = 40;
+        pacman->comendo.spritesheet.width = -pacman->comendo.spritesheet.width;
+        pacman->cutscene_morte.spritesheet.width = -pacman->cutscene_morte.spritesheet.width;
+    }
+    if(pacman->move_y < 0)
+    {
+        pacman->comendo.rotacao = 270;
+        pacman->cutscene_morte.rotacao = 270;
+        pacman->spritesheet.x = 120;
+    }
+    if(pacman->move_y > 0)
+    {
+        pacman->comendo.rotacao = 90;
+        pacman->cutscene_morte.rotacao = 90;
+        pacman->spritesheet.x = 80;
+    }
+
 }
 
 /*COLISAO COM PELLETS(ATUALIZA SCORE E ESTADO AO PEGAR POWER PELLET)*/
-void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPellets)
+void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPellets, GameState* state)
 {
     //grid atual
     int grid_i = pacman->pos.y/TAM_GRID;
@@ -93,11 +142,12 @@ void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPe
     break;
     //power pellet
     case 'o':
-        //logica do power pellet(a fazer)
+        if(pacman->power_pellet == false) *state = CUT_IN;
         pacman->power_pellet = true;
         (*score)+=50;
         grid_mapa[grid_i][grid_j] = ' ';
         (*totalPellets)--;
+        pacman->tempo_power_pellet+= 5;
     break;
 
     case 'U':
@@ -107,29 +157,17 @@ void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPe
     }
 }
 
-/*CRONOMETRA O ESTADO E ATT A SPD E ATT O GAMESTATE*/
-void powerPellet(tJogador* pacman, GameState* game_state)
+/*apenas cronometra o tempo de power pellet e o desativa. independe do framerate, o tempo é medido em segundos*/
+void powerPellet(tJogador* pacman)
 {  
-    static int tempo_restante = 460;
-    static int cheque = 0;
-    if(cheque == 0)
-    {
-        *game_state = CUT_IN;
-        cheque = 1;
-    }
-
-    tempo_restante--;
-    if(tempo_restante <= 0)
-    {
-        pacman->power_pellet = false;
-        cheque = 0;
-        tempo_restante = 460;
-    }
+     pacman->tempo_power_pellet -= GetFrameTime();
+        if(pacman->tempo_power_pellet <= 0)
+            pacman->power_pellet = false;
 }
 
+/*atualiza colisao do player*/
 void atualizaColisaoPlayer(tJogador* pacman)
 {
-    
     pacman->colisao_player.x = pacman->pos.x + (TAM_GRID - pacman->colisao_player.width)/2;
     pacman->colisao_player.y = pacman->pos.y + (TAM_GRID - pacman->colisao_player.height)/2;
 }
@@ -206,9 +244,7 @@ void movePlayer(char** grid_mapa, tJogador* pacman)
     pacman->pos.x += pacman->move_x;
     pacman->pos.y += pacman->move_y;
 
-
     trocaSpritePacman(pacman);
-
     atualizaColisaoPlayer(pacman);
 }
 

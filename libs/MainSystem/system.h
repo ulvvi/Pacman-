@@ -12,7 +12,22 @@
 #define MASK_SIZE ((TAM_I/2) * (TAM_J/2))
 
 
+//struct de animacao dos "objetos"
+typedef struct
+{
+    int frame_atual;
+    int total_frames;
+    float tempo_frame;
+    float contador;
+    Texture2D sprite;
+    Rectangle spritesheet;
+    Vector2 pos;
+    float rotacao;
 
+} tAnimacao;
+
+
+//struct do player
 typedef struct
 {
     Vector2 pos;
@@ -21,29 +36,35 @@ typedef struct
     int move_x;
     int move_y;
     bool power_pellet;
+    float tempo_power_pellet;
     int score;
     int remainingPellets;
     int dir;
 
+    bool desenho;
     Rectangle colisao_player;
     Rectangle spritesheet;
     Texture2D sprite;
+    tAnimacao comendo;
+    tAnimacao cutscene_morte;
 
 } tJogador;
 
-
-//STATE MACHINE eba memorias de guerra
-typedef enum GameState
+//struct do fantasma
+typedef struct
 {
-    MENU,
-    GAMEPLAY,
-    JACKPOT,
-    PAUSE,
-    CUT_IN,
-    PRIMEIRO_MOVIMENTO
+    Vector2 pos;
+    float spd;
+    bool vulneravel;
+    int direcao;
+    Rectangle colisao_fantasma;
+    Vector2 pos_inicial;
 
-}GameState;
+    Texture2D sprite;
+    Rectangle spritesheet;
+} tInimigo;
 
+//struct do mapa
 typedef struct 
 {
     char** grid_mapa;
@@ -57,20 +78,21 @@ typedef struct
 
 }tMapa;
 
-typedef struct
-{
-    //vai ter q criar um array dessa struct se pa na main, dinamicamente
-    //vector2 tem os campos x e y
-    Vector2 pos;
-    float spd;
-    bool vulneravel;
-    int direcao;
-    Rectangle colisao_fantasma;
-    Vector2 pos_inicial;
 
-    Texture2D sprite;
-    Rectangle spritesheet;
-} tInimigo;
+//state machine principal do jogo
+typedef enum GameState
+{
+    MENU,
+    GAMEPLAY,
+    JACKPOT,
+    PAUSE,
+    CUT_IN,
+    PRIMEIRO_MOVIMENTO,
+    MORTE
+
+}GameState;
+
+
 
 
 typedef struct
@@ -86,13 +108,6 @@ float temporizador(int* cronometro)
     (*cronometro)++;
     return ((float)*cronometro)/90;
 }
-
-//acho que vou remover essa struct, mas enfim, coisa pra depois
-typedef struct
-{
-    int grid_inicio[2];
-    int grid_final[2];
-}tCordenada;
 
 
 void initializeWindow(){
