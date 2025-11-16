@@ -6,7 +6,7 @@ int main(void)
     initializeWindow();
     
     //mainMenu();
-    gameLevel(1);
+    //gameLevel(1);
     //wonLevel();
     gameLevel(2);
 
