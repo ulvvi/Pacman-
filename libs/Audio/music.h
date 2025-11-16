@@ -62,7 +62,7 @@ void switchMusic(GameState state, Music stems[]){
     }
 }
 
-void initiateAudio(Music stems[], int level){
+void initiateAudio(Music stems[], Sound sfx[], int level){
 
     InitAudioDevice();
 
@@ -78,5 +78,8 @@ void initiateAudio(Music stems[], int level){
             stems[2] = LoadMusicStream("audio/Music/power_2.wav");
             break;
     }
+
+    sfx[0] = LoadSound("audio/menuSFX/menu1.wav");
+    sfx[1] = LoadSound("audio/menuSFX/confirm.wav");
     return;
 }

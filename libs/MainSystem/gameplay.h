@@ -97,16 +97,15 @@ void gameLevel(int level){
                 AUDIO
     ************************************/
     Music stems[3];
+    Sound menu[2];
 
-    initiateAudio(stems, level);
+    initiateAudio(stems, menu, level);
     playMusic(stems);
     
     Sound som_cut_in = LoadSound("audio/ambiente/CUTIN.mp3");
     SetSoundVolume(som_cut_in, 0.5f);
     Sound jingle = LoadSound("audio/ambiente/jingle.wav");
     SetSoundVolume(jingle, 0.5f);
-    Sound menuClick = LoadSound("audio/menuSFX/menu1.wav");
-    SetSoundVolume(menuClick, 1.2f);
     
 
     /************************************
@@ -202,7 +201,7 @@ void gameLevel(int level){
             break;
             case PAUSE:
                 switchMusic(MENU, stems);
-                menuLogic(&option, &state_atual, &mapa, &pacman, fantasmas, menuClick);
+                menuLogic(&option, &state_atual, &mapa, &pacman, fantasmas, menu);
             break;
             
             //deuixar pa tu refatorar taylor

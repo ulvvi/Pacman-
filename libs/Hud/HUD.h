@@ -129,8 +129,9 @@ void drawMenu(int* index){
     }
 }
 
-int currentChosen(int cur){
+int currentChosen(int cur, Sound sfx[]){
   if(IsKeyPressed(KEY_ENTER)){
+    PlaySound(sfx[1]);
     return cur;
   }
   else
@@ -139,34 +140,34 @@ int currentChosen(int cur){
   }
 }
 
-void menuInputs(int* index, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo* ghosts, Sound menuClick){
-  if(IsKeyPressed(KEY_V) || currentChosen(*index) == BACK){
+void menuInputs(int* index, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo* ghosts, Sound sfx[]){
+  if(IsKeyPressed(KEY_V) || currentChosen(*index, sfx) == BACK){
     *state_atual = GAMEPLAY;
   }
-  if(IsKeyPressed(KEY_N) || currentChosen(*index) == NEW){
+  if(IsKeyPressed(KEY_N) || currentChosen(*index, sfx) == NEW){
 
   }
-  if(IsKeyPressed(KEY_Q) || currentChosen(*index) == QUIT){
+  if(IsKeyPressed(KEY_Q) || currentChosen(*index, sfx) == QUIT){
     CloseWindow();
     return;
   }
-  if(IsKeyPressed(KEY_S) || currentChosen(*index) == SAVE){
+  if(IsKeyPressed(KEY_S) || currentChosen(*index, sfx) == SAVE){
     save(pacman, ghosts, map, 1); //salva no slot 1 por enquanto
   }
-  if(IsKeyPressed(KEY_L) || currentChosen(*index) == LOAD){
+  if(IsKeyPressed(KEY_L) || currentChosen(*index, sfx) == LOAD){
     load(pacman, ghosts, map, 1); //carrega do slot 1 por enquanto
   }
 
   //verifica o input para mudar a opcao selecionada
   if(IsKeyPressed(KEY_DOWN)){
-    PlaySound(menuClick);
+    PlaySound(sfx[0]);
     *index += 1;
     if(*index > QUIT){
       *index = BACK;
     }
   }
   if(IsKeyPressed(KEY_UP)){
-    PlaySound(menuClick);
+    PlaySound(sfx[0]);
     *index -= 1;
     if(*index < BACK){
       *index = QUIT;
@@ -174,7 +175,7 @@ void menuInputs(int* index, GameState* state_atual, tMapa* map, tJogador* pacman
   }
 }
 
-void menuLogic(int* index, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo* ghosts, Sound menuClick){
+void menuLogic(int* index, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo* ghosts, Sound sfx[]){
     drawMenu(index);
-    menuInputs(index, state_atual, map, pacman, ghosts, menuClick);
+    menuInputs(index, state_atual, map, pacman, ghosts, sfx);
 }
