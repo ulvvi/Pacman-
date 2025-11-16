@@ -9,9 +9,9 @@ void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual,int numero_fan
     drawMap(mapa.grid_mapa);
     drawTexturaParede(mapa);
     //layer entidades
-    //if(pacman.desenho == true) 
     if(pacman->desenho == true)
     {
+        //pacman
         if(pacman->move_x != 0 || pacman->move_y != 0)
         {
             animaObjeto(&pacman->comendo);
@@ -22,18 +22,34 @@ void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual,int numero_fan
         }
     }
     //DrawRectangleLinesEx(pacman.colisao_player, 4.0,RED);
-    //jaja refatoro isso, é so q por enqt ainda to debuggando 
-        for(int i = 0; i < numero_fantasmas; i++)
+    //jaja refatoro isso, é so q por enqt ainda to debuggando
+    for(int i = 0; i < numero_fantasmas; i++)
+    {
+        if(fantasmas[i].desenho == true)
         {
+            fantasmas[i].morte.pos.x = fantasmas[i].pos.x;
+            fantasmas[i].morte.pos.y = fantasmas[i].pos.y;
             DrawTextureRec(fantasmas[i].sprite, fantasmas[i].spritesheet, fantasmas[i].pos, WHITE);
-            
         }
+        else
+        {
+            if(fantasmas[i].tempo_morto < 8.5)
+            {
+                animaObjeto(&fantasmas[i].morto);
+                fantasmas[i].morte.frame_atual = 0;
+            }
+            else
+            {
+                animaObjeto(&fantasmas[i].morte);
+            }
+        }
+    }
     //layer main HUD
     drawHUD(pacman->score, pacman->remainingPellets);
     DrawText(TextFormat("posx: %.2f, posy: %.2f, vida: %d, dir: %d", pacman->pos.x, pacman->pos.y, pacman->vida, pacman->dir), 900, 810, 20, WHITE);
 }
 
-
+//updata o jogo a cada frame
 void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, int *option, tInimigo* fantasma, int numero_fantasma){
     //contabilizador de frames pro fantasma 
     mapa->frame_counter++;
@@ -69,10 +85,15 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, int *opt
         }
     }
 
-    //fantasmas
+    //iteracao dos fantasmas
     for(int i = 0; i < numero_fantasma; i++)
     {
         fantasma[i] = moveFantasma(fantasma[i], mapa->grid_mapa, mapa->frame_counter);
+        if(fantasma[i].desenho == false)
+        {
+            //so roda se tiver algum fantasma morto
+            reviveFantasma(fantasma, i);
+        }
     }
     atualizaColisaoFantasma(fantasma, numero_fantasma);
     ConcretizaColisao(pacman, fantasma, mapa->grid_mapa, checaColisaoFantasma(pacman->colisao_player, fantasma, numero_fantasma), numero_fantasma, state_atual);
@@ -80,6 +101,7 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, int *opt
     trocaSpriteFantasma(fantasma, numero_fantasma);
 }
 
+//limpezas no geral
 void cleanup(tMapa* mapa, Sound som_cut_in){  
     //unload nos assets
     UnloadSound(som_cut_in);
@@ -150,7 +172,10 @@ void gameLevel(int level){
     ************************************/
 
     mapa.tileset_parede = LoadTexture("sprites/ambiente/tileset_paredes.png");
-    tAnimacao obj_cut_in = {0, 26, 0.075, 0, LoadTexture("sprites/player/pacman_cut_in-Sheet.png"), {0,0,LARGURA, 600},  {0, ALTURA/2 - 600/2}, 0};
+    //jaja refatoro rlx
+    tAnimacao obj_cut_in = {
+        0, 26, 0.075, 0, LoadTexture("sprites/player/pacman_cut_in-Sheet.png"), 
+        {0,0,LARGURA, 600},  {0, ALTURA/2 - 600/2}, 0, 0, 0};
 
 
     /************************************

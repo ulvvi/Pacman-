@@ -41,6 +41,7 @@ void trocaSpriteFantasma(tInimigo* fantasma, int numero_fantasma)
     }
 }
 
+//"reseta" o fantasma
 void centralizaFantasma(tInimigo* fantasma, int numero_fantasma)
 {
     for(int i = 0; i < numero_fantasma; i++)
@@ -48,6 +49,10 @@ void centralizaFantasma(tInimigo* fantasma, int numero_fantasma)
         fantasma[i].pos.x = fantasma[i].pos_inicial.x;
         fantasma[i].pos.y = fantasma[i].pos_inicial.y;
         fantasma[i].direcao = 0;
+        //reset do fantasma, caso esteja morto
+        fantasma[i].tempo_morto = 0;
+        fantasma[i].desenho = true;
+        fantasma[i].spd = 2;
     }
 }
 
@@ -261,6 +266,7 @@ int calculaFantasmas(char** grid_mapa)
     return numero_fantasmas;
 }
 
+/*inicializa tudo envolvendo o fantasma*/
 void inicializaFantasmas(tInimigo* fantasma, char** grid_mapa)
 {   
     int contador = 0;
@@ -279,17 +285,46 @@ void inicializaFantasmas(tInimigo* fantasma, char** grid_mapa)
                 fantasma[contador].colisao_fantasma.width = TAM_GRID;
                 fantasma[contador].colisao_fantasma.x = fantasma[contador].pos.x;
                 fantasma[contador].colisao_fantasma.y = fantasma[contador].pos.y;
+                fantasma[contador].tempo_morto = 0;
                 //posicao
                 fantasma[contador].pos.x = j*TAM_GRID;
                 fantasma[contador].pos.y = i*TAM_GRID;
                 fantasma[contador].pos_inicial.x = fantasma[contador].pos.x;
                 fantasma[contador].pos_inicial.y = fantasma[contador].pos.y;
+
                 //sprites base
+                fantasma[contador].desenho = true;
                 fantasma[contador].sprite = LoadTexture("sprites/inimigo/fantasma_spritesheet.png");
                 fantasma[contador].spritesheet.height = 40;
                 fantasma[contador].spritesheet.width = 40;
                 fantasma[contador].spritesheet.x = 0;
                 fantasma[contador].spritesheet.y = 40*contador;
+
+                //animacao morte
+                fantasma[contador].morte.frame_atual = 0;
+                fantasma[contador].morte.total_frames = 20;
+                fantasma[contador].morte.tempo_frame = 0.110;
+                fantasma[contador].morte.contador = 0;
+                fantasma[contador].morte.sprite = LoadTexture("sprites/inimigo/fantasma_morte-Sheet.png");
+                fantasma[contador].morte.spritesheet.width = 40;
+                fantasma[contador].morte.spritesheet.height = 40;
+                fantasma[contador].morte.spritesheet.x = 0;
+                fantasma[contador].morte.spritesheet.y = fantasma[contador].spritesheet.y;
+                fantasma[contador].morte.rotacao = 0;
+
+                //animacao morto(descanso)
+                fantasma[contador].morto.frame_atual = 0;
+                fantasma[contador].morto.total_frames = 7;
+                fantasma[contador].morto.tempo_frame = 0.130;
+                fantasma[contador].morto.contador = 0;
+                fantasma[contador].morto.sprite = LoadTexture("sprites/inimigo/fantasma_morto-Sheet.png");
+                fantasma[contador].morto.spritesheet.width = 40;
+                fantasma[contador].morto.spritesheet.height = 40;
+                fantasma[contador].morto.spritesheet.x = 0;
+                fantasma[contador].morto.spritesheet.y = fantasma[contador].spritesheet.y;
+                fantasma[contador].morto.rotacao = 0;
+                fantasma[contador].morto.pos.x = fantasma[contador].pos_inicial.x;
+                fantasma[contador].morto.pos.y = fantasma[contador].pos_inicial.y;
                 contador++;
             }
         }
@@ -320,6 +355,19 @@ int checaColisaoFantasma(Rectangle colisao_player, tInimigo* fantasma, int n)
     return -1;
 }
 
+/*funcao pra o fantasma ser comido*/
+void comeFantasma(tInimigo* fantasma, int indice)
+{
+    fantasma[indice].pos.x = fantasma[indice].pos_inicial.x;
+    fantasma[indice].pos.y = fantasma[indice].pos_inicial.y;
+    fantasma[indice].colisao_fantasma.height = 0;
+    fantasma[indice].colisao_fantasma.width = 0;
+    fantasma[indice].spd = 0;
+    fantasma[indice].direcao = 0;
+    fantasma[indice].tempo_morto = 10;
+    fantasma[indice].desenho = false;
+    printf("%d", indice);
+}
 
 /*SUBTRAI A VIDA DO JOGADOR E, SE NECESSARIO, DA GAMEOVER*/
 void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, int indice, int numero_fantasma, GameState* state_atual)
@@ -329,7 +377,7 @@ void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, i
     switch(pacman->power_pellet)
     {
         case true:
-            //logica de comer o fantasma
+            comeFantasma(fantasma, indice);
         break;
 
         case false:
@@ -345,5 +393,19 @@ void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, i
                 *state_atual = MORTE;
             }   
         break;
+    }
+}
+
+/*temporizador e "revive" o fantasma*/
+void reviveFantasma(tInimigo* fantasma, int indice)
+{
+    fantasma[indice].tempo_morto -= GetFrameTime();
+    if(fantasma[indice].tempo_morto <= 0)
+    {
+        fantasma[indice].colisao_fantasma.width = TAM_GRID;
+        fantasma[indice].colisao_fantasma.height = TAM_GRID;
+        fantasma[indice].desenho = true;
+        fantasma[indice].direcao = 0;
+        fantasma[indice].spd = 2;
     }
 }

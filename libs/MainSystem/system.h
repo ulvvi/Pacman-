@@ -23,6 +23,8 @@ typedef struct
     Rectangle spritesheet;
     Vector2 pos;
     float rotacao;
+    int coluna_atual;
+    int linha_atual;
 
 } tAnimacao;
 
@@ -60,8 +62,13 @@ typedef struct
     Rectangle colisao_fantasma;
     Vector2 pos_inicial;
 
+    float tempo_morto;
+    bool desenho;
     Texture2D sprite;
     Rectangle spritesheet;
+
+    tAnimacao morte;
+    tAnimacao morto;
 } tInimigo;
 
 //struct do mapa

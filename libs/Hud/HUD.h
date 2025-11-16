@@ -41,13 +41,6 @@ char* menuOptionsText[] = {
   "Q - Sair do Jogo"
 };
 
-
-/*
-void cutIn(Sound som_cut_in, Texture2D cut_in)
-{
-    DrawTexture(cut_in, 0, ALTURA/2 - 600/2, WHITE);
-}*/
-
 void drawHUD(int score, int totalPellets){
     DrawRectangle(0, 800, 1600, 40, BLACK); //desenho da HUD
     DrawText(TextFormat("Score: %d", score), 10, 810, 20, WHITE);

@@ -31,19 +31,16 @@ void cutscene(tAnimacao* objeto, GameState* state_atual, GameState state_final)
     //o spritesheet das cutscenes eu to exportando de forma compacta, por isso, nao é tudo na msm linha e precisa dessas ciusas a mais
     int colunas_totais = objeto->sprite.width/abs(objeto->spritesheet.width);
     int linhas_totais = objeto->sprite.height/abs(objeto->spritesheet.height);
-    static int coluna_atual = 0;
-    static int linha_atual = 0;
-
 
     if(objeto->contador > objeto->tempo_frame)
     {
         objeto->frame_atual++;
         objeto->contador = 0;
-        coluna_atual++;
-        if(coluna_atual == colunas_totais)
+        objeto->coluna_atual++;
+        if(objeto->coluna_atual == colunas_totais)
         {
-            coluna_atual = 0;
-            linha_atual++;
+            objeto->coluna_atual = 0;
+            objeto->linha_atual++;
         }
     }   
 
@@ -53,17 +50,14 @@ void cutscene(tAnimacao* objeto, GameState* state_atual, GameState state_final)
         *state_atual = state_final;
         objeto->frame_atual = 0;
         objeto->contador = 0;
-        coluna_atual = 0;
-        linha_atual = 0;
+        objeto->coluna_atual = 0;
+        objeto->linha_atual = 0;
         return;
     }
 
-
-    objeto->spritesheet.x = abs(objeto->spritesheet.width)*coluna_atual;
-    objeto->spritesheet.y = abs(objeto->spritesheet.height)*linha_atual;
+    objeto->spritesheet.x = abs(objeto->spritesheet.width)*objeto->coluna_atual;
+    objeto->spritesheet.y = abs(objeto->spritesheet.height)*objeto->linha_atual;
     DrawTexturePro(objeto->sprite, objeto->spritesheet, dest, origem, objeto->rotacao, WHITE);
     //DrawTextureRec(objeto->sprite, objeto->spritesheet, objeto->pos, WHITE);
     objeto->contador+= GetFrameTime();
-    
-    
 }

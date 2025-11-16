@@ -17,7 +17,7 @@ bool checaPlayerDentroMapa(tJogador *pacman)
 }
 
 
-/*CENTRALIZA O PLAYER NO GRID, SO PRECISA SER CHAMADA NO INICIO DA FASE*/
+/*"reseta" o player*/
 void centralizaPlayer(tJogador* pacman, char** grid_mapa)
 {   
     for(int i = 0; i < TAM_I; i++)
@@ -88,6 +88,8 @@ void inicializaPlayer(tJogador* pacman, int pellets)
     pacman->cutscene_morte.spritesheet.width = TAM_GRID;
     pacman->cutscene_morte.spritesheet.x = 0;
     pacman->cutscene_morte.spritesheet.y = 0;
+    pacman->cutscene_morte.coluna_atual = 0;
+    pacman->cutscene_morte.linha_atual = 0;
         //a pos do objeto cutscene n precisa inicializar, pra ela tanto faz, vai ser atualizada por frame
     pacman->cutscene_morte.rotacao = 0.0;
 }
