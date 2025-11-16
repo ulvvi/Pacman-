@@ -111,13 +111,21 @@ void drawMenu(int* index){
             int xOffset = (expandedWidth - OPTION_WIDTH) / 2;
             int yOffset = (expandedHeight - OPTION_HEIGHT) / 2;
 
+            if(IsKeyPressed(KEY_ENTER)){
+            DrawRectangle(MENU_SPACING_X - xOffset, currentY - yOffset, expandedWidth + 5, expandedHeight + 5, DARKGRAY);
+            DrawRectangle(MENU_SPACING_X - xOffset, currentY - yOffset, expandedWidth, expandedHeight, COLOR_OPTION_NORMAL_BG);
+            DrawText(menuOptionsText[i], MENU_SPACING_X, currentY + (expandedHeight - OPTION_FONT_SIZE) / 2, OPTION_FONT_SIZE, COLOR_OPTION_NORMAL_TEXT);
+              
+            }
+            else
+            {
             DrawRectangle(MENU_SPACING_X - xOffset, currentY - yOffset, expandedWidth + 5, expandedHeight + 5, DARKGRAY);
             DrawRectangle(MENU_SPACING_X - xOffset, currentY - yOffset, expandedWidth, expandedHeight, COLOR_OPTION_HIGHLIGHT_BG);
-
-
             DrawText(menuOptionsText[i], MENU_SPACING_X, currentY + (expandedHeight - OPTION_FONT_SIZE) / 2, OPTION_FONT_SIZE, COLOR_OPTION_HIGHLIGHT_TEXT);
-            
+            }
+
             DrawText(">", MENU_SPACING_X - 30, currentY + (expandedHeight - OPTION_FONT_SIZE) / 2, OPTION_FONT_SIZE, COLOR_SELECTOR);
+
             
         } 
         else{
