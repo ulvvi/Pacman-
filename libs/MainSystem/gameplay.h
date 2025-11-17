@@ -226,6 +226,7 @@ void gameLevel(int level){
             break;
 
             case MORTE:
+                pauseAllMusic(stems);
                 pacman.cutscene_morte.pos.x = pacman.pos.x;
                 pacman.cutscene_morte.pos.y = pacman.pos.y;
                 pacman.desenho = false;
