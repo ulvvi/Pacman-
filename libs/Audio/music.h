@@ -77,6 +77,11 @@ void initiateAudio(Music stems[], Sound sfx[], int level){
             stems[1] = LoadMusicStream("audio/Music/level_2.wav");
             stems[2] = LoadMusicStream("audio/Music/power_2.wav");
             break;
+        case 3:
+            stems[0] = LoadMusicStream("audio/Music/pause_3.wav");
+            stems[1] = LoadMusicStream("audio/Music/level_3.wav");
+            stems[2] = LoadMusicStream("audio/Music/power_3.wav");
+        break;
     }
 
     sfx[0] = LoadSound("audio/menuSFX/menu1.wav");

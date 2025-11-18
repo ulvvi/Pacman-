@@ -8,7 +8,7 @@ int main(void)
     //mainMenu();
     //gameLevel(1);
     //wonLevel();
-    gameLevel(2);
+    gameLevel(3);
 
     CloseWindow();
 }
