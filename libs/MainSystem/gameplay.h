@@ -101,11 +101,20 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, int *opt
     trocaSpriteFantasma(fantasma, numero_fantasma);
 }
 
+bool hasCollectedAllPellets(tJogador* pacman){
+    if(pacman->remainingPellets <= 0 || IsKeyPressed(KEY_C)){
+        return true;
+    } else {
+        return false;
+    }
+}
+
 //limpezas no geral
-void cleanup(tMapa* mapa, Sound som_cut_in){  
+void cleanup(tMapa* mapa, Sound sfx[], Music stems[], Sound som_cut_in){  
     //unload nos assets
     UnloadSound(som_cut_in);
     UnloadTexture(mapa->tileset_parede);
+    stopAllMusic(stems);
     CloseAudioDevice();
 
     //liberar memoria
@@ -114,6 +123,34 @@ void cleanup(tMapa* mapa, Sound som_cut_in){
     freeMatrizAux(mapa->matriz_auxiliar);
 }
 
+void initGameLevel(int level, tMapa* mapa, tJogador* pacman, tInimigo** fantasmas, int* num_fantasmas,
+                   Music stems[3], Sound menu[2], Sound* som_cut_in, Sound* jingle, tAnimacao* obj_cut_in) 
+{
+    // --- ÁUDIO ---
+    initiateAudio(stems, menu, level);
+    playMusic(stems);
+    *som_cut_in = LoadSound("audio/ambiente/CUTIN.mp3");
+    SetSoundVolume(*som_cut_in, 0.5f);
+    *jingle = LoadSound("audio/ambiente/jingle.wav");
+    SetSoundVolume(*jingle, 0.5f);
+    
+    // --- MAPA e PLAYER ---
+    inicializaMapa(mapa);
+    mapa->tileset_parede = LoadTexture("sprites/ambiente/tileset_paredes.png");
+    inicializaPlayer(pacman, mapa->pellets_totais);
+    centralizaPlayer(pacman, mapa->grid_mapa);
+    
+    // --- INIMIGOS (com alocação de memória) ---
+    *num_fantasmas = calculaFantasmas(mapa->grid_mapa);
+    *fantasmas = malloc(sizeof(tInimigo) * (*num_fantasmas));
+    inicializaFantasmas(*fantasmas, mapa->grid_mapa);
+    
+    // --- ANIMAÇÕES/CUTSCENES ---
+    *obj_cut_in = (tAnimacao){
+        0, 26, 0.075, 0, LoadTexture("sprites/player/pacman_cut_in-Sheet.png"), 
+        {0,0,LARGURA, 600}, {0, ALTURA/2 - 600/2}, 0, 0, 0
+    };
+}
 
 
 void gameLevel(int level){
@@ -122,61 +159,27 @@ void gameLevel(int level){
     //dps mudar pro primeiro state ser o menu
     GameState state_atual = PRIMEIRO_MOVIMENTO;
 
-    /************************************
-                MENU
-    ************************************/
     int option = 0;
 
-    /***********************************
-                AUDIO
-    ************************************/
     Music stems[3];
     Sound menu[2];
-
-    initiateAudio(stems, menu, level);
-    playMusic(stems);
     
-    Sound som_cut_in = LoadSound("audio/ambiente/CUTIN.mp3");
-    SetSoundVolume(som_cut_in, 0.5f);
-    Sound jingle = LoadSound("audio/ambiente/jingle.wav");
-    SetSoundVolume(jingle, 0.5f);
-    
+    Sound som_cut_in;
+    Sound jingle;
 
-    /************************************
-                MAPA
-    ************************************/
     tMapa mapa;
-    inicializaMapa(&mapa);
     
-
-    /************************************
-                PLAYER
-    ************************************/
     tJogador pacman;
-    inicializaPlayer(&pacman, mapa.pellets_totais);
-    centralizaPlayer(&pacman, mapa.grid_mapa);
+
+    int numero_fantasmas;
+    tInimigo* fantasmas;
     
-    /************************************
-                INIMIGO
-    ************************************/  
-    int numero_fantasmas = calculaFantasmas(mapa.grid_mapa);
-    tInimigo* fantasmas = malloc(sizeof(tInimigo)*numero_fantasmas);
-    inicializaFantasmas(fantasmas, mapa.grid_mapa);
+    mapa.tileset_parede;
+    tAnimacao obj_cut_in;
+
+    initGameLevel(level, &mapa, &pacman, &fantasmas, &numero_fantasmas, stems, menu, &som_cut_in, &jingle, &obj_cut_in);
+
     
-
-
-        
-    /************************************
-                TEXTURAS
-    ************************************/
-
-    mapa.tileset_parede = LoadTexture("sprites/ambiente/tileset_paredes.png");
-    //jaja refatoro rlx
-    tAnimacao obj_cut_in = {
-        0, 26, 0.075, 0, LoadTexture("sprites/player/pacman_cut_in-Sheet.png"), 
-        {0,0,LARGURA, 600},  {0, ALTURA/2 - 600/2}, 0, 0, 0};
-
-
     /************************************
                 JOGO
     ************************************/
@@ -270,8 +273,16 @@ void gameLevel(int level){
             break;
         }
         EndDrawing();
+
+        //logica de vitoria
+        if(state_atual == GAMEPLAY){
+            if(hasCollectedAllPellets(&pacman) == true){
+                victoryScreen();
+                break;
+            }
+        }
     }
 
-    cleanup(&mapa, som_cut_in);
+    cleanup(&mapa, menu, stems, som_cut_in);
     return;
 }

@@ -13,6 +13,7 @@
 #include "Audio/music.h"
 #include "Map/texturing.h"
 #include "MainSystem/menu.h"
+#include "MainSystem/vicScreen.h"
 #include "Character/animacao.h"
 #include "MainSystem/gameplay.h"
 
