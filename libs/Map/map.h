@@ -92,9 +92,21 @@ void drawMap(char** mapa)
                 case ' ':
                     break;
                 //desenhar fruta
-                case 'U':
+
+                //FRUTAS
+                case 'C':
                     DrawCircle(center_x, center_y, 8, RED);
                     break;
+                case 'S':
+                    DrawCircle(center_x, center_y, 8, PINK);
+                    break;
+                case 'G':
+                    DrawCircle(center_x, center_y, 8, PURPLE);
+                    break;
+                case 'B':
+                    DrawCircle(center_x, center_y, 8, BLUE);
+                    break;
+
                 //bizzarrices
                 default:
                     break;

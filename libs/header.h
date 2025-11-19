@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "./MainSystem/system.h"
+#include "./Map/fruits.h"
 #include "Map/map.h"
 #include "Character/player.h"
 #include "Character/fantasma.h"
