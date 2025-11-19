@@ -109,6 +109,10 @@ bool hasCollectedAllPellets(tJogador* pacman){
     }
 }
 
+
+
+
+
 //limpezas no geral
 void cleanup(tMapa* mapa, Sound sfx[], Music stems[], Sound som_cut_in){  
     //unload nos assets
@@ -151,6 +155,9 @@ void initGameLevel(int level, tMapa* mapa, tJogador* pacman, tInimigo** fantasma
         {0,0,LARGURA, 600}, {0, ALTURA/2 - 600/2}, 0, 0, 0
     };
 }
+
+
+
 
 
 void gameLevel(int level){
@@ -204,9 +211,6 @@ void gameLevel(int level){
                 updateLogic(&pacman, &mapa, &state_atual, &option, fantasmas, numero_fantasmas);
                 pacman.comendo.pos.x = pacman.pos.x;
                 pacman.comendo.pos.y = pacman.pos.y;
-
-
-                //depois tem que trocar essa porr
             break;
 
             case PRIMEIRO_MOVIMENTO:
