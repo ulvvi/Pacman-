@@ -163,7 +163,7 @@ void initGameLevel(int level, tMapa* mapa, tJogador* pacman, tInimigo** fantasma
 void gameLevel(int level){
 
     int cronometro = 0;
-    //dps mudar pro primeiro state ser o menu
+    
     GameState state_atual = PRIMEIRO_MOVIMENTO;
 
     int option = 0;
@@ -186,6 +186,8 @@ void gameLevel(int level){
 
     initGameLevel(level, &mapa, &pacman, &fantasmas, &numero_fantasmas, stems, menu, &som_cut_in, &jingle, &obj_cut_in);
 
+    Sound winJingle = LoadSound("audio/ambiente/win_jingle.wav");
+    SetSoundVolume(winJingle, 1.5f);
     
     /************************************
                 JOGO
@@ -281,6 +283,7 @@ void gameLevel(int level){
         //logica de vitoria
         if(state_atual == GAMEPLAY){
             if(hasCollectedAllPellets(&pacman) == true){
+                PlaySound(winJingle);
                 victoryScreen();
                 break;
             }
