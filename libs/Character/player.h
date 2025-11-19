@@ -152,10 +152,27 @@ void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPe
         pacman->tempo_power_pellet+= 8;
     break;
 
-    case 'U':
-        //logica da fruta
-        (*score)+=100;
-        grid_mapa[grid_i][grid_j] = ' ';
+        //frutas
+    
+        case 'C':
+            getFruit(pacman, 'C');
+            grid_mapa[grid_i][grid_j] = ' ';
+        break;
+
+        case 'S':
+            getFruit(pacman, 'S');
+            grid_mapa[grid_i][grid_j] = ' ';
+        break;
+
+        case 'G':
+            getFruit(pacman, 'G');
+            grid_mapa[grid_i][grid_j] = ' ';
+        break;
+
+        case 'B':
+            getFruit(pacman, 'B');
+            grid_mapa[grid_i][grid_j] = ' ';
+        break;
     }
 }
 

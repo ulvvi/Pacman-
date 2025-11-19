@@ -2,6 +2,7 @@
 #include "../header.h"
 
 
+
 void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual,int numero_fantasmas, tInimigo *fantasmas, tCamera camera_principal){
     //layer fundo/mapa   
     BeginDrawing(); 
@@ -67,6 +68,9 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, int *opt
         *state_atual = PAUSE;
     }
 
+    //spawn de frutas
+    spawnFruit(mapa->grid_mapa, pacman);
+
     //movimentacao
     movePlayer(mapa->grid_mapa, pacman);
 
@@ -119,24 +123,7 @@ bool hasCollectedAllPellets(tJogador* pacman){
 
 
 
-
-
-//limpezas no geral
-void cleanup(tMapa* mapa, Sound sfx[], Music stems[], Sound som_cut_in){  
-    //unload nos assets
-    UnloadSound(som_cut_in);
-    UnloadTexture(mapa->tileset_parede);
-    stopAllMusic(stems);
-    CloseAudioDevice();
-
-    //liberar memoria
-    freeMascaras(mapa->mapa_mascaras);
-    freeDiddy(mapa->grid_mapa);
-    freeMatrizAux(mapa->matriz_auxiliar);
-}
-
-void initGameLevel(int level, tMapa* mapa, tJogador* pacman, tInimigo** fantasmas, int* num_fantasmas,
-                   Music stems[3], Sound menu[2], Sound* som_cut_in, Sound* jingle, tAnimacao* obj_cut_in) 
+void initGameLevel(int level, tMapa* mapa, tJogador* pacman, tInimigo** fantasmas, int* num_fantasmas, Music stems[3], Sound menu[2], Sound* som_cut_in, Sound* jingle, tAnimacao* obj_cut_in) 
 {
     // --- ÁUDIO ---
     initiateAudio(stems, menu, level);
@@ -162,10 +149,24 @@ void initGameLevel(int level, tMapa* mapa, tJogador* pacman, tInimigo** fantasma
         0, 26, 0.075, 0, LoadTexture("sprites/player/pacman_cut_in-Sheet.png"), 
         {0,0,LARGURA, 600}, {0, ALTURA/2 - 600/2}, 0, 0, 0
     };
-
-
-
 }
+
+
+//limpezas no geral
+void cleanup(tMapa* mapa, Sound sfx[], Music stems[], Sound som_cut_in){  
+    //unload nos assets
+    UnloadSound(som_cut_in);
+    UnloadTexture(mapa->tileset_parede);
+    stopAllMusic(stems);
+    CloseAudioDevice();
+
+    //liberar memoria
+    freeMascaras(mapa->mapa_mascaras);
+    freeDiddy(mapa->grid_mapa);
+    freeMatrizAux(mapa->matriz_auxiliar);
+}
+
+
 
 void gameLevel(int level){
 
