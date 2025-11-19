@@ -8,6 +8,7 @@
 #include "./MainSystem/system.h"
 #include "Map/map.h"
 #include "Character/player.h"
+#include "MainSystem/camera.h"
 #include "Character/fantasma.h"
 #include "Hud/HUD.h"
 #include "Audio/music.h"
@@ -16,6 +17,7 @@
 #include "MainSystem/vicScreen.h"
 #include "Character/animacao.h"
 #include "MainSystem/gameplay.h"
+
 
 
 

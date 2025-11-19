@@ -149,7 +149,7 @@ void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPe
         (*score)+=50;
         grid_mapa[grid_i][grid_j] = ' ';
         (*totalPellets)--;
-        pacman->tempo_power_pellet+= 5;
+        pacman->tempo_power_pellet+= 8;
     break;
 
     case 'U':

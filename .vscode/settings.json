@@ -17,6 +17,8 @@
         "player.h": "c",
         "menu.h": "c",
         "fantasma.h": "c",
-        "saveandload.h": "c"
+        "saveandload.h": "c",
+        "animacao.h": "c",
+        "math.h": "c"
     }
 }

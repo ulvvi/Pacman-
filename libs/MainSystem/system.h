@@ -95,7 +95,8 @@ typedef enum GameState
     PAUSE,
     CUT_IN,
     PRIMEIRO_MOVIMENTO,
-    MORTE
+    MORTE,
+    TRANSICAO
 
 }GameState;
 

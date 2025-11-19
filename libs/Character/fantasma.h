@@ -302,7 +302,7 @@ void inicializaFantasmas(tInimigo* fantasma, char** grid_mapa)
 
                 //animacao morte
                 fantasma[contador].morte.frame_atual = 0;
-                fantasma[contador].morte.total_frames = 20;
+                fantasma[contador].morte.total_frames = 14;
                 fantasma[contador].morte.tempo_frame = 0.110;
                 fantasma[contador].morte.contador = 0;
                 fantasma[contador].morte.sprite = LoadTexture("sprites/inimigo/fantasma_morte-Sheet.png");
@@ -370,14 +370,17 @@ void comeFantasma(tInimigo* fantasma, int indice)
 }
 
 /*SUBTRAI A VIDA DO JOGADOR E, SE NECESSARIO, DA GAMEOVER*/
-void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, int indice, int numero_fantasma, GameState* state_atual)
+void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, int indice, int numero_fantasma, GameState* state_atual, tCamera* camera_relativa)
 {
     if (indice == -1)
         return;
     switch(pacman->power_pellet)
     {
         case true:
+            float tempo_screenshake = 0.25;
+            float forca_screenshake = 200;
             comeFantasma(fantasma, indice);
+            ativaCamera(camera_relativa, tempo_screenshake, forca_screenshake);
         break;
 
         case false:
@@ -387,6 +390,10 @@ void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, i
             }
             else
             {
+                //tirei da minha cabeca mesmo o tempo de shake(e pelo visto ta batendo legal)
+                float tempo_screenshake = pacman->cutscene_morte.total_frames*pacman->cutscene_morte.tempo_frame - 1.25;
+                float forca_screenshake = 75;
+                ativaCamera(camera_relativa, tempo_screenshake, forca_screenshake);
                 pacman->vida--;
                 //voltar o pacman pro sprite original
                 pacman->spritesheet.x = 0;
