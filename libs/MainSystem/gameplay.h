@@ -297,21 +297,8 @@ void gameLevel(int level){
             break;
             
             case TRANSICAO:
-            /*
-                if(cronometro == 0)
-                {
-                    camera_principal.camera.zoom = 8;
-                }
-                if(temporizador(&cronometro) >= 1)
-                {
-                    cronometro = 0;
-                    state_atual = PRIMEIRO_MOVIMENTO;
-                }
-                DrawRectangle(0, 0, LARGURA, ALTURA, BLACK);
-                */
                camera_principal.camera.zoom = 8;
                cutscene(&obj_transicao, &state_atual, PRIMEIRO_MOVIMENTO);
-
             break;
         }
         EndDrawing();
