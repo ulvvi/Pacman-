@@ -169,7 +169,7 @@ void cleanup(tMapa* mapa, Sound sfx[], Music stems[], Sound som_cut_in){
 
 
 void gameLevel(int level){
-
+    int cor_antiga;
     int cronometro = 0;
     
     GameState state_atual = TRANSICAO;
@@ -227,6 +227,10 @@ void gameLevel(int level){
                 updateLogic(&pacman, &mapa, &state_atual, &option, fantasmas, numero_fantasmas, &camera_principal);
                 pacman.comendo.pos.x = pacman.pos.x;
                 pacman.comendo.pos.y = pacman.pos.y;
+                if(pacman.power_pellet == false)
+                {
+                    trocaCorEXT(&mapa, cor_antiga);
+                }
             break;
 
             case PRIMEIRO_MOVIMENTO:
@@ -275,10 +279,9 @@ void gameLevel(int level){
             //deuixar pa tu refatorar taylor
             case CUT_IN:
                 static bool primeira_vez = true;
-                static int cor_atual;
                 if(primeira_vez)
                 {
-                    cor_atual = mapa.spritesheet.y/40;
+                    cor_antiga = mapa.spritesheet.y/40;
                     PlaySound(som_cut_in);
                     pauseAllMusic(stems);
                     trocaCorEXT(&mapa, 8);  
@@ -290,7 +293,7 @@ void gameLevel(int level){
                 if(state_atual == GAMEPLAY)
                 {
                     resumeAllMusic(stems);
-                    trocaCorEXT(&mapa, cor_atual);     
+                    //trocaCorEXT(&mapa, cor_atual);     
                     primeira_vez = true;        
                 }
                 
