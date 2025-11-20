@@ -242,5 +242,6 @@ void inicializaMapa(tMapa* mapa)
     mapa->spritesheet.height = 40;
     mapa->spritesheet.width = 40;
     texturizaMapa(mapa);
+    mapa->cor_atual = mapa->spritesheet.y/40;
 }
 

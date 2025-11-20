@@ -177,11 +177,14 @@ void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPe
 }
 
 /*apenas cronometra o tempo de power pellet e o desativa. independe do framerate, o tempo é medido em segundos*/
-void powerPellet(tJogador* pacman)
+void powerPellet(tJogador* pacman, tMapa* mapa)
 {  
      pacman->tempo_power_pellet -= GetFrameTime();
         if(pacman->tempo_power_pellet <= 0)
+        {
+            trocaCorEXT(mapa, mapa->cor_atual);
             pacman->power_pellet = false;
+        }
 }
 
 /*atualiza colisao do player*/

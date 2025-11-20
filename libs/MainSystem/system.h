@@ -82,6 +82,7 @@ typedef struct
     int tamanho_spritesheet;
     int pellets_totais;
     int frame_counter;
+    int cor_atual;
 
 }tMapa;
 

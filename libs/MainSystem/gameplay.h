@@ -61,7 +61,6 @@ void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual,int numero_fan
 void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, int *option, tInimigo* fantasma, int numero_fantasma, tCamera* camera_principal){
     //contabilizador de frames pro fantasma 
     mapa->frame_counter++;
-
     if(IsKeyPressed(KEY_TAB))
     {
         *option = 0;
@@ -83,7 +82,7 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, int *opt
     //cronometro do power pellet
     if(pacman->power_pellet == true)
     {
-        powerPellet(pacman);
+        powerPellet(pacman, mapa);
     }
 
     //teleporte player
@@ -169,7 +168,6 @@ void cleanup(tMapa* mapa, Sound sfx[], Music stems[], Sound som_cut_in){
 
 
 void gameLevel(int level){
-    int cor_antiga;
     int cronometro = 0;
     
     GameState state_atual = TRANSICAO;
@@ -227,10 +225,6 @@ void gameLevel(int level){
                 updateLogic(&pacman, &mapa, &state_atual, &option, fantasmas, numero_fantasmas, &camera_principal);
                 pacman.comendo.pos.x = pacman.pos.x;
                 pacman.comendo.pos.y = pacman.pos.y;
-                if(pacman.power_pellet == false)
-                {
-                    trocaCorEXT(&mapa, cor_antiga);
-                }
             break;
 
             case PRIMEIRO_MOVIMENTO:
@@ -281,7 +275,6 @@ void gameLevel(int level){
                 static bool primeira_vez = true;
                 if(primeira_vez)
                 {
-                    cor_antiga = mapa.spritesheet.y/40;
                     PlaySound(som_cut_in);
                     pauseAllMusic(stems);
                     trocaCorEXT(&mapa, 8);  
