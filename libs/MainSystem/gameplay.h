@@ -236,7 +236,7 @@ void gameLevel(int level){
                 pauseAllMusic(stems);
                 if(cronometro == 0){
                     PlaySound(jingle);
-                    ativaCamera(&camera_principal, 3.5, 0);
+                    ativaCamera(&camera_principal, 4.0, 0);
                 }
                 if(temporizador(&cronometro) >= 5.0)
                 {
