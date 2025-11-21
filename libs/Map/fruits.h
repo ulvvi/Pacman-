@@ -14,7 +14,6 @@ typedef enum {
 } FruitType;
 
 
-
 void spawnFruit(char** map, tJogador* pacman){
     static int fruit_timer = 0;
     fruit_timer++;
