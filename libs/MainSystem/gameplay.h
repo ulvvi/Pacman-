@@ -131,7 +131,7 @@ void initGameLevel(int level, tMapa* mapa, tJogador* pacman, tInimigo** fantasma
     *som_cut_in = LoadSound("audio/ambiente/CUTIN.mp3");
     SetSoundVolume(*som_cut_in, 0.5f);
     *jingle = LoadSound("audio/ambiente/jingle.wav");
-    SetSoundVolume(*jingle, 0.5f);
+    SetSoundVolume(*jingle, 2.0f);
     
     // --- MAPA e PLAYER ---
     inicializaMapa(mapa);
@@ -238,19 +238,13 @@ void gameLevel(int level){
                     PlaySound(jingle);
                     ativaCamera(&camera_principal, 3.5, 0);
                 }
-                if(temporizador(&cronometro) >= 4.5)
+                if(temporizador(&cronometro) >= 5.0)
                 {
                     cronometro = 0;
                     state_atual = GAMEPLAY;
                     resumeAllMusic(stems);
                 }
                 if(camera_principal.ativa == true) zoomInOut(&camera_principal, 1);
-                //bool input = IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN);
-                /*if(input == true)
-                {
-                    updateLogic(&pacman, mapa.grid_mapa, &state_atual, &option, fantasmas, numero_fantasmas);
-                    state_atual = GAMEPLAY;
-                }*/
             break;
 
             case MORTE:
@@ -297,6 +291,7 @@ void gameLevel(int level){
             break;
             
             case TRANSICAO:
+               pauseAllMusic(stems); 
                camera_principal.camera.zoom = 8;
                cutscene(&obj_transicao, &state_atual, PRIMEIRO_MOVIMENTO);
             break;
