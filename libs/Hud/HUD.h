@@ -41,11 +41,34 @@ char* menuOptionsText[] = {
   "Q - Sair do Jogo"
 };
 
-void drawHUD(int score, int totalPellets){
+
+void drawFruit(int curFruit){
+  DrawRectangle(1400, 800, 40, 40, DARKBLUE);
+  DrawRectangle(1405, 805, 30, 30, BLACK);
+
+  switch(curFruit){
+    case 0:
+      DrawRectangle(1410, 810, 20, 20, RED);
+      break;
+    case 1:
+      DrawRectangle(1410, 810, 20, 20, PINK);
+      break;
+    case 2:
+      DrawRectangle(1410, 810, 20, 20, PURPLE);
+      break;
+    case 3:
+      DrawRectangle(1410, 810, 20, 20, BLUE);
+      break;
+  }
+}
+
+void drawHUD(int score, int totalPellets, int curFruit){
     DrawRectangle(0, 800, 1600, 40, BLACK); //desenho da HUD
     DrawText(TextFormat("Score: %d", score), 10, 810, 20, WHITE);
     DrawText(TextFormat("pellets: %d", totalPellets), 150, 810, 20, WHITE);
+    drawFruit(curFruit);
 }
+
 
 //gameOver não ficaria aqui
 void gameOver()
