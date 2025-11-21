@@ -57,6 +57,7 @@ void inicializaPlayer(tJogador* pacman, int pellets)
     pacman->remainingPellets = pellets;
     pacman->desenho = true;
     pacman->tempo_power_pellet = 0;
+    pacman->current_fruit = -1;
 
     //sprite base pacman
     pacman->sprite = LoadTexture("sprites/player/pacman_spritesheet.png");

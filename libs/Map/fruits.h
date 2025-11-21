@@ -58,16 +58,20 @@ void spawnFruit(char** map, tJogador* pacman){
 void getFruit(tJogador* pacman, char fruit_char){
     switch(fruit_char){
         case 'C':
-            pacman->score += 100;
+            pacman->score += 500;
+            pacman->current_fruit = 0;
             break;
         case 'S':
-            pacman->score += 300;
+            pacman->score += 500;
+            pacman->current_fruit = 1;
             break;
         case 'G':
             pacman->score += 500;
+            pacman->current_fruit = 2;
             break;
         case 'B':
-            pacman->score += 700;
+            pacman->score += 500;
+            pacman->current_fruit = 3;
             break;
     }
 }

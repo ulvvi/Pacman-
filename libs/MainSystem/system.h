@@ -42,6 +42,7 @@ typedef struct
     int score;
     int remainingPellets;
     int dir;
+    int current_fruit;
 
     bool desenho;
     Rectangle colisao_player;
