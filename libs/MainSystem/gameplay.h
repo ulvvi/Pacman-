@@ -53,7 +53,7 @@ void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual,int numero_fan
     //fim do q a camera afeta
     EndMode2D();
     //layer main HUD
-    drawHUD(pacman->score, pacman->remainingPellets, pacman->current_fruit);
+    drawHUD(pacman->score, pacman->remainingPellets, pacman->current_fruit, mapa);
     DrawText(TextFormat("posx: %.2f, posy: %.2f, vida: %d, dir: %d", pacman->pos.x, pacman->pos.y, pacman->vida, pacman->dir), 900, 810, 20, WHITE);
 }
 

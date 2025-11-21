@@ -42,31 +42,31 @@ char* menuOptionsText[] = {
 };
 
 
-void drawFruit(int curFruit){
+void drawFruit(int curFruit, tMapa mapa){
   DrawRectangle(1400, 800, 40, 40, DARKBLUE);
   DrawRectangle(1405, 805, 30, 30, BLACK);
 
   switch(curFruit){
     case 0:
-      DrawRectangle(1410, 810, 20, 20, RED);
+      DrawTexture(mapa.cherry,1400, 800, WHITE);
       break;
     case 1:
-      DrawRectangle(1410, 810, 20, 20, PINK);
+      DrawTexture(mapa.strawberry,1400, 800, WHITE);
       break;
     case 2:
-      DrawRectangle(1410, 810, 20, 20, PURPLE);
+      DrawTexture(mapa.grape,1400, 800, WHITE);
       break;
     case 3:
-      DrawRectangle(1410, 810, 20, 20, BLUE);
+      DrawTexture(mapa.blueberry,1400, 800, WHITE);
       break;
   }
 }
 
-void drawHUD(int score, int totalPellets, int curFruit){
+void drawHUD(int score, int totalPellets, int curFruit, tMapa mapa){
     DrawRectangle(0, 800, 1600, 40, BLACK); //desenho da HUD
     DrawText(TextFormat("Score: %d", score), 10, 810, 20, WHITE);
     DrawText(TextFormat("pellets: %d", totalPellets), 150, 810, 20, WHITE);
-    drawFruit(curFruit);
+    drawFruit(curFruit, mapa);
 }
 
 
