@@ -84,6 +84,11 @@ typedef struct
     int frame_counter;
     int cor_atual;
 
+    Texture2D cherry; 
+    Texture2D grape; 
+    Texture2D blueberry; 
+    Texture2D strawberry; 
+
 }tMapa;
 
 

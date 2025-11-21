@@ -9,7 +9,7 @@ void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual,int numero_fan
     //iniciar camera(tudo entre beginmode2d e endmode2d que sofrera efeito de zoom e de screenshake, oq tiver fora, como hud, n sofrera)
     BeginMode2D(camera_principal.camera);
     ClearBackground(BLACK);
-    drawMap(mapa.grid_mapa);
+    drawMap(mapa);
     drawTexturaParede(mapa);
     //layer entidades
     if(pacman->desenho == true)

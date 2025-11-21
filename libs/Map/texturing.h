@@ -243,5 +243,11 @@ void inicializaMapa(tMapa* mapa)
     mapa->spritesheet.width = 40;
     texturizaMapa(mapa);
     mapa->cor_atual = mapa->spritesheet.y/40;
+
+    //frutinhas
+    mapa->cherry = LoadTexture("sprites/ambiente/cereja.png");
+    mapa->grape = LoadTexture("sprites/ambiente/uva.png");
+    mapa->blueberry = LoadTexture("sprites/ambiente/mirtilo.png");
+    mapa->strawberry = LoadTexture("sprites/ambiente/morango.png");
 }
 

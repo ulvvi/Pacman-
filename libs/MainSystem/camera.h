@@ -21,6 +21,7 @@ void inicializaCamera(tCamera* camera_relativa, tJogador pacman)
     camera_relativa->forca = 0;
     camera_relativa->ativa = false;
 }
+//autoexplicativo
 void ativaCamera(tCamera* camera_relativa, float tempo, float forca)
 {
     camera_relativa->duracao = tempo;
@@ -28,6 +29,7 @@ void ativaCamera(tCamera* camera_relativa, float tempo, float forca)
     camera_relativa->ativa = true;
 }
 
+//treme a tela de acordo com a forca e o tempo passados pela funcao ativaCamera
 void screenShake(tCamera* camera_relativa)
 {
     if(camera_relativa->duracao > 0)
@@ -53,6 +55,7 @@ void screenShake(tCamera* camera_relativa)
     }
 }
 
+//calcula sua propria forca de acordo com o zoom_destino e o tempo(que é passado pela ativa_camera). serve tanto para zoom in e zoom out
 void zoomInOut(tCamera* camera_relativa, float zoom_destino)
 {
     //calculo da forca

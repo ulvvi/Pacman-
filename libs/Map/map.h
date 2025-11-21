@@ -58,7 +58,7 @@ int initMap(char filename[], char **mapa) {
 }
 
 //desenha o mapa com a matriz
-void drawMap(char** mapa) 
+void drawMap(tMapa mapa) 
 {
     for(int i = 0; i < TAM_I; i++) 
     {
@@ -69,7 +69,7 @@ void drawMap(char** mapa)
             float center_x = j * TAM_GRID + TAM_GRID / 2;
             float center_y = i * TAM_GRID + TAM_GRID / 2;
 
-            switch(mapa[i][j])
+            switch(mapa.grid_mapa[i][j])
             {
                 //desenhar parede
                 case '#':
@@ -95,16 +95,16 @@ void drawMap(char** mapa)
 
                 //FRUTAS
                 case 'C':
-                    DrawCircle(center_x, center_y, 8, RED);
+                    DrawTexture(mapa.cherry, x, y, WHITE);
                     break;
                 case 'S':
-                    DrawCircle(center_x, center_y, 8, PINK);
+                    DrawTexture(mapa.strawberry, x, y, WHITE);
                     break;
                 case 'G':
-                    DrawCircle(center_x, center_y, 8, PURPLE);
+                    DrawTexture(mapa.grape, x, y, WHITE);
                     break;
                 case 'B':
-                    DrawCircle(center_x, center_y, 8, BLUE);
+                    DrawTexture(mapa.blueberry, x, y, WHITE);
                     break;
 
                 //bizzarrices
