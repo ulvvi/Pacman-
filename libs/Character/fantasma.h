@@ -375,7 +375,8 @@ void inicializaFantasmas(tInimigo* fantasma, char** grid_mapa)
 
                 //sprites base
                 fantasma[contador].desenho = true;
-                fantasma[contador].sprite = LoadTexture("sprites/inimigo/fantasma_spritesheet.png");
+                fantasma[contador].sprite_normal = LoadTexture("sprites/inimigo/fantasma_spritesheet.png");
+                fantasma[contador].sprite_fuga = LoadTexture("sprites/inimigo/fantasma_fuga-Sheet.png");
                 fantasma[contador].spritesheet.height = 40;
                 fantasma[contador].spritesheet.width = 40;
                 fantasma[contador].spritesheet.x = 0;

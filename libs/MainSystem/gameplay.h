@@ -33,7 +33,17 @@ void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual,int numero_fan
             fantasmas[i].morte.pos.x = fantasmas[i].pos.x;
             fantasmas[i].morte.pos.y = fantasmas[i].pos.y;
             fantasmas[i].morte.frame_atual = 0;
-            DrawTextureRec(fantasmas[i].sprite, fantasmas[i].spritesheet, fantasmas[i].pos, WHITE);
+            fantasmas[i].morto.frame_atual = 0;
+            //decidir se desenha os sprites de fuga ou normais
+            if(pacman->power_pellet == true)
+            {
+                DrawTextureRec(fantasmas[i].sprite_fuga, fantasmas[i].spritesheet, fantasmas[i].pos, WHITE);
+            }
+            else
+            {
+                DrawTextureRec(fantasmas[i].sprite_normal, fantasmas[i].spritesheet, fantasmas[i].pos, WHITE);
+            }
+            
         }
         else
         {

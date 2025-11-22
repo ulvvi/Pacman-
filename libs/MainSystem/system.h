@@ -78,7 +78,8 @@ typedef struct
 
     float tempo_morto;
     bool desenho;
-    Texture2D sprite;
+    Texture2D sprite_normal;
+    Texture2D sprite_fuga;
     Rectangle spritesheet;
 
     tAnimacao morte;
