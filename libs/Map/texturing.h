@@ -233,6 +233,7 @@ void inicializaMapa(tMapa* mapa, char* filename, int* level_atual)
     mapa->pellets_totais = initMap(filename, mapa->grid_mapa);
     mapa->frame_counter = 0;
 
+
     //texturas
     mapa->mapa_mascaras = malloc(sizeof(int)*256);
     mapa->matriz_auxiliar = inicializaMatrizAux();

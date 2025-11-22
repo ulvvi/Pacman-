@@ -91,6 +91,7 @@ typedef struct
 {
     char** grid_mapa;
     int **matriz_auxiliar;
+    int numero_fantasmas;
     int *mapa_mascaras;
     Texture2D tileset_parede; 
     Rectangle spritesheet;

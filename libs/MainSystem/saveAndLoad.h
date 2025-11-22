@@ -30,7 +30,7 @@ void save_player(tJogador* pacman, FILE* arq)
 
 void save_fantasma(tInimigo* fantasma, tMapa map, FILE* arq)
 {
-    for(int i = 0; i < calculaFantasmas(map.grid_mapa); i++)
+    for(int i = 0; i < map.numero_fantasmas; i++)
     {
         fwrite(&fantasma[i].spd, sizeof(float), 1, arq);
         fwrite(&fantasma[i].vulneravel, sizeof(bool), 1, arq);;
@@ -49,7 +49,9 @@ void save_map(tMapa* mapa, FILE* fp) {
     fwrite(&mapa->tamanho_spritesheet, sizeof(int), 1, fp);
     fwrite(&mapa->pellets_totais, sizeof(int), 1, fp);
     fwrite(&mapa->frame_counter, sizeof(int), 1, fp);
+    fwrite(&mapa->numero_fantasmas, sizeof(int),1,fp);
     fwrite(mapa->level, sizeof(int),1,fp);
+
 
     for (int i = 0; i < TAM_I; i++) {
         if (mapa->grid_mapa && mapa->grid_mapa[i]) {
@@ -95,7 +97,9 @@ void load_map(tMapa* mapa, FILE* fp) {
     fread(&mapa->tamanho_spritesheet, sizeof(int), 1, fp);
     fread(&mapa->pellets_totais, sizeof(int), 1, fp);
     fread(&mapa->frame_counter, sizeof(int), 1, fp);
+    fread(&mapa->numero_fantasmas, sizeof(int),1,fp);
     fread(mapa->level, sizeof(int),1,fp);
+    
 
     for (int i = 0; i < TAM_I; i++) {
 
@@ -136,8 +140,15 @@ void load_player(tJogador* pacman, FILE* arq)
 }
 
 void load_fantasma(tInimigo* fantasma, tMapa map, FILE* arq)
-{
-    for(int i = 0; i < calculaFantasmas(map.grid_mapa); i++)
+{   
+    //realoca dependendo do numero de fantasmas do mapa que sera carregado
+    fantasma = realloc(fantasma, sizeof(tInimigo)*map.numero_fantasmas);
+    if(fantasma == NULL)
+    {
+        puts("[LOAD] erro de carregamento de fantasmas\n");
+        return;
+    }
+    for(int i = 0; i < map.numero_fantasmas; i++)
     {
         fread(&fantasma[i].spd, sizeof(float), 1, arq);
         fread(&fantasma[i].vulneravel, sizeof(bool), 1, arq);;

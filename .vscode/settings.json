@@ -22,6 +22,8 @@
         "math.h": "c",
         "chrono": "c",
         "ranges": "c",
-        "variant": "c"
+        "variant": "c",
+        "camera.h": "c",
+        "fruits.h": "c"
     }
 }
