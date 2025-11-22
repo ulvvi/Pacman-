@@ -2,6 +2,7 @@
 #pragma once
 #include "../MainSystem/system.h"
 #include "../header.h"
+#include "persegue.h"
 
 //forward declaration
 void gameOver();
@@ -154,7 +155,7 @@ int contaDirecoes(tInimigo fantasma, char** grid_mapa){
 }
 
 
-int escolheDirecao(tInimigo fantasma,char** grid_mapa)
+/*int escolheDirecao(tInimigo fantasma,char** grid_mapa)
 {   
     int dirDispo = contaDirecoes(fantasma,grid_mapa);
     int dirAtual = fantasma.direcao;
@@ -207,7 +208,7 @@ int escolheDirecao(tInimigo fantasma,char** grid_mapa)
            
 
         }
-}
+}*/
 
 bool interseptaPacman(int dir, tInimigo fantasma, tJogador pacman){
     int pacX = pacman.pos.x;
@@ -290,16 +291,16 @@ int fogePacman(tInimigo fantasma, char** grid_mapa, tJogador pacman){
     
 }
 
-tInimigo moveFantasma(tInimigo fantasma,char** grid_mapa, int indice, tJogador pacman){
+tInimigo moveFantasma(tInimigo fantasma, tMapa mapa, int indice, tJogador pacman){
     
     if(saindoMapa(fantasma)!=-1){
         fantasma.pos=teleportaFantasma(fantasma);
     }
     if((indice%20==0 && (fantasma.pos.x>=40 && fantasma.pos.x<=1520) && (fantasma.pos.y>=40 && fantasma.pos.y<=720)) && !pacman.power_pellet){
-        fantasma.direcao=escolheDirecao(fantasma, grid_mapa);
+        fantasma.direcao=escolheDireção2(&fantasma, &pacman, &mapa);
     }
     if((indice%20==0 && (fantasma.pos.x>=40 && fantasma.pos.x<=1520) && (fantasma.pos.y>=40 && fantasma.pos.y<=720)) && pacman.power_pellet){
-        fantasma.direcao=fogePacman(fantasma, grid_mapa, pacman);
+        fantasma.direcao=fogePacman(fantasma, mapa.grid_mapa, pacman);
     }
 
         switch (fantasma.direcao){
