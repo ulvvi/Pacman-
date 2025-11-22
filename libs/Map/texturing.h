@@ -224,12 +224,19 @@ void freeMascaras(int* mapa_mascaras)
     free(mapa_mascaras);
 }
 
+char* createMapPath(int level)
+{   
+    static char buffer[30];
+    sprintf(buffer, "maps/mapa%d.txt", level);
+    return buffer;
+}
+
 //Inicializa tudo em relacao ao mapa junto de suas texturas
-void inicializaMapa(tMapa* mapa)
+void inicializaMapa(tMapa* mapa, int level)
 {
     //mapa em si
     mapa->grid_mapa = allocateMap();
-    mapa->pellets_totais = initMap("maps/mapa1.txt", mapa->grid_mapa);
+    mapa->pellets_totais = initMap(createMapPath(level), mapa->grid_mapa);
     mapa->frame_counter = 0;
 
     //texturas

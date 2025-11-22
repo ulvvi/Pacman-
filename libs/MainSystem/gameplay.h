@@ -134,7 +134,7 @@ void initGameLevel(int level, tMapa* mapa, tJogador* pacman, tInimigo** fantasma
     SetSoundVolume(*jingle, 2.0f);
     
     // --- MAPA e PLAYER ---
-    inicializaMapa(mapa);
+    inicializaMapa(mapa, level);
     mapa->tileset_parede = LoadTexture("sprites/ambiente/tileset_paredes.png");
     inicializaPlayer(pacman, mapa->pellets_totais);
     centralizaPlayer(pacman, mapa->grid_mapa);
