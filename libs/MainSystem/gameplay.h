@@ -127,8 +127,8 @@ void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasm
 {
 
     // --- ÁUDIO ---
-    //initiateAudio(stems, menu, *level);
-    //playMusic(stems);
+    initiateAudio(stems, menu, *level);
+    playMusic(stems);
     *som_cut_in = LoadSound("audio/ambiente/CUTIN.mp3");
     SetSoundVolume(*som_cut_in, 0.5f);
     *jingle = LoadSound("audio/ambiente/jingle.wav");
@@ -181,7 +181,7 @@ bool gameLevel(int* level){
     
     GameState state_atual = TRANSICAO;
 
-    tMenu menuData = {0};
+    tMenu menuData;
 
     Music stems[3];
     
