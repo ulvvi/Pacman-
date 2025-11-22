@@ -3,7 +3,7 @@
 
 
 
-void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual,int numero_fantasmas, tInimigo *fantasmas, tCamera camera_principal){
+void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual, tInimigo *fantasmas, tCamera camera_principal){
     //layer fundo/mapa   
     BeginDrawing(); 
     //iniciar camera(tudo entre beginmode2d e endmode2d que sofrera efeito de zoom e de screenshake, oq tiver fora, como hud, n sofrera)
@@ -26,7 +26,7 @@ void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual,int numero_fan
     }
     //DrawRectangleLinesEx(pacman.colisao_player, 4.0,RED);
     //jaja refatoro isso, é so q por enqt ainda to debuggando
-    for(int i = 0; i < numero_fantasmas; i++)
+    for(int i = 0; i < mapa.numero_fantasmas; i++)
     {
         if(fantasmas[i].desenho == true)
         {
@@ -68,7 +68,7 @@ void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual,int numero_fan
 }
 
 //updata o jogo a cada frame
-void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* menuData, tInimigo* fantasma, int numero_fantasma, tCamera* camera_principal){
+void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* menuData, tInimigo* fantasma, tCamera* camera_principal){
     //contabilizador de frames pro fantasma 
     mapa->frame_counter++;
     if(IsKeyPressed(KEY_TAB))
@@ -107,7 +107,7 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
     }
 
     //iteracao dos fantasmas
-    for(int i = 0; i < numero_fantasma; i++)
+    for(int i = 0; i < mapa->numero_fantasmas; i++)
     {
         fantasma[i] = moveFantasma(fantasma[i], mapa->grid_mapa, mapa->frame_counter, *pacman);
         if(fantasma[i].desenho == false)
@@ -116,11 +116,13 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
             reviveFantasma(fantasma, i);
         }
     }
-    atualizaColisaoFantasma(fantasma, numero_fantasma);
-    ConcretizaColisao(pacman, fantasma, mapa->grid_mapa, checaColisaoFantasma(pacman->colisao_player, fantasma, numero_fantasma), numero_fantasma, state_atual, camera_principal);
+    atualizaColisaoFantasma(fantasma, mapa->numero_fantasmas);
+    ConcretizaColisao(pacman, fantasma, mapa->grid_mapa, checaColisaoFantasma(pacman->colisao_player, fantasma, mapa->numero_fantasmas), mapa->numero_fantasmas, 
+    state_atual, camera_principal);
+
     //n consegui encaixar esse troca sprite dentro da func do alexandre, por ela n receber um pointer
     if(camera_principal->ativa == true) screenShake(camera_principal);
-    trocaSpriteFantasma(fantasma, numero_fantasma);
+    trocaSpriteFantasma(fantasma, mapa->numero_fantasmas);
 }
 
 bool hasCollectedAllPellets(tJogador* pacman){
@@ -133,7 +135,7 @@ bool hasCollectedAllPellets(tJogador* pacman){
 
 
 
-void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasmas, tMenu* menu, int* num_fantasmas, Music stems[3], Sound* som_cut_in, Sound* jingle, tAnimacao* obj_cut_in) 
+void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasmas, tMenu* menu, Music stems[3], Sound* som_cut_in, Sound* jingle, tAnimacao* obj_cut_in) 
 {
 
     // --- ÁUDIO ---
@@ -148,6 +150,7 @@ void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasm
     char filename[30];
     modificaFilename(filename, *level);
     inicializaMapa(mapa, filename, level);
+    mapa->numero_fantasmas = calculaFantasmas(mapa->grid_mapa);
 
     mapa->tileset_parede = LoadTexture("sprites/ambiente/tileset_paredes.png");
     inicializaPlayer(pacman, mapa->pellets_totais);
@@ -158,8 +161,7 @@ void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasm
     menu->subIndex = 0;
     
     // --- INIMIGOS (com alocação de memória) ---
-    *num_fantasmas = calculaFantasmas(mapa->grid_mapa);
-    *fantasmas = malloc(sizeof(tInimigo) * (*num_fantasmas));
+    *fantasmas = malloc(sizeof(tInimigo) * (mapa->numero_fantasmas));
     inicializaFantasmas(*fantasmas, mapa->grid_mapa);
     
     // --- ANIMAÇÕES/CUTSCENES ---
@@ -202,13 +204,13 @@ bool gameLevel(int* level){
     
     tJogador pacman = {0};
 
-    int numero_fantasmas;
+
     tInimigo* fantasmas;
     
     tAnimacao obj_cut_in;
     tAnimacao obj_transicao = {0, 18, 0.100, 0, LoadTexture("sprites/ambiente/transicao2-Sheet.png"),{0,0,LARGURA, ALTURA}, {0,0}, 0, 0, 0};
 
-    initGameLevel(level, &mapa, &pacman, &fantasmas, &menuData, &numero_fantasmas, stems, &som_cut_in, &jingle, &obj_cut_in);
+    initGameLevel(level, &mapa, &pacman, &fantasmas, &menuData, stems, &som_cut_in, &jingle, &obj_cut_in);
 
     tCamera camera_principal;
     inicializaCamera(&camera_principal, pacman);
@@ -228,7 +230,7 @@ bool gameLevel(int* level){
         updateMusic(stems);
         
         //desenhos
-        drawGame(mapa, &pacman, state_atual,numero_fantasmas,fantasmas, camera_principal);
+        drawGame(mapa, &pacman, state_atual, fantasmas, camera_principal);
        
         
         //RESTANTE DOS LAYERS(NUMA STATE MACHINE)
@@ -239,7 +241,7 @@ bool gameLevel(int* level){
                 if(pacman.power_pellet == true){
                     switchMusic(JACKPOT, stems);
                 }
-                updateLogic(&pacman, &mapa, &state_atual, &menuData, fantasmas, numero_fantasmas, &camera_principal);
+                updateLogic(&pacman, &mapa, &state_atual, &menuData, fantasmas, &camera_principal);
                 pacman.comendo.pos.x = pacman.pos.x;
                 pacman.comendo.pos.y = pacman.pos.y;
             break;
@@ -272,7 +274,7 @@ bool gameLevel(int* level){
                 if(state_atual == TRANSICAO)
                 {
                     centralizaPlayer(&pacman, mapa.grid_mapa);
-                    centralizaFantasma(fantasmas, numero_fantasmas);
+                    centralizaFantasma(fantasmas, mapa.numero_fantasmas);
                     pacman.desenho = true;
                 }
             break;
