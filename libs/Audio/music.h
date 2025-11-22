@@ -63,9 +63,6 @@ void switchMusic(GameState state, Music stems[]){
 }
 
 void initiateAudio(Music stems[], Sound sfx[], int level){
-
-    InitAudioDevice();
-
     switch(level){
         case 2:
             stems[0] = LoadMusicStream("audio/Music/pause_1.wav");

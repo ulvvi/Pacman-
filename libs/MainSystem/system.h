@@ -89,6 +89,7 @@ typedef struct
     Texture2D grape; 
     Texture2D blueberry; 
     Texture2D strawberry; 
+    int* level;
 
 }tMapa;
 

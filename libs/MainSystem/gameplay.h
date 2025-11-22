@@ -122,10 +122,11 @@ bool hasCollectedAllPellets(tJogador* pacman){
 
 
 
-void initGameLevel(int level, tMapa* mapa, tJogador* pacman, tInimigo** fantasmas, int* num_fantasmas, Music stems[3], Sound menu[2], Sound* som_cut_in, Sound* jingle, tAnimacao* obj_cut_in) 
+void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasmas, int* num_fantasmas, Music stems[3], Sound menu[2], Sound* som_cut_in, Sound* jingle, tAnimacao* obj_cut_in) 
 {
+
     // --- ÁUDIO ---
-    initiateAudio(stems, menu, level);
+    initiateAudio(stems, menu, *level);
     playMusic(stems);
     *som_cut_in = LoadSound("audio/ambiente/CUTIN.mp3");
     SetSoundVolume(*som_cut_in, 0.5f);
@@ -133,7 +134,10 @@ void initGameLevel(int level, tMapa* mapa, tJogador* pacman, tInimigo** fantasma
     SetSoundVolume(*jingle, 0.5f);
     
     // --- MAPA e PLAYER ---
-    inicializaMapa(mapa);
+    char filename[30];
+    modificaFilename(filename, *level);
+    inicializaMapa(mapa, filename, level);
+
     mapa->tileset_parede = LoadTexture("sprites/ambiente/tileset_paredes.png");
     inicializaPlayer(pacman, mapa->pellets_totais);
     centralizaPlayer(pacman, mapa->grid_mapa);
@@ -157,7 +161,6 @@ void cleanup(tMapa* mapa, Sound sfx[], Music stems[], Sound som_cut_in){
     UnloadSound(som_cut_in);
     UnloadTexture(mapa->tileset_parede);
     stopAllMusic(stems);
-    CloseAudioDevice();
 
     //liberar memoria
     freeMascaras(mapa->mapa_mascaras);
@@ -167,8 +170,9 @@ void cleanup(tMapa* mapa, Sound sfx[], Music stems[], Sound som_cut_in){
 
 
 
-void gameLevel(int level){
+bool gameLevel(int* level){
     int cronometro = 0;
+    bool venceu = false;
     
     GameState state_atual = TRANSICAO;
 
@@ -254,6 +258,7 @@ void gameLevel(int level){
                 pauseAllMusic(stems);
                 pacman.cutscene_morte.pos.x = pacman.pos.x;
                 pacman.cutscene_morte.pos.y = pacman.pos.y;
+
                 pacman.desenho = false;
                 //a func cutscene ja troca o state quando acabar, logo, so sera gameplay apos a ultima chamada da func cutscene
                 cutscene(&pacman.cutscene_morte, &state_atual, TRANSICAO);
@@ -304,11 +309,12 @@ void gameLevel(int level){
             if(hasCollectedAllPellets(&pacman) == true){
                 PlaySound(winJingle);
                 victoryScreen();
+                venceu = true;
                 break;
             }
         }
     }
 
     cleanup(&mapa, menu, stems, som_cut_in);
-    return;
+    return venceu;
 }

@@ -4,6 +4,13 @@
 
 Color PEL = {255, 213, 65, 255};
 
+
+
+void modificaFilename(char filename[], int level)
+{
+    sprintf(filename, "maps/mapa%d.txt", level);
+}
+
 //inicializa a matriz com o nome do arq
 char** allocateMap(){
     char** grid_mapa = (char**)malloc(sizeof(char*)*TAM_I);

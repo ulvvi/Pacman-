@@ -225,11 +225,11 @@ void freeMascaras(int* mapa_mascaras)
 }
 
 //Inicializa tudo em relacao ao mapa junto de suas texturas
-void inicializaMapa(tMapa* mapa)
+void inicializaMapa(tMapa* mapa, char* filename, int* level_atual)
 {
     //mapa em si
     mapa->grid_mapa = allocateMap();
-    mapa->pellets_totais = initMap("maps/mapa1.txt", mapa->grid_mapa);
+    mapa->pellets_totais = initMap(filename, mapa->grid_mapa);
     mapa->frame_counter = 0;
 
     //texturas
@@ -243,6 +243,7 @@ void inicializaMapa(tMapa* mapa)
     mapa->spritesheet.width = 40;
     texturizaMapa(mapa);
     mapa->cor_atual = mapa->spritesheet.y/40;
+    mapa->level = level_atual;
 
     //frutinhas
     mapa->cherry = LoadTexture("sprites/ambiente/cereja.png");
