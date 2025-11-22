@@ -208,7 +208,7 @@ int escolheDirecao(tInimigo fantasma,char** grid_mapa)
 
         }
 }
-
+/*
 bool interseptaPacman(int dir, tInimigo fantasma, tJogador pacman){
     int pacX = pacman.pos.x;
     int pacY = pacman.pos.y;
@@ -287,8 +287,9 @@ int fogePacman(tInimigo fantasma, char** grid_mapa, tJogador pacman){
         return oposta;
     }
     return dirAtual;
+    
 }
-
+*/
 tInimigo moveFantasma(tInimigo fantasma,char** grid_mapa, int indice, tJogador pacman){
     
     if(saindoMapa(fantasma)!=-1){
@@ -297,9 +298,10 @@ tInimigo moveFantasma(tInimigo fantasma,char** grid_mapa, int indice, tJogador p
     if((indice%20==0 && (fantasma.pos.x>=40 && fantasma.pos.x<=1520) && (fantasma.pos.y>=40 && fantasma.pos.y<=720)) && !pacman.power_pellet){
         fantasma.direcao=escolheDirecao(fantasma, grid_mapa);
     }
+    /*
     if((indice%20==0 && (fantasma.pos.x>=40 && fantasma.pos.x<=1520) && (fantasma.pos.y>=40 && fantasma.pos.y<=720)) && pacman.power_pellet){
         fantasma.direcao=fogePacman(fantasma, grid_mapa, pacman);
-    }
+    }*/
 
         switch (fantasma.direcao){
         case 1:

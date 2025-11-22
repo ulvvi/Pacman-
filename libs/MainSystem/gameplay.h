@@ -127,8 +127,8 @@ void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasm
 {
 
     // --- ÁUDIO ---
-    initiateAudio(stems, menu, *level);
-    playMusic(stems);
+    //initiateAudio(stems, menu, *level);
+    //playMusic(stems);
     *som_cut_in = LoadSound("audio/ambiente/CUTIN.mp3");
     SetSoundVolume(*som_cut_in, 0.5f);
     *jingle = LoadSound("audio/ambiente/jingle.wav");
@@ -181,21 +181,20 @@ bool gameLevel(int* level){
     
     GameState state_atual = TRANSICAO;
 
-    tMenu menuData;
+    tMenu menuData = {0};
 
     Music stems[3];
     
     Sound som_cut_in;
     Sound jingle;
 
-    tMapa mapa;
+    tMapa mapa = {0};
     
-    tJogador pacman;
+    tJogador pacman = {0};
 
     int numero_fantasmas;
     tInimigo* fantasmas;
     
-    mapa.tileset_parede;
     tAnimacao obj_cut_in;
     tAnimacao obj_transicao = {0, 18, 0.100, 0, LoadTexture("sprites/ambiente/transicao2-Sheet.png"),{0,0,LARGURA, ALTURA}, {0,0}, 0, 0, 0};
 
