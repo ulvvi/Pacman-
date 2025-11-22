@@ -82,16 +82,16 @@ Vector2 teleportaFantasma(tInimigo fantasma){
     switch (fantasma.direcao)
     {
         case 1:
-            fantasma.pos.y=TAM_GRID*(TAM_I)-fantasma.spd;
+            fantasma.pos.y=TAM_GRID*(TAM_I);
             break;
         case 2:
-            fantasma.pos.x=fantasma.spd-TAM_GRID;
+            fantasma.pos.x=-TAM_GRID;
             break;
         case 3:
-            fantasma.pos.y=fantasma.spd-TAM_GRID;
+            fantasma.pos.y=-TAM_GRID;
             break;
         case 4:
-            fantasma.pos.x=TAM_GRID*(TAM_J)-fantasma.spd;
+            fantasma.pos.x=TAM_GRID*(TAM_J);
             break;
     }
     return fantasma.pos;
@@ -205,20 +205,98 @@ int escolheDirecao(tInimigo fantasma,char** grid_mapa)
            
 
         }
-
-       
-
-       
-
 }
 
-tInimigo moveFantasma(tInimigo fantasma,char** grid_mapa, int indice){
+bool interseptaPacman(int dir, tInimigo fantasma, tJogador pacman){
+    int pacX = pacman.pos.x;
+    int pacY = pacman.pos.y;
+    int fanX = fantasma.pos.x;
+    int fanY = fantasma.pos.y;
+    int distanciaSegura = 280; 
+
+    if (abs(pacX - fanX) > distanciaSegura && abs(pacY-fanY) > distanciaSegura) {
+        return false; 
+    }
+
+    switch (dir)
+    {
+        case 1: // Cima 
+            return (pacY < fanY && pacY > (fanY-distanciaSegura));
+        
+        case 2: // Direita
+            return (pacX > fanX && pacX < (fanX + distanciaSegura));
+
+        case 3: // Baixo
+            return (pacY > fanY && pacY < (fanY + distanciaSegura));
+
+        case 4: // Esquerda 
+            return (pacX < fanX && pacX > (fanX - distanciaSegura));
+    }
+    return false;
+}
+
+int fogePacman(tInimigo fantasma, char** grid_mapa, tJogador pacman){
+    int pacX = pacman.pos.x;
+    int pacY = pacman.pos.y;
+    int fanX = fantasma.pos.x;
+    int fanY = fantasma.pos.y;
+    
+    int dirAtual = fantasma.direcao;
+    int oposta = direcaoOposta(dirAtual);
+
+    int fugirX = 0;
+    int fugirY = 0;
+
+    if(pacX < fanX) fugirX = 2; 
+    else fugirX = 4;
+
+    if(pacY < fanY) fugirY = 3;
+    else fugirY = 1;
+    
+    if(dirAtual == fugirX || dirAtual == fugirY) {
+        if (validaDirecao(fantasma, grid_mapa, dirAtual) != -1) {
+            return dirAtual;
+        }
+    }
+    
+    int distX = abs(pacX - fanX);
+    int distY = abs(pacY - fanY);
+    
+    int primeiraOpcao, segundaOpcao;
+    if(distX < distY) { 
+        primeiraOpcao = fugirX;
+        segundaOpcao = fugirY;
+    } else{
+        primeiraOpcao = fugirY;
+        segundaOpcao = fugirX;
+    }
+    if(validaDirecao(fantasma, grid_mapa, primeiraOpcao) != -1 && primeiraOpcao != oposta) {
+        return primeiraOpcao;
+    }
+    if(validaDirecao(fantasma, grid_mapa, segundaOpcao) != -1 && segundaOpcao != oposta) {
+        return segundaOpcao;
+    }
+    for(int i = 1; i <= 4; i++) {
+        if (i != oposta && validaDirecao(fantasma, grid_mapa, i) != -1) {
+            return i;
+        }
+    }
+    if(validaDirecao(fantasma, grid_mapa, oposta) != -1) {
+        return oposta;
+    }
+    return dirAtual;
+}
+
+tInimigo moveFantasma(tInimigo fantasma,char** grid_mapa, int indice, tJogador pacman){
+    
     if(saindoMapa(fantasma)!=-1){
         fantasma.pos=teleportaFantasma(fantasma);
     }
-    
-    if(indice%20==0 && (fantasma.pos.x>=40 && fantasma.pos.x<=1520) && (fantasma.pos.y>=40 && fantasma.pos.y<=720)){
+    if((indice%20==0 && (fantasma.pos.x>=40 && fantasma.pos.x<=1520) && (fantasma.pos.y>=40 && fantasma.pos.y<=720)) && !pacman.power_pellet){
         fantasma.direcao=escolheDirecao(fantasma, grid_mapa);
+    }
+    if((indice%20==0 && (fantasma.pos.x>=40 && fantasma.pos.x<=1520) && (fantasma.pos.y>=40 && fantasma.pos.y<=720)) && pacman.power_pellet){
+        fantasma.direcao=fogePacman(fantasma, grid_mapa, pacman);
     }
 
         switch (fantasma.direcao){
@@ -416,3 +494,5 @@ void reviveFantasma(tInimigo* fantasma, int indice)
         fantasma[indice].spd = 2;
     }
 }
+
+
