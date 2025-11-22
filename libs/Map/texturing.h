@@ -224,6 +224,7 @@ void freeMascaras(int* mapa_mascaras)
     free(mapa_mascaras);
 }
 
+
 //Inicializa tudo em relacao ao mapa junto de suas texturas
 void inicializaMapa(tMapa* mapa, char* filename, int* level_atual)
 {

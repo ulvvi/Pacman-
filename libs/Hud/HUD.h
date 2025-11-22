@@ -5,14 +5,14 @@
 #include "../MainSystem/saveAndLoad.h"
 
 
-#define MENU_SPACING_X 100 
+#define MENU_SPACING_X 100
+#define SUBMENU_SPACING_X  MENU_SPACING_X + 100  
 #define MENU_PADDING_Y 20  
 #define OPTION_HEIGHT 40
 #define OPTION_WIDTH 300
 #define TITLE_FONT_SIZE 60
 #define OPTION_FONT_SIZE 30
 #define OPTION_COUNT 5
-
 
 #define COLOR_BACKGROUND_OVERLAY  Fade(BLACK, 0.8f)
 #define COLOR_TITLE_BG            BLUE
@@ -39,6 +39,14 @@ char* menuOptionsText[] = {
   "S - Salvar Jogo",
   "L - Carregar Jogo",
   "Q - Sair do Jogo"
+};
+
+char* submenuOptionsText[] = {
+  "1 - Slot 1",
+  "2 - Slot 2",
+  "3 - Slot 3",
+  "4 - Slot 4",
+  "5 - Slot 5"
 };
 
 
@@ -102,7 +110,7 @@ void gameOver()
 }
 
 
-void drawMenu(int* index){
+void drawMenu(tMenu* menuData){
     DrawRectangle(0, 0, LARGURA, ALTURA, COLOR_BACKGROUND_OVERLAY);
 
     const char* titleText = "PAUSE";
@@ -121,7 +129,7 @@ void drawMenu(int* index){
 
         int currentY = startY + i * (OPTION_HEIGHT + MENU_PADDING_Y);
         
-        if(i == *index){
+        if(i == menuData->index){
             int expandedWidth = OPTION_WIDTH * 1.1; 
             int expandedHeight = OPTION_HEIGHT * 1.1;
             int xOffset = (expandedWidth - OPTION_WIDTH) / 2;
@@ -153,10 +161,10 @@ void drawMenu(int* index){
     }
 }
 
-int currentChosen(int cur, Sound sfx[]){
+int currentChosen(tMenu* menuData){
   if(IsKeyPressed(KEY_ENTER)){
-    PlaySound(sfx[1]);
-    return cur;
+    PlaySound(menuData->menuSFX[1]);
+    return menuData->index;
   }
   else
   {
@@ -164,42 +172,43 @@ int currentChosen(int cur, Sound sfx[]){
   }
 }
 
-void menuInputs(int* index, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo* ghosts, Sound sfx[]){
-  if(IsKeyPressed(KEY_V) || currentChosen(*index, sfx) == BACK){
+void menuInputs(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo* ghosts){
+  if(IsKeyPressed(KEY_V) || currentChosen(menuData) == BACK){
     *state_atual = GAMEPLAY;
   }
-  if(IsKeyPressed(KEY_N) || currentChosen(*index, sfx) == NEW){
+  if(IsKeyPressed(KEY_N) || currentChosen(menuData) == NEW){
 
   }
-  if(IsKeyPressed(KEY_Q) || currentChosen(*index, sfx) == QUIT){
+  if(IsKeyPressed(KEY_Q) || currentChosen(menuData) == QUIT){
     CloseWindow();
     return;
   }
-  if(IsKeyPressed(KEY_S) || currentChosen(*index, sfx) == SAVE){
+  if(IsKeyPressed(KEY_S) || currentChosen(menuData) == SAVE){
     save(pacman, ghosts, map, 1); //salva no slot 1 por enquanto
   }
-  if(IsKeyPressed(KEY_L) || currentChosen(*index, sfx) == LOAD){
+  if(IsKeyPressed(KEY_L) || currentChosen(menuData) == LOAD){
     load(pacman, ghosts, map, 1); //carrega do slot 1 por enquanto
   }
 
   //verifica o input para mudar a opcao selecionada
   if(IsKeyPressed(KEY_DOWN)){
-    PlaySound(sfx[0]);
-    *index += 1;
-    if(*index > QUIT){
-      *index = BACK;
+    PlaySound(menuData->menuSFX[0]);
+    menuData->index += 1;
+    if(menuData->index > QUIT){
+      menuData->index = BACK;
     }
   }
   if(IsKeyPressed(KEY_UP)){
-    PlaySound(sfx[0]);
-    *index -= 1;
-    if(*index < BACK){
-      *index = QUIT;
+    PlaySound(menuData->menuSFX[0]);
+    menuData->index -= 1;
+    if(menuData->index < BACK){
+      menuData->index = QUIT;
     }
   }
 }
 
-void menuLogic(int* index, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo* ghosts, Sound sfx[]){
-    drawMenu(index);
-    menuInputs(index, state_atual, map, pacman, ghosts, sfx);
+void menuLogic(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo* ghosts){
+  int subIndex = 0;
+  drawMenu(menuData);
+  menuInputs(menuData, state_atual, map, pacman, ghosts);
 }

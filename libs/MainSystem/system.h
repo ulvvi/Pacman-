@@ -28,6 +28,19 @@ typedef struct
 
 } tAnimacao;
 
+enum menuState{
+  MAIN,
+  SAVE_MENU,
+  LOAD_MENU
+};
+
+typedef struct {
+    int index;
+    int subIndex;
+    int MenuState;
+    Sound menuSFX[2];
+} tMenu;
+
 
 //struct do player
 typedef struct

@@ -58,12 +58,13 @@ void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual,int numero_fan
 }
 
 //updata o jogo a cada frame
-void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, int *option, tInimigo* fantasma, int numero_fantasma, tCamera* camera_principal){
+void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* menuData, tInimigo* fantasma, int numero_fantasma, tCamera* camera_principal){
     //contabilizador de frames pro fantasma 
     mapa->frame_counter++;
     if(IsKeyPressed(KEY_TAB))
     {
-        *option = 0;
+        menuData->index = 0;
+        menuData->subIndex = 0;
         *state_atual = PAUSE;
     }
 
@@ -98,7 +99,7 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, int *opt
     //iteracao dos fantasmas
     for(int i = 0; i < numero_fantasma; i++)
     {
-        fantasma[i] = moveFantasma(fantasma[i], mapa->grid_mapa, mapa->frame_counter);
+        fantasma[i] = moveFantasma(fantasma[i], mapa->grid_mapa, mapa->frame_counter, *pacman);
         if(fantasma[i].desenho == false)
         {
             //so roda se tiver algum fantasma morto
@@ -122,7 +123,7 @@ bool hasCollectedAllPellets(tJogador* pacman){
 
 
 
-void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasmas, int* num_fantasmas, Music stems[3], Sound menu[2], Sound* som_cut_in, Sound* jingle, tAnimacao* obj_cut_in) 
+void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasmas, tMenu* menu, int* num_fantasmas, Music stems[3], Sound* som_cut_in, Sound* jingle, tAnimacao* obj_cut_in) 
 {
 
     // --- ÁUDIO ---
@@ -131,7 +132,7 @@ void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasm
     *som_cut_in = LoadSound("audio/ambiente/CUTIN.mp3");
     SetSoundVolume(*som_cut_in, 0.5f);
     *jingle = LoadSound("audio/ambiente/jingle.wav");
-    SetSoundVolume(*jingle, 0.5f);
+    SetSoundVolume(*jingle, 2.0f);
     
     // --- MAPA e PLAYER ---
     char filename[30];
@@ -141,6 +142,10 @@ void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasm
     mapa->tileset_parede = LoadTexture("sprites/ambiente/tileset_paredes.png");
     inicializaPlayer(pacman, mapa->pellets_totais);
     centralizaPlayer(pacman, mapa->grid_mapa);
+
+    //--- MENU ---//
+    menu->index = 0;
+    menu->subIndex = 0;
     
     // --- INIMIGOS (com alocação de memória) ---
     *num_fantasmas = calculaFantasmas(mapa->grid_mapa);
@@ -156,7 +161,7 @@ void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasm
 
 
 //limpezas no geral
-void cleanup(tMapa* mapa, Sound sfx[], Music stems[], Sound som_cut_in){  
+void cleanup(tMapa* mapa, tMenu* menuData, Music stems[], Sound som_cut_in){  
     //unload nos assets
     UnloadSound(som_cut_in);
     UnloadTexture(mapa->tileset_parede);
@@ -176,10 +181,9 @@ bool gameLevel(int* level){
     
     GameState state_atual = TRANSICAO;
 
-    int option = 0;
+    tMenu menuData;
 
     Music stems[3];
-    Sound menu[2];
     
     Sound som_cut_in;
     Sound jingle;
@@ -195,7 +199,7 @@ bool gameLevel(int* level){
     tAnimacao obj_cut_in;
     tAnimacao obj_transicao = {0, 18, 0.100, 0, LoadTexture("sprites/ambiente/transicao2-Sheet.png"),{0,0,LARGURA, ALTURA}, {0,0}, 0, 0, 0};
 
-    initGameLevel(level, &mapa, &pacman, &fantasmas, &numero_fantasmas, stems, menu, &som_cut_in, &jingle, &obj_cut_in);
+    initGameLevel(level, &mapa, &pacman, &fantasmas, &menuData, &numero_fantasmas, stems, &som_cut_in, &jingle, &obj_cut_in);
 
     tCamera camera_principal;
     inicializaCamera(&camera_principal, pacman);
@@ -226,7 +230,7 @@ bool gameLevel(int* level){
                 if(pacman.power_pellet == true){
                     switchMusic(JACKPOT, stems);
                 }
-                updateLogic(&pacman, &mapa, &state_atual, &option, fantasmas, numero_fantasmas, &camera_principal);
+                updateLogic(&pacman, &mapa, &state_atual, &menuData, fantasmas, numero_fantasmas, &camera_principal);
                 pacman.comendo.pos.x = pacman.pos.x;
                 pacman.comendo.pos.y = pacman.pos.y;
             break;
@@ -236,21 +240,15 @@ bool gameLevel(int* level){
                 pauseAllMusic(stems);
                 if(cronometro == 0){
                     PlaySound(jingle);
-                    ativaCamera(&camera_principal, 3.5, 0);
+                    ativaCamera(&camera_principal, 4.0, 0);
                 }
-                if(temporizador(&cronometro) >= 4.5)
+                if(temporizador(&cronometro) >= 5.0)
                 {
                     cronometro = 0;
                     state_atual = GAMEPLAY;
                     resumeAllMusic(stems);
                 }
                 if(camera_principal.ativa == true) zoomInOut(&camera_principal, 1);
-                //bool input = IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN);
-                /*if(input == true)
-                {
-                    updateLogic(&pacman, mapa.grid_mapa, &state_atual, &option, fantasmas, numero_fantasmas);
-                    state_atual = GAMEPLAY;
-                }*/
             break;
 
             case MORTE:
@@ -272,7 +270,7 @@ bool gameLevel(int* level){
 
             case PAUSE:
                 switchMusic(MENU, stems);
-                menuLogic(&option, &state_atual, &mapa, &pacman, fantasmas, menu);
+                menuLogic(&menuData, &state_atual, &mapa, &pacman, fantasmas);
             break;
             
             //deuixar pa tu refatorar taylor
@@ -298,6 +296,7 @@ bool gameLevel(int* level){
             break;
             
             case TRANSICAO:
+               pauseAllMusic(stems); 
                camera_principal.camera.zoom = 8;
                cutscene(&obj_transicao, &state_atual, PRIMEIRO_MOVIMENTO);
             break;
@@ -315,6 +314,6 @@ bool gameLevel(int* level){
         }
     }
 
-    cleanup(&mapa, menu, stems, som_cut_in);
+    cleanup(&mapa, &menuData, stems, som_cut_in);
     return venceu;
 }
