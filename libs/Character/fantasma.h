@@ -208,7 +208,7 @@ int escolheDirecao(tInimigo fantasma,char** grid_mapa)
 
         }
 }
-/*
+
 bool interseptaPacman(int dir, tInimigo fantasma, tJogador pacman){
     int pacX = pacman.pos.x;
     int pacY = pacman.pos.y;
@@ -289,7 +289,7 @@ int fogePacman(tInimigo fantasma, char** grid_mapa, tJogador pacman){
     return dirAtual;
     
 }
-*/
+
 tInimigo moveFantasma(tInimigo fantasma,char** grid_mapa, int indice, tJogador pacman){
     
     if(saindoMapa(fantasma)!=-1){
