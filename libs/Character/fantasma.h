@@ -298,10 +298,9 @@ tInimigo moveFantasma(tInimigo fantasma,char** grid_mapa, int indice, tJogador p
     if((indice%20==0 && (fantasma.pos.x>=40 && fantasma.pos.x<=1520) && (fantasma.pos.y>=40 && fantasma.pos.y<=720)) && !pacman.power_pellet){
         fantasma.direcao=escolheDirecao(fantasma, grid_mapa);
     }
-    /*
     if((indice%20==0 && (fantasma.pos.x>=40 && fantasma.pos.x<=1520) && (fantasma.pos.y>=40 && fantasma.pos.y<=720)) && pacman.power_pellet){
         fantasma.direcao=fogePacman(fantasma, grid_mapa, pacman);
-    }*/
+    }
 
         switch (fantasma.direcao){
         case 1:
