@@ -1,6 +1,5 @@
 #pragma once
 #include "../header.h"
-#include "../Character/fantasma.h"
 #include "../MainSystem/system.h"
 #include "../Character/player.h"
 
@@ -156,7 +155,6 @@ void load_fantasma(tInimigo* fantasma, tMapa map, FILE* arq)
         fread(&fantasma[i].tempo_morto, sizeof(float), 1, arq);; 
         fread(&fantasma[i].pos, sizeof(Vector2), 1, arq);
         fread(&fantasma[i].pos_inicial, sizeof(Vector2), 1, arq);
-        alinhaFantasmaAoGrid(&fantasma[i]);
     }
 }
 

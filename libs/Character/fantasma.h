@@ -4,20 +4,6 @@
 #include "../header.h"
 #include "persegue.h"
 
-//forward declaration
-void gameOver();
-
-void alinhaFantasmaAoGrid(tInimigo* fantasma)
-{
-    /*
-    int grid_j = (int)((fantasma->pos.x + TAM_GRID / 2.0f) / TAM_GRID);
-    int grid_i = (int)((fantasma->pos.y + TAM_GRID / 2.0f) / TAM_GRID);
-    fantasma->pos.x = grid_j * TAM_GRID;
-    fantasma->pos.y = grid_i * TAM_GRID;
-    //fantasma->direcao = 0; 
-    */
-}
-
 
 void trocaSpriteFantasma(tInimigo* fantasma, int numero_fantasma)
 { 
