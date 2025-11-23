@@ -3,6 +3,7 @@
 #include "../MainSystem/system.h"
 #include "../header.h"
 #include "persegue.h"
+#include "intercepta.h"
 
 
 void trocaSpriteFantasma(tInimigo* fantasma, int numero_fantasma)
@@ -283,7 +284,7 @@ tInimigo moveFantasma(tInimigo fantasma, tMapa mapa, int indice, tJogador pacman
         fantasma.pos=teleportaFantasma(fantasma);
     }
     if((indice%20==0 && (fantasma.pos.x>=40 && fantasma.pos.x<=1520) && (fantasma.pos.y>=40 && fantasma.pos.y<=720)) && !pacman.power_pellet){
-        fantasma.direcao=escolheDireção2(&fantasma, &pacman, &mapa);
+        fantasma.direcao=escolheDireçãoIntercepta(&fantasma, &pacman, &mapa);
     }
     if((indice%20==0 && (fantasma.pos.x>=40 && fantasma.pos.x<=1520) && (fantasma.pos.y>=40 && fantasma.pos.y<=720)) && pacman.power_pellet){
         fantasma.direcao=fogePacman(fantasma, mapa.grid_mapa, pacman);

@@ -2,47 +2,13 @@
 #pragma once
 #include "../header.h"
 
-typedef enum {
-    CIM = 1, //precisa começar do 1 pra ser compatível com o codigo do xande     
-    DIREITA,   
-    BAIXO,     
-    ESQUERDA   
-} tDirection;
-
-typedef struct Node {
-    int x, y;
-    int g;     
-    int h;     
-    int f;     
-    bool explored; //ta na closed list (explorado ja paezão)
-    bool opened; //basicmente ta na open list
-    struct Node* parent;// o kra que deu origem a ele
-} tNode;
-
-//manhatttan :DDDDD
-int Heuristica(int x1, int y1, int x2, int y2) {
-    return abs(x1 - x2) + abs(y1 - y2);
-}
-
-//fora do grid ou parede eh paia
-bool EhValido(int x, int y, tMapa* mapa) {
-    if (x < 0 || x >= TAM_J || y < 0 || y >= TAM_I)
-        return false;
-
-    if (mapa->grid_mapa[y][x] == '#') { 
-        return false;
-    }
-    return true;
-}
-
-
-int escolheDireção2(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
+int escolheDireçãoIntercepta(tInimigo* fantasma, tJogador* pacman, tMapa* mapa) {
     
     //converte pra matriz
     int startX = (int)(fantasma->pos.x / TAM_GRID);
     int startY = (int)(fantasma->pos.y / TAM_GRID);
-    int targetX = (int)(player->pos.x / TAM_GRID);
-    int targetY = (int)(player->pos.y / TAM_GRID);
+    int targetX = (int)(pacman->pos.x / TAM_GRID);
+    int targetY = (int)(pacman->pos.y / TAM_GRID);
 
     //se por alguma razão ele ta dentro do pacman
     if (startX == targetX && startY == targetY) return fantasma->direcao;
