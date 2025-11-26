@@ -1,14 +1,54 @@
-//coisas do alg astaritmo A* para perseguir o pacman
-#pragma once
+#include "persegue.h"
 #include "../header.h"
+#pragma once
 
-int escolheDireçãoIntercepta(tInimigo* fantasma, tJogador* pacman, tMapa* mapa) {
+void whereToIntercept(tJogador* player, int* posXintercepta, int* posYintercepta, tMapa* mapa){
+    //calcula a direção do pacman
+    int dir_x = (player->move_x / player->spd);
+    int dir_y = (player->move_y / player->spd);
+
+    //ve a posição do pacman
+    int currentX = (player->pos.x / TAM_GRID);
+    int currentY = (player->pos.y / TAM_GRID);
+
+    int targetX = currentX + (5 * dir_x);
+    int targetY = currentY + (5 * dir_y);
+    
+    if (mapa->grid_mapa[targetY][targetX] == '#') {
+
+        targetX = currentX + (1 * dir_x);
+        targetY = currentY + (1 * dir_y);
+    } 
+
+    *posXintercepta = targetX;
+    *posYintercepta = targetY;
+
+    //debug
+
+    int drawX = targetX * TAM_GRID;
+    int drawY = targetY * TAM_GRID;
+
+    DrawRectangle(
+        drawX, 
+        drawY, 
+        TAM_GRID, 
+        TAM_GRID, 
+        (Color){ 255, 0, 0, 100 } 
+    );
+}
+
+int escolheDirIntercepta(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
+
+    int posXintercepta;
+    int posYintercepta;
+
+    whereToIntercept(player, &posXintercepta, &posYintercepta, mapa);
     
     //converte pra matriz
     int startX = (int)(fantasma->pos.x / TAM_GRID);
     int startY = (int)(fantasma->pos.y / TAM_GRID);
-    int targetX = (int)(pacman->pos.x / TAM_GRID);
-    int targetY = (int)(pacman->pos.y / TAM_GRID);
+    int targetX = posXintercepta;
+    int targetY = posYintercepta;
 
     //se por alguma razão ele ta dentro do pacman
     if (startX == targetX && startY == targetY) return fantasma->direcao;
@@ -72,6 +112,15 @@ int escolheDireçãoIntercepta(tInimigo* fantasma, tJogador* pacman, tMapa* mapa
             int newX = current->x + dx[i];
             int newY = current->y + dy[i];
 
+            //reconhecer o portal como caminho valido podendo inserir valores
+            //fora do grid (basicamente cria aresta no grafo)
+            if (newX < 0) newX = TAM_J - 1;
+            else if (newX >= TAM_J) newX = 0;
+
+            //mesma coisa so que vertical
+            if (newY < 0) newY = TAM_I - 1;
+            else if (newY >= TAM_I) newY = 0;
+
             if (!EhValido(newX, newY, mapa)) continue;
 
             tNode* neighbor = &nodeGrid[newY][newX];
@@ -91,16 +140,20 @@ int escolheDireçãoIntercepta(tInimigo* fantasma, tJogador* pacman, tMapa* mapa
     }
 
     //backtrack pro primeiro passo pra fazer o caminho
-    
     tNode* pathNode = &nodeGrid[targetY][targetX];
     
     //se nao tem caminho, retorna isso pra n dar bosta
     if (pathNode->parent == NULL) return fantasma->direcao;
 
-    // retorna até que o pai do nó atual seja o nó de início
+    // retorna ate o fi do no inicial (pra saber qual o primeiro passo)
     while (pathNode->parent != NULL && pathNode->parent != startNode) {
         pathNode = pathNode->parent;
     }
+
+    //casos de portal
+    if (startX == TAM_J - 1 && pathNode->x == 0) return DIREITA;
+    
+    if (startX == 0 && pathNode->x == TAM_J - 1) return ESQUERDA;
 
     // o passo real do fantasma
     if (pathNode->x > startX) return DIREITA;
@@ -110,6 +163,3 @@ int escolheDireçãoIntercepta(tInimigo* fantasma, tJogador* pacman, tMapa* mapa
 
     return fantasma->direcao;; //caso tudo de errado retorna a direcao atual
 }
-
-
-

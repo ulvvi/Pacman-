@@ -46,7 +46,7 @@ bool EhValido(int x, int y, tMapa* mapa) {
 }
 
 
-int escolheDireção2(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
+int escolheDirPersegue(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
     
     //converte pra matriz
     int startX = (int)(fantasma->pos.x / TAM_GRID);
