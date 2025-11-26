@@ -53,7 +53,7 @@ void inicializaPlayer(tJogador* pacman, int pellets)
     //coisas gerais
     pacman->power_pellet = false;
     pacman->score = 0;
-    pacman->vida = 10; 
+    pacman->vida = 3; 
     pacman->remainingPellets = pellets;
     pacman->desenho = true;
     pacman->tempo_power_pellet = 0;
