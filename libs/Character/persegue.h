@@ -21,7 +21,17 @@ typedef struct Node {
 
 //manhatttan :DDDDD
 int Heuristica(int x1, int y1, int x2, int y2) {
-    return abs(x1 - x2) + abs(y1 - y2);
+    int dx = abs(x1 - x2);
+    int dy = abs(y1 - y2);
+
+    if (dx > TAM_J / 2)
+        dx = TAM_J - dx;
+    
+
+    if (dy > TAM_I / 2) 
+        dy = TAM_I - dy; 
+
+    return dx + dy;
 }
 
 //fora do grid ou parede eh paia
@@ -106,6 +116,15 @@ int escolheDireção2(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
             int newX = current->x + dx[i];
             int newY = current->y + dy[i];
 
+            //reconhecer o portal como caminho valido podendo inserir valores
+            //fora do grid (basicamente cria aresta no grafo)
+            if (newX < 0) newX = TAM_J - 1;
+            else if (newX >= TAM_J) newX = 0;
+
+            //mesma coisa so que vertical
+            if (newY < 0) newY = TAM_I - 1;
+            else if (newY >= TAM_I) newY = 0;
+
             if (!EhValido(newX, newY, mapa)) continue;
 
             tNode* neighbor = &nodeGrid[newY][newX];
@@ -125,16 +144,20 @@ int escolheDireção2(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
     }
 
     //backtrack pro primeiro passo pra fazer o caminho
-    
     tNode* pathNode = &nodeGrid[targetY][targetX];
     
     //se nao tem caminho, retorna isso pra n dar bosta
     if (pathNode->parent == NULL) return fantasma->direcao;
 
-    // retorna até que o pai do nó atual seja o nó de início
+    // retorna ate o fi do no inicial (pra saber qual o primeiro passo)
     while (pathNode->parent != NULL && pathNode->parent != startNode) {
         pathNode = pathNode->parent;
     }
+
+    //casos de portal
+    if (startX == TAM_J - 1 && pathNode->x == 0) return DIREITA;
+    
+    if (startX == 0 && pathNode->x == TAM_J - 1) return ESQUERDA;
 
     // o passo real do fantasma
     if (pathNode->x > startX) return DIREITA;
