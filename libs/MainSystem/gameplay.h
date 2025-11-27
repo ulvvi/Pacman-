@@ -242,6 +242,11 @@ bool gameLevel(int* level){
                     switchMusic(JACKPOT, stems);
                 }
                 updateLogic(&pacman, &mapa, &state_atual, &menuData, fantasmas, &camera_principal);
+                if(IsKeyDown(KEY_A)) 
+                {
+                    pacman.vida--; 
+                    state_atual = MORTE;
+                }
                 pacman.comendo.pos.x = pacman.pos.x;
                 pacman.comendo.pos.y = pacman.pos.y;
             break;
@@ -273,6 +278,10 @@ bool gameLevel(int* level){
                 cutscene(&pacman.cutscene_morte, &state_atual, TRANSICAO);
                 if(state_atual == TRANSICAO)
                 {
+                    if(pacman.vida == 0)
+                    {
+                        return venceu;
+                    }
                     centralizaPlayer(&pacman, mapa.grid_mapa);
                     centralizaFantasma(fantasmas, mapa.numero_fantasmas);
                     pacman.desenho = true;
