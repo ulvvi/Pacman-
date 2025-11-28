@@ -6,18 +6,21 @@ void whereToIntercept(tJogador* player, int* posXintercepta, int* posYintercepta
     //calcula a direção do pacman
     int dir_x = (player->move_x / player->spd);
     int dir_y = (player->move_y / player->spd);
+    
 
     //ve a posição do pacman
     int currentX = (player->pos.x / TAM_GRID);
     int currentY = (player->pos.y / TAM_GRID);
 
+    const int blocksInAdvance = 8;
+
     int targetX;
     int targetY;
 
-    for(int i = 1; i < 5; i++){
+    for(int i = 1; i < blocksInAdvance; i++){
         targetX = currentX + (i * dir_x);
         targetY = currentY + (i * dir_y);
-        if(targetY > TAM_I || targetX > TAM_J){
+        if(targetY > TAM_I - 1 || targetX > TAM_J - 1){
             targetX = currentX + ((i-1) * dir_x);
             targetY = currentY + ((i-1) * dir_y);
             break;
@@ -34,7 +37,7 @@ void whereToIntercept(tJogador* player, int* posXintercepta, int* posYintercepta
     *posYintercepta = targetY;
 
     //debug
-
+    /*
     int drawX = targetX * TAM_GRID;
     int drawY = targetY * TAM_GRID;
 
@@ -45,6 +48,7 @@ void whereToIntercept(tJogador* player, int* posXintercepta, int* posYintercepta
         TAM_GRID, 
         (Color){ 255, 0, 0, 100 } 
     );
+    */
 }
 
 int escolheDirIntercepta(tInimigo* fantasma, tJogador* player, tMapa* mapa) {

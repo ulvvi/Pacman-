@@ -214,6 +214,7 @@ bool gameLevel(int* level){
 
     tCamera camera_principal;
     inicializaCamera(&camera_principal, pacman);
+    int dangerPellets = pacman.remainingPellets / 2;
 
     Sound winJingle = LoadSound("audio/ambiente/win_jingle.wav");
     SetSoundVolume(winJingle, 1.5f);
@@ -240,6 +241,11 @@ bool gameLevel(int* level){
                 switchMusic(GAMEPLAY, stems);
                 if(pacman.power_pellet == true){
                     switchMusic(JACKPOT, stems);
+                }
+                if(pacman.remainingPellets <= dangerPellets){
+                    SetMusicPitch(stems[0], 1.10f);
+                    SetMusicPitch(stems[1], 1.10f);
+                    SetMusicPitch(stems[2], 1.10f);
                 }
                 updateLogic(&pacman, &mapa, &state_atual, &menuData, fantasmas, &camera_principal);
                 if(IsKeyDown(KEY_A)) 

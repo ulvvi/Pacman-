@@ -75,6 +75,7 @@ typedef struct
     int direcao;
     Rectangle colisao_fantasma;
     Vector2 pos_inicial;
+    int type;
 
     float tempo_morto;
     bool desenho;

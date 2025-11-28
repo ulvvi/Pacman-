@@ -5,6 +5,13 @@
 #include "persegue.h"
 #include "intercepta.h"
 
+enum {
+    PERSEGUIDOR,
+    INTERCEPTADOR,
+    GUARDA,
+    RETARDO
+} ghostTypes;
+
 
 void trocaSpriteFantasma(tInimigo* fantasma, int numero_fantasma)
 { 
@@ -142,7 +149,7 @@ int contaDirecoes(tInimigo fantasma, char** grid_mapa){
 }
 
 
-/*int escolheDirecao(tInimigo fantasma,char** grid_mapa)
+int escolheDirecaoRand(tInimigo fantasma,char** grid_mapa)
 {   
     int dirDispo = contaDirecoes(fantasma,grid_mapa);
     int dirAtual = fantasma.direcao;
@@ -195,7 +202,7 @@ int contaDirecoes(tInimigo fantasma, char** grid_mapa){
            
 
         }
-}*/
+}
 
 bool interseptaPacman(int dir, tInimigo fantasma, tJogador pacman){
     int pacX = pacman.pos.x;
@@ -284,7 +291,20 @@ tInimigo moveFantasma(tInimigo fantasma, tMapa mapa, int indice, tJogador pacman
         fantasma.pos=teleportaFantasma(fantasma);
     }
     if((indice%20==0 && (fantasma.pos.x>=40 && fantasma.pos.x<=1520) && (fantasma.pos.y>=40 && fantasma.pos.y<=720)) && !pacman.power_pellet){
-        fantasma.direcao=escolheDirIntercepta(&fantasma, &pacman, &mapa);
+        switch(fantasma.type){
+            case PERSEGUIDOR:
+                fantasma.direcao=escolheDirPersegue(&fantasma, &pacman, &mapa);
+                break;
+            case INTERCEPTADOR:
+                fantasma.direcao=escolheDirIntercepta(&fantasma, &pacman, &mapa);
+                break;
+            case GUARDA:
+                fantasma.direcao=escolheDirecaoRand(fantasma, mapa.grid_mapa);
+                break;
+            case RETARDO:
+                fantasma.direcao=escolheDirecaoRand(fantasma, mapa.grid_mapa);
+                break;
+        }
     }
     if((indice%20==0 && (fantasma.pos.x>=40 && fantasma.pos.x<=1520) && (fantasma.pos.y>=40 && fantasma.pos.y<=720)) && pacman.power_pellet){
         fantasma.direcao=fogePacman(fantasma, mapa.grid_mapa, pacman);
@@ -349,6 +369,7 @@ void inicializaFantasmas(tInimigo* fantasma, char** grid_mapa)
                 fantasma[contador].spd = 2;
                 fantasma[contador].vulneravel = false;
                 fantasma[contador].direcao = 0;
+                fantasma[contador].type = contador;
                 //colisao
                 fantasma[contador].colisao_fantasma.height = TAM_GRID;
                 fantasma[contador].colisao_fantasma.width = TAM_GRID;
