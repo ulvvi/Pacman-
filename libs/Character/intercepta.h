@@ -15,19 +15,19 @@ void whereToIntercept(tJogador* player, int* posXintercepta, int* posYintercepta
     int targetY;
 
     for(int i = 1; i < 5; i++){
-        int targetX = currentX + (i * dir_x);
-        int targetY = currentY + (i * dir_y);
-        if (mapa->grid_mapa[targetY][targetX] == '#') {
-            targetX = currentX + (1 * dir_x);
-            targetY = currentY + (1 * dir_y);
+        targetX = currentX + (i * dir_x);
+        targetY = currentY + (i * dir_y);
+        if(targetY > TAM_I || targetX > TAM_J){
+            targetX = currentX + ((i-1) * dir_x);
+            targetY = currentY + ((i-1) * dir_y);
+            break;
         }
-    } 
-
-
-    if (mapa->grid_mapa[targetY][targetX] == '#') {
-
-        targetX = currentX + (1 * dir_x);
-        targetY = currentY + (1 * dir_y);
+        if (mapa->grid_mapa[targetY][targetX] == '#') {
+            targetX = currentX + ((i-1) * dir_x);
+            targetY = currentY + ((i-1) * dir_y);
+            break;
+        }
+    
     } 
 
     *posXintercepta = targetX;
