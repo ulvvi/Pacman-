@@ -12,16 +12,16 @@ int main(void)
     inicializaAssets(&assets);
 
     
-    int* nivel_atual;
-    *nivel_atual = 1;
+    int nivel_atual;
+    nivel_atual = 1;
     while(!WindowShouldClose())
     {   
         mainMenu();
         while(true){
             //roda a func gamelevel e retorna true ou false(true pra vitoria, false pra derrota)
-            if(gameLevel(nivel_atual, assets) == true)
+            if(gameLevel(&nivel_atual, assets) == true)
             {
-                (*nivel_atual)++;
+                (nivel_atual)++;
             }
             else
             {
