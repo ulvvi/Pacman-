@@ -493,6 +493,13 @@ void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, i
                 pacman->spritesheet.x = 0;
                 *state_atual = MORTE;
             }
+            else{
+                tempo_screenshake = 0.25;
+                forca_screenshake = 200;
+                comeFantasma(fantasma, indice);
+                ativaCamera(camera_relativa, tempo_screenshake, forca_screenshake);
+
+            }
         break;
     }
 }

@@ -18,7 +18,7 @@ void spawnFruit(char** map, tJogador* pacman){
     fruit_timer++;
 
     //verifica se ja passou o tempo para spawnar a fruta
-    if(fruit_timer >= 1800){
+    if(fruit_timer >= 900){
         fruit_timer = 0;
 
         int x, y;
