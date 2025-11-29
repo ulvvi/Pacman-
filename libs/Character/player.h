@@ -58,6 +58,7 @@ void inicializaPlayer(tJogador* pacman, int pellets, tAssets assets)
     pacman->desenho = true;
     pacman->tempo_power_pellet = 0;
     pacman->current_fruit = -1;
+    pacman->curFruitTimer = 0;
 
     //sprite base pacman
     pacman->sprite = assets.pacman_sprite;
@@ -221,6 +222,9 @@ void movePlayer(char** grid_mapa, tJogador* pacman)
         move_alvo_x = 0;
     }
 
+    if(IsKeyPressed(KEY_SPACE)){
+        useFruit(pacman);
+    }
     
     //inversao imediata de posicao(no msm eixo)
     if(pacman->move_x != 0 && abs(pacman->move_x) == abs(move_alvo_x*pacman->spd))

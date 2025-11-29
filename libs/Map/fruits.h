@@ -32,7 +32,7 @@ void spawnFruit(char** map, tJogador* pacman){
         }
 
         //escolhe um tipo de fruta aleatoriamente
-        FruitType fruit_type = (FruitType)GetRandomValue(0, 3);
+        FruitType fruit_type = (FruitType)GetRandomValue(0, 0);
         char fruit_char;
         switch(fruit_type){
             case CHERRY:
@@ -74,4 +74,37 @@ void getFruit(tJogador* pacman, char fruit_char){
             pacman->current_fruit = 3;
             break;
     }
+}
+
+void useFruit(tJogador* pacman){
+    switch(pacman->current_fruit){
+        case CHERRY:
+            pacman->cherry = true;
+            break;
+
+        case STRAWBERRY:
+            pacman->strawberry = true;
+            break;
+
+        case GRAPE:
+            pacman->grape = true;
+            break;
+
+        case BLUEBERRY:
+            pacman->blueberry = true;
+            break;
+    }
+
+    pacman->current_fruit = -1;
+}
+
+
+void cherry(tJogador* pacman){
+        pacman->curFruitTimer += GetFrameTime();
+        pacman->spd = 4;
+        if(pacman->curFruitTimer >= 12)
+        {
+            pacman->cherry = false;
+            pacman->curFruitTimer = 0;
+        }  
 }

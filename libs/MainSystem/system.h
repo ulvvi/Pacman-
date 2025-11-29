@@ -57,6 +57,11 @@ typedef struct
     int remainingPellets;
     int dir;
     int current_fruit;
+    bool cherry;
+    bool strawberry;
+    bool grape;
+    bool blueberry;
+    float curFruitTimer;
 
     bool desenho;
     Rectangle colisao_player;
