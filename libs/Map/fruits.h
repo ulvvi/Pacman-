@@ -75,3 +75,25 @@ void getFruit(tJogador* pacman, char fruit_char){
             break;
     }
 }
+
+void useFruit(tJogador* pacman){
+    switch(pacman->current_fruit){
+        case 'C':
+            pacman->cherry = true;
+            break;
+
+        case 'S':
+            pacman->strawberry = true;
+            break;
+
+        case 'G':
+            pacman->grape = true;
+            break;
+
+        case 'B':
+            pacman->blueberry = true;
+            break;
+    }
+
+    pacman->current_fruit = -1;
+}

@@ -188,6 +188,15 @@ void powerPellet(tJogador* pacman, tMapa* mapa)
         }
 }
 
+void cherry(tJogador* pacman){
+    pacman->curFruitTimer -= GetFrameTime();
+    pacman->spd += 4;
+    if(pacman->tempo_power_pellet <= 0){
+        pacman->spd -= 4;
+        pacman->cherry = false;
+    }
+}
+
 /*atualiza colisao do player*/
 void atualizaColisaoPlayer(tJogador* pacman)
 {
@@ -221,6 +230,9 @@ void movePlayer(char** grid_mapa, tJogador* pacman)
         move_alvo_x = 0;
     }
 
+    if(IsKeyPressed(KEY_SPACE)){
+        useFruit(pacman);
+    }
     
     //inversao imediata de posicao(no msm eixo)
     if(pacman->move_x != 0 && abs(pacman->move_x) == abs(move_alvo_x*pacman->spd))
