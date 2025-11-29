@@ -77,6 +77,9 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
         menuData->subIndex = 0;
         *state_atual = PAUSE;
     }
+    if(IsKeyPressed(KEY_F1)){
+        pacman->current_fruit = CHERRY;
+    }
 
     //spawn de frutas
     spawnFruit(mapa->grid_mapa, pacman);
@@ -94,6 +97,10 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
     if(pacman->power_pellet == true)
     {
         powerPellet(pacman, mapa);
+    }
+
+    if(pacman->cherry == true){
+        cherry(pacman);
     }
 
     //teleporte player

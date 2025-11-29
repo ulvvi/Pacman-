@@ -58,6 +58,7 @@ void inicializaPlayer(tJogador* pacman, int pellets)
     pacman->desenho = true;
     pacman->tempo_power_pellet = 0;
     pacman->current_fruit = -1;
+    pacman->curFruitTimer = 0;
 
     //sprite base pacman
     pacman->sprite = LoadTexture("sprites/player/pacman_spritesheet.png");
@@ -186,15 +187,6 @@ void powerPellet(tJogador* pacman, tMapa* mapa)
             trocaCorEXT(mapa, mapa->cor_atual);
             pacman->power_pellet = false;
         }
-}
-
-void cherry(tJogador* pacman){
-    pacman->curFruitTimer -= GetFrameTime();
-    pacman->spd += 4;
-    if(pacman->tempo_power_pellet <= 0){
-        pacman->spd -= 4;
-        pacman->cherry = false;
-    }
 }
 
 /*atualiza colisao do player*/
