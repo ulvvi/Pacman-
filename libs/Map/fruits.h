@@ -32,7 +32,7 @@ void spawnFruit(char** map, tJogador* pacman){
         }
 
         //escolhe um tipo de fruta aleatoriamente
-        FruitType fruit_type = (FruitType)GetRandomValue(0, 0);
+        FruitType fruit_type = (FruitType)GetRandomValue(0, 4);
         char fruit_char;
         switch(fruit_type){
             case CHERRY:
