@@ -77,11 +77,19 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
         menuData->subIndex = 0;
         *state_atual = PAUSE;
     }
+
+    //debug
     if(IsKeyPressed(KEY_F1)){
         pacman->current_fruit = CHERRY;
     }
+    if(IsKeyPressed(KEY_F2)){
+        pacman->current_fruit = STRAWBERRY;
+    }
     if(IsKeyPressed(KEY_F3)){
         pacman->current_fruit = GRAPE;
+    }
+    if(IsKeyPressed(KEY_F4)){
+        pacman->current_fruit = BLUEBERRY;
     }
 
     //spawn de frutas
@@ -108,6 +116,10 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
 
     if(pacman->grape == true){
         grape(pacman);
+    }
+
+    if(pacman->blueberry == true){
+        blueberry(pacman);
     }
 
     //teleporte player
@@ -191,7 +203,7 @@ tAssets assets)
 void cleanup(tMapa* mapa, tMenu* menuData, Music stems[], Sound som_cut_in){  
     //unload nos assets
     UnloadSound(som_cut_in);
-    UnloadTexture(mapa->tileset_parede);
+    //UnloadTexture(mapa->tileset_parede);
     stopAllMusic(stems);
 
     //liberar memoria
@@ -356,6 +368,6 @@ bool gameLevel(int* level, tAssets assets){
         }
     }
 
-    //cleanup(&mapa, &menuData, stems, som_cut_in);
+    cleanup(&mapa, &menuData, stems, som_cut_in);
     return venceu;
 }
