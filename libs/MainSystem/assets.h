@@ -20,6 +20,7 @@ typedef struct
     Texture2D strawberry;
     //animacoes
     Texture2D teste;
+    Texture2D teste2;
 
 }tAssets;
 
