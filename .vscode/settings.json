@@ -24,6 +24,9 @@
         "ranges": "c",
         "variant": "c",
         "camera.h": "c",
-        "fruits.h": "c"
+        "fruits.h": "c",
+        "vicscreen.h": "c",
+        "mainmenu.h": "c",
+        "assets.h": "c"
     }
 }

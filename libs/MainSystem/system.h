@@ -42,6 +42,7 @@ typedef struct {
 } tMenu;
 
 
+
 //struct do player
 typedef struct
 {

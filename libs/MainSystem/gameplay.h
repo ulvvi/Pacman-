@@ -135,7 +135,8 @@ bool hasCollectedAllPellets(tJogador* pacman){
 
 
 
-void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasmas, tMenu* menu, Music stems[3], Sound* som_cut_in, Sound* jingle, tAnimacao* obj_cut_in) 
+void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasmas, tMenu* menu, Music stems[3], Sound* som_cut_in, Sound* jingle, tAnimacao* obj_cut_in,
+tAssets assets) 
 {
 
     // --- ÁUDIO ---
@@ -149,11 +150,11 @@ void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasm
     // --- MAPA e PLAYER ---
     char filename[30];
     modificaFilename(filename, *level);
-    inicializaMapa(mapa, filename, level);
+    inicializaMapa(mapa, filename, level, assets);
     mapa->numero_fantasmas = calculaFantasmas(mapa->grid_mapa);
 
-    mapa->tileset_parede = LoadTexture("sprites/ambiente/tileset_paredes.png");
-    inicializaPlayer(pacman, mapa->pellets_totais);
+    
+    inicializaPlayer(pacman, mapa->pellets_totais, assets);
     centralizaPlayer(pacman, mapa->grid_mapa);
 
     //--- MENU ---//
@@ -162,7 +163,7 @@ void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasm
     
     // --- INIMIGOS (com alocação de memória) ---
     *fantasmas = malloc(sizeof(tInimigo) * (mapa->numero_fantasmas));
-    inicializaFantasmas(*fantasmas, mapa->grid_mapa);
+    inicializaFantasmas(*fantasmas, mapa->grid_mapa, assets);
     
     // --- ANIMAÇÕES/CUTSCENES ---
     *obj_cut_in = (tAnimacao){
@@ -187,7 +188,7 @@ void cleanup(tMapa* mapa, tMenu* menuData, Music stems[], Sound som_cut_in){
 
 
 
-bool gameLevel(int* level){
+bool gameLevel(int* level, tAssets assets){
     int cronometro = 0;
     bool venceu = false;
     
@@ -210,7 +211,7 @@ bool gameLevel(int* level){
     tAnimacao obj_cut_in;
     tAnimacao obj_transicao = {0, 18, 0.100, 0, LoadTexture("sprites/ambiente/transicao2-Sheet.png"),{0,0,LARGURA, ALTURA}, {0,0}, 0, 0, 0};
 
-    initGameLevel(level, &mapa, &pacman, &fantasmas, &menuData, stems, &som_cut_in, &jingle, &obj_cut_in);
+    initGameLevel(level, &mapa, &pacman, &fantasmas, &menuData, stems, &som_cut_in, &jingle, &obj_cut_in, assets);
 
     tCamera camera_principal;
     inicializaCamera(&camera_principal, pacman);
@@ -286,6 +287,7 @@ bool gameLevel(int* level){
                 {
                     if(pacman.vida == 0)
                     {
+                        EndDrawing();
                         return venceu;
                     }
                     centralizaPlayer(&pacman, mapa.grid_mapa);
@@ -340,6 +342,6 @@ bool gameLevel(int* level){
         }
     }
 
-    cleanup(&mapa, &menuData, stems, som_cut_in);
+    //cleanup(&mapa, &menuData, stems, som_cut_in);
     return venceu;
 }

@@ -78,16 +78,18 @@ void drawHUD(int score, int totalPellets, int curFruit, tMapa mapa){
 }
 
 
-//gameOver não ficaria aqui
-void gameOver()
+/*a ideia agr do game over é ele retornar um valor e na main a gnt fazer algo dependendo do retorno. como gameover so precisa ter o voltar pro menu, rejogar
+fase e fechar jogo, n vai encher a main de coisa n, eh de boa*/
+
+int gameOver()
 {
     int tam_over = 80;
     int tam_resto = 20;
     char texto_over[] = {"FIM DE JOGO"};
-    char texto_menu[] = {"V para retornar ao MENU"};
+    char texto_menu[] = {"V para tentar novamente"};
     char texto_sair[] = {"ESC para sair do jogo"};
     bool game_over = true;
-    while(game_over == true)
+    while(true)
     {
         BeginDrawing();
         ClearBackground(BLACK);
@@ -99,12 +101,16 @@ void gameOver()
         if(IsKeyPressed(KEY_V))
         {
             //voltar ao menu de alguma forma
-            game_over = false;
+            return 0;
+        }
+        if(IsKeyPressed(KEY_M))
+        {
+            //voltar ao menu de alguma forma
+            return 1;
         }
         if(IsKeyPressed(KEY_ESCAPE))
         {
-            CloseWindow();
-            exit(0);
+            return 2;
         }
     }
 }

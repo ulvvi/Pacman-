@@ -1,10 +1,15 @@
 #include "libs/header.h"
 
 //MAIN
+
 int main(void)
 {   
+    
+    //inicializacoes do jogo(perduram pra sempre)
     initializeWindow();
     InitAudioDevice();
+    tAssets assets;
+    inicializaAssets(&assets);
 
     
     int* nivel_atual;
@@ -14,18 +19,26 @@ int main(void)
         mainMenu();
         while(true){
             //roda a func gamelevel e retorna true ou false(true pra vitoria, false pra derrota)
-            if(gameLevel(nivel_atual) == true)
+            if(gameLevel(nivel_atual, assets) == true)
             {
                 (*nivel_atual)++;
             }
             else
             {
-                //gameover()  //coisa de gameover talvez;
-                break;
+                //evitar loop infinito se ja foi apertado o ESC(ou o X)
+                if(WindowShouldClose())
+                    break;
+                int opcao = gameOver();
+                if(opcao == 1)
+                {
+                    //dando break nesse loop while ja roda o mainmenu dnv e tudo ok
+                    break;
+                }
+                //o resto meio q nem precisa, se clicar em rejogar, vai rodar o loop interno novamente, da mesma fase, e muita fé
             }
         }
     }
-
+    limpezaGeral(&assets);
     CloseAudioDevice();
     CloseWindow();
 }

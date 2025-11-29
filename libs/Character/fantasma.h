@@ -356,7 +356,7 @@ int calculaFantasmas(char** grid_mapa)
 }
 
 /*inicializa tudo envolvendo o fantasma*/
-void inicializaFantasmas(tInimigo* fantasma, char** grid_mapa)
+void inicializaFantasmas(tInimigo* fantasma, char** grid_mapa, tAssets assets)
 {   
     int contador = 0;
     for(int i = 0; i < TAM_I; i++)
@@ -384,8 +384,8 @@ void inicializaFantasmas(tInimigo* fantasma, char** grid_mapa)
 
                 //sprites base
                 fantasma[contador].desenho = true;
-                fantasma[contador].sprite_normal = LoadTexture("sprites/inimigo/fantasma_spritesheet.png");
-                fantasma[contador].sprite_fuga = LoadTexture("sprites/inimigo/fantasma_fuga-Sheet.png");
+                fantasma[contador].sprite_normal = assets.fantasma_normal_sprite;
+                fantasma[contador].sprite_fuga = assets.fantasma_fuga_sprite;
                 fantasma[contador].spritesheet.height = 40;
                 fantasma[contador].spritesheet.width = 40;
                 fantasma[contador].spritesheet.x = 0;
@@ -396,7 +396,7 @@ void inicializaFantasmas(tInimigo* fantasma, char** grid_mapa)
                 fantasma[contador].morte.total_frames = 14;
                 fantasma[contador].morte.tempo_frame = 0.110;
                 fantasma[contador].morte.contador = 0;
-                fantasma[contador].morte.sprite = LoadTexture("sprites/inimigo/fantasma_morte-Sheet.png");
+                fantasma[contador].morte.sprite = assets.fantasma_morte_sprite;
                 fantasma[contador].morte.spritesheet.width = 40;
                 fantasma[contador].morte.spritesheet.height = 40;
                 fantasma[contador].morte.spritesheet.x = 0;
@@ -408,7 +408,7 @@ void inicializaFantasmas(tInimigo* fantasma, char** grid_mapa)
                 fantasma[contador].morto.total_frames = 7;
                 fantasma[contador].morto.tempo_frame = 0.130;
                 fantasma[contador].morto.contador = 0;
-                fantasma[contador].morto.sprite = LoadTexture("sprites/inimigo/fantasma_morto-Sheet.png");
+                fantasma[contador].morto.sprite = assets.fantasma_morto_sprite;
                 fantasma[contador].morto.spritesheet.width = 40;
                 fantasma[contador].morto.spritesheet.height = 40;
                 fantasma[contador].morto.spritesheet.x = 0;

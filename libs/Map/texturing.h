@@ -226,7 +226,7 @@ void freeMascaras(int* mapa_mascaras)
 
 
 //Inicializa tudo em relacao ao mapa junto de suas texturas
-void inicializaMapa(tMapa* mapa, char* filename, int* level_atual)
+void inicializaMapa(tMapa* mapa, char* filename, int* level_atual, tAssets assets)
 {
     //mapa em si
     mapa->grid_mapa = allocateMap();
@@ -246,11 +246,12 @@ void inicializaMapa(tMapa* mapa, char* filename, int* level_atual)
     texturizaMapa(mapa);
     mapa->cor_atual = mapa->spritesheet.y/40;
     mapa->level = level_atual;
+    mapa->tileset_parede = assets.mapa_parede_sprite;
 
     //frutinhas
-    mapa->cherry = LoadTexture("sprites/ambiente/cereja.png");
-    mapa->grape = LoadTexture("sprites/ambiente/uva.png");
-    mapa->blueberry = LoadTexture("sprites/ambiente/mirtilo.png");
-    mapa->strawberry = LoadTexture("sprites/ambiente/morango.png");
+    mapa->cherry = assets.cherry;
+    mapa->grape = assets.grape;
+    mapa->blueberry = assets.blueberry;
+    mapa->strawberry = assets.strawberry;
 }
 

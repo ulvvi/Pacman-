@@ -39,8 +39,8 @@ void centralizaPlayer(tJogador* pacman, char** grid_mapa)
     }
 }
 
-/*tudo que precisa ser inicializado do pacman ta ai*/
-void inicializaPlayer(tJogador* pacman, int pellets)
+/*tudo que precisa ser do do pacman ta ai*/
+void inicializaPlayer(tJogador* pacman, int pellets, tAssets assets)
 {
     //colisao
     pacman->colisao_player.height = 30;
@@ -60,7 +60,7 @@ void inicializaPlayer(tJogador* pacman, int pellets)
     pacman->current_fruit = -1;
 
     //sprite base pacman
-    pacman->sprite = LoadTexture("sprites/player/pacman_spritesheet.png");
+    pacman->sprite = assets.pacman_sprite;
     pacman->spritesheet.height = 40;
     pacman->spritesheet.width = 40;
     pacman->spritesheet.x = 0;
@@ -71,7 +71,7 @@ void inicializaPlayer(tJogador* pacman, int pellets)
     pacman->comendo.total_frames = 4;
     pacman->comendo.tempo_frame = 0.045;
     pacman->comendo.contador = 0;
-    pacman->comendo.sprite = LoadTexture("sprites/player/animacao_pacman-Sheet.png");
+    pacman->comendo.sprite = assets.pacman_comendo_sprite;
     pacman->comendo.spritesheet.height = TAM_GRID;
     pacman->comendo.spritesheet.width = TAM_GRID;
     pacman->comendo.spritesheet.x = 0;
@@ -84,7 +84,7 @@ void inicializaPlayer(tJogador* pacman, int pellets)
     pacman->cutscene_morte.total_frames = 20;
     pacman->cutscene_morte.tempo_frame = 0.100;
     pacman->cutscene_morte.contador = 0;
-    pacman->cutscene_morte.sprite = LoadTexture("sprites/player/pacman_morte-Sheet.png");
+    pacman->cutscene_morte.sprite = assets.pacman_cutscene_morte_sprite;
     pacman->cutscene_morte.spritesheet.height = TAM_GRID;
     pacman->cutscene_morte.spritesheet.width = TAM_GRID;
     pacman->cutscene_morte.spritesheet.x = 0;
