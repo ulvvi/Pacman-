@@ -157,7 +157,7 @@ int escolheDirIntercepta(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
     tNode* pathNode = &nodeGrid[targetY][targetX];
     
     //se nao tem caminho, retorna isso pra n dar bosta
-    if (pathNode->parent == NULL) return fantasma->direcao;
+    if (pathNode->parent == NULL) return -1;
 
     // retorna ate o fi do no inicial (pra saber qual o primeiro passo)
     while (pathNode->parent != NULL && pathNode->parent != startNode) {

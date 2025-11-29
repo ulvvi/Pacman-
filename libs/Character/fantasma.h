@@ -294,9 +294,15 @@ tInimigo moveFantasma(tInimigo fantasma, tMapa mapa, int indice, tJogador pacman
         switch(fantasma.type){
             case PERSEGUIDOR:
                 fantasma.direcao=escolheDirPersegue(&fantasma, &pacman, &mapa);
+                if(fantasma.direcao == -1){
+                    fantasma.direcao=escolheDirecaoRand(fantasma, mapa.grid_mapa);
+                }
                 break;
             case INTERCEPTADOR:
                 fantasma.direcao=escolheDirIntercepta(&fantasma, &pacman, &mapa);
+                if(fantasma.direcao == -1){
+                    fantasma.direcao=escolheDirecaoRand(fantasma, mapa.grid_mapa);
+                }
                 break;
             case GUARDA:
                 fantasma.direcao=escolheDirecaoRand(fantasma, mapa.grid_mapa);

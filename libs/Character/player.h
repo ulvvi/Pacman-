@@ -242,29 +242,49 @@ void movePlayer(char** grid_mapa, tJogador* pacman)
     {
         //calculo grid atual
         int grid_i = pacman->pos.y/TAM_GRID;
-        int grid_j = pacman->pos.x/TAM_GRID;    
+        int grid_j = pacman->pos.x/TAM_GRID;
 
-        if(move_alvo_y != 0 && grid_mapa[grid_i+move_alvo_y][grid_j] != '#')
-        {
-            pacman->move_y = move_alvo_y*pacman->spd;
-            pacman->dir = move_alvo_y;
-            pacman->move_x = 0;
-            move_alvo_y = 0;
+        if(pacman->grape == false){
+            if(move_alvo_y != 0 && grid_mapa[grid_i+move_alvo_y][grid_j] != '#')
+            {
+                pacman->move_y = move_alvo_y*pacman->spd;
+                pacman->dir = move_alvo_y;
+                pacman->move_x = 0;
+                move_alvo_y = 0;
                 
             
-        }
-        else if(move_alvo_x != 0 && grid_mapa[grid_i][grid_j+move_alvo_x] != '#')
-        {
-            pacman->move_x = move_alvo_x*pacman->spd;
-            pacman->dir = move_alvo_x;
-            pacman->move_y = 0;
-            move_alvo_x = 0;
-        }
-        //caso em que nao se aperta pra virar em uma intersecao(continua no msm eixo andando reto)
-        if(grid_mapa[(grid_i+pacman->move_y/pacman->spd)][grid_j+(pacman->move_x/pacman->spd)] == '#')
-        {
-            pacman->move_x = 0;
-            pacman->move_y = 0;
+            }
+            else if(move_alvo_x != 0 && grid_mapa[grid_i][grid_j+move_alvo_x] != '#')
+            {
+                pacman->move_x = move_alvo_x*pacman->spd;
+                pacman->dir = move_alvo_x;
+                pacman->move_y = 0;
+                move_alvo_x = 0;
+            }
+            //caso em que nao se aperta pra virar em uma intersecao(continua no msm eixo andando reto)
+            if(grid_mapa[(grid_i+pacman->move_y/pacman->spd)][grid_j+(pacman->move_x/pacman->spd)] == '#')
+            {
+                pacman->move_x = 0;
+                pacman->move_y = 0;
+            }
+        } else {
+
+            if(move_alvo_y != 0)
+            {
+                pacman->move_y = move_alvo_y*pacman->spd;
+                pacman->dir = move_alvo_y;
+                pacman->move_x = 0;
+                move_alvo_y = 0;
+                
+            
+            }
+            else if(move_alvo_x != 0)
+            {
+                pacman->move_x = move_alvo_x*pacman->spd;
+                pacman->dir = move_alvo_x;
+                pacman->move_y = 0;
+                move_alvo_x = 0;
+            }
         }
     }
     //att da pos

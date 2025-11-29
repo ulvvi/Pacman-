@@ -101,10 +101,24 @@ void useFruit(tJogador* pacman){
 
 void cherry(tJogador* pacman){
         pacman->curFruitTimer += GetFrameTime();
+        pacman->comendo.spritesheet.y = 40;
         pacman->spd = 4;
-        if(pacman->curFruitTimer >= 12)
+        if(pacman->curFruitTimer >= 6)
         {
             pacman->cherry = false;
+            pacman->spd = 2;
+            pacman->comendo.spritesheet.y = 0;
+            pacman->curFruitTimer = 0;
+        }  
+}
+
+void grape(tJogador* pacman){
+        pacman->curFruitTimer += GetFrameTime();
+        pacman->comendo.spritesheet.y = 120;
+        if(pacman->curFruitTimer >= 6)
+        {
+            pacman->grape = false;
+            pacman->comendo.spritesheet.y = 0;
             pacman->curFruitTimer = 0;
         }  
 }
