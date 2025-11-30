@@ -58,19 +58,15 @@ void spawnFruit(char** map, tJogador* pacman){
 void getFruit(tJogador* pacman, char fruit_char){
     switch(fruit_char){
         case 'C':
-            pacman->score += 500;
             pacman->current_fruit = 0;
             break;
         case 'S':
-            pacman->score += 500;
             pacman->current_fruit = 1;
             break;
         case 'G':
-            pacman->score += 500;
             pacman->current_fruit = 2;
             break;
         case 'B':
-            pacman->score += 500;
             pacman->current_fruit = 3;
             break;
     }
@@ -106,17 +102,23 @@ void cherry(tJogador* pacman){
         {
             pacman->spd = 4;
             primeira_vez = false;
+            pacman->comendo.spritesheet.y = 40;
+            pacman->comendo.frame_atual = 0;
+            pacman->comendo.tempo_frame = 0.130;
         }
         pacman->curFruitTimer += GetFrameTime();
-        pacman->comendo.spritesheet.y = 40;
+        
         
         if(pacman->curFruitTimer >= 6)
         {
             pacman->cherry = false;
             pacman->spd = 2;
             pacman->comendo.spritesheet.y = 0;
+            pacman->comendo.frame_atual = 0;
+            pacman->comendo.tempo_frame = 0.060;
             pacman->curFruitTimer = 0;
             primeira_vez = true;
+           
         }  
 }
 

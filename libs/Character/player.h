@@ -130,25 +130,27 @@ void trocaSpritePacman(tJogador* pacman)
 }
 
 /*COLISAO COM PELLETS(ATUALIZA SCORE E ESTADO AO PEGAR POWER PELLET)*/
-void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPellets, GameState* state)
+void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPellets, GameState* state, tVfx* pontuacao)
 {
     //grid atual
     int grid_i = pacman->pos.y/TAM_GRID;
     int grid_j = pacman->pos.x/TAM_GRID;
+    int pontuou = 0;
 
     switch(grid_mapa[grid_i][grid_j])
     {
+    
     //pellet
     case '.':
-        (*score)+=10;
+        pontuou = 10;
         grid_mapa[grid_i][grid_j] = ' ';
         (*totalPellets)--;
     break;
     //power pellet
     case 'o':
+        pontuou = 50;
         if(pacman->power_pellet == false) *state = CUT_IN;
         pacman->power_pellet = true;
-        (*score)+=50;
         grid_mapa[grid_i][grid_j] = ' ';
         (*totalPellets)--;
         pacman->tempo_power_pellet+= 8;
@@ -157,24 +159,34 @@ void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPe
         //frutas
     
         case 'C':
+            pontuou = 300;
             getFruit(pacman, 'C');
             grid_mapa[grid_i][grid_j] = ' ';
         break;
 
         case 'S':
+            pontuou = 300;
             getFruit(pacman, 'S');
             grid_mapa[grid_i][grid_j] = ' ';
         break;
 
         case 'G':
+            pontuou = 300;
             getFruit(pacman, 'G');
             grid_mapa[grid_i][grid_j] = ' ';
         break;
 
         case 'B':
+            pontuou = 300;
             getFruit(pacman, 'B');
             grid_mapa[grid_i][grid_j] = ' ';
         break;
+    }
+    (*score)+= pontuou;
+    if(pontuou > 10)
+    {
+        pontuacao->ativo = true;
+        pontuacao->parametro_especial = pontuou;
     }
 }
 

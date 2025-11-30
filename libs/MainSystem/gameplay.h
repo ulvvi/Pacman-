@@ -3,7 +3,7 @@
 
 
 
-void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual, tInimigo *fantasmas, tCamera camera_principal){
+void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual, tInimigo *fantasmas, tCamera camera_principal, tVfx* pontuacao){
     //layer fundo/mapa   
     BeginDrawing(); 
     //iniciar camera(tudo entre beginmode2d e endmode2d que sofrera efeito de zoom e de screenshake, oq tiver fora, como hud, n sofrera)
@@ -59,6 +59,10 @@ void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual, tInimigo *fan
                 animaObjeto(&fantasmas[i].morte);
             }
         }
+        if(pontuacao->ativo == true)
+        {
+            mostraPontuacao(pontuacao, *pacman);
+        }
     }
     //fim do q a camera afeta
     EndMode2D();
@@ -68,7 +72,7 @@ void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual, tInimigo *fan
 }
 
 //updata o jogo a cada frame
-void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* menuData, tInimigo* fantasma, tCamera* camera_principal){
+void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* menuData, tInimigo* fantasma, tCamera* camera_principal, tVfx* pontuacao){
     //contabilizador de frames pro fantasma 
     mapa->frame_counter++;
     if(IsKeyPressed(KEY_TAB))
@@ -93,7 +97,7 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
     //colisoes pellets
     if(checaPlayerCentralizado(pacman) && checaPlayerDentroMapa(pacman))
     {   
-        colisaoPellets(pacman, mapa->grid_mapa, &pacman->score, &pacman->remainingPellets, state_atual);
+        colisaoPellets(pacman, mapa->grid_mapa, &pacman->score, &pacman->remainingPellets, state_atual, pontuacao);
     }
 
     //cronometro do power pellet
@@ -109,6 +113,7 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
     if(pacman->grape == true){
         grape(pacman);
     }
+
 
     //teleporte player
     if(checaPlayerDentroMapa(pacman) == false)
@@ -132,7 +137,7 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
     }
     atualizaColisaoFantasma(fantasma, mapa->numero_fantasmas);
     ConcretizaColisao(pacman, fantasma, mapa->grid_mapa, checaColisaoFantasma(pacman->colisao_player, fantasma, mapa->numero_fantasmas), mapa->numero_fantasmas, 
-    state_atual, camera_principal);
+    state_atual, camera_principal, pontuacao);
 
     //n consegui encaixar esse troca sprite dentro da func do alexandre, por ela n receber um pointer
     if(camera_principal->ativa == true) screenShake(camera_principal);
@@ -181,7 +186,7 @@ tAssets assets)
     
     // --- ANIMAÇÕES/CUTSCENES ---
     *obj_cut_in = (tAnimacao){
-        0, 26, 0.075, 0, LoadTexture("sprites/player/pacman_cut_in-Sheet.png"), 
+        0, 26, 0.075, 0, assets.cut_in_animacao, 
         {0,0,LARGURA, 600}, {0, ALTURA/2 - 600/2}, 0, 0, 0
     };
 }
@@ -191,7 +196,6 @@ tAssets assets)
 void cleanup(tMapa* mapa, tMenu* menuData, Music stems[], Sound som_cut_in){  
     //unload nos assets
     UnloadSound(som_cut_in);
-    UnloadTexture(mapa->tileset_parede);
     stopAllMusic(stems);
 
     //liberar memoria
@@ -223,7 +227,9 @@ bool gameLevel(int* level, tAssets assets){
     tInimigo* fantasmas;
     
     tAnimacao obj_cut_in;
-    tAnimacao obj_transicao = {0, 18, 0.100, 0, LoadTexture("sprites/ambiente/transicao2-Sheet.png"),{0,0,LARGURA, ALTURA}, {0,0}, 0, 0, 0};
+    tAnimacao obj_transicao = {0, 18, 0.100, 0, assets.transicao_animacao,{0,0,LARGURA, ALTURA}, {0,0}, 0, 0, 0};
+
+    tVfx pontuacao = {3, 3, false, {0,0}, 0};
 
     initGameLevel(level, &mapa, &pacman, &fantasmas, &menuData, stems, &som_cut_in, &jingle, &obj_cut_in, assets);
 
@@ -246,9 +252,8 @@ bool gameLevel(int* level, tAssets assets){
         updateMusic(stems);
         
         //desenhos
-        drawGame(mapa, &pacman, state_atual, fantasmas, camera_principal);
-       
-        
+        drawGame(mapa, &pacman, state_atual, fantasmas, camera_principal, &pontuacao);
+             
         //RESTANTE DOS LAYERS(NUMA STATE MACHINE)
         switch(state_atual)
         {
@@ -262,7 +267,7 @@ bool gameLevel(int* level, tAssets assets){
                     SetMusicPitch(stems[1], 1.10f);
                     SetMusicPitch(stems[2], 1.10f);
                 }
-                updateLogic(&pacman, &mapa, &state_atual, &menuData, fantasmas, &camera_principal);
+                updateLogic(&pacman, &mapa, &state_atual, &menuData, fantasmas, &camera_principal, &pontuacao);
                 if(IsKeyDown(KEY_A)) 
                 {
                     pacman.vida--; 
@@ -293,7 +298,6 @@ bool gameLevel(int* level, tAssets assets){
                 pauseAllMusic(stems);
                 pacman.cutscene_morte.pos.x = pacman.pos.x;
                 pacman.cutscene_morte.pos.y = pacman.pos.y;
-
                 pacman.desenho = false;
                 //a func cutscene ja troca o state quando acabar, logo, so sera gameplay apos a ultima chamada da func cutscene
                 cutscene(&pacman.cutscene_morte, &state_atual, TRANSICAO);
@@ -356,6 +360,6 @@ bool gameLevel(int* level, tAssets assets){
         }
     }
 
-    //cleanup(&mapa, &menuData, stems, som_cut_in);
+    cleanup(&mapa, &menuData, stems, som_cut_in);
     return venceu;
 }

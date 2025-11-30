@@ -10,6 +10,15 @@
 #define TAM_GRID 40
 #define MAP_SIZE (TAM_I * TAM_J)
 #define MASK_SIZE ((TAM_I/2) * (TAM_J/2))
+//struct dos possiveis vfx
+typedef struct
+{
+    float tempo;
+    float tempo_restante;
+    bool ativo;
+    Vector2 pos;
+    int parametro_especial;
+}tVfx;
 
 
 //struct de animacao dos "objetos"

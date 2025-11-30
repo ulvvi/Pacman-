@@ -14,6 +14,7 @@
 #include "MainSystem/camera.h"
 #include "MainSystem/saveAndLoad.h"
 #include "Hud/HUD.h"
+#include "Hud/vfx.h"
 #include "Character/fantasma.h"
 #include "Audio/music.h"
 #include "MainSystem/menu.h"
@@ -21,6 +22,8 @@
 #include "MainSystem/vicScreen.h"
 #include "Character/animacao.h"
 #include "MainSystem/gameplay.h"
+
+
 
 
 

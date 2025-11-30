@@ -19,8 +19,11 @@ typedef struct
     Texture2D blueberry;
     Texture2D strawberry;
     //animacoes
-    Texture2D teste;
-    Texture2D teste2;
+    Texture2D cut_in_animacao;
+    Texture2D transicao_animacao;
+    
+
+
 
 }tAssets;
 
@@ -44,8 +47,9 @@ void inicializaAssets(tAssets* assets)
     assets->grape = LoadTexture("sprites/ambiente/uva.png");
     assets->blueberry = LoadTexture("sprites/ambiente/mirtilo.png");
     assets->strawberry = LoadTexture("sprites/ambiente/morango.png");
-    printf("MORANGO CARREGADO");
     //animacoes "soltas(n ligadas a alguma struct de struct)"
+    assets->cut_in_animacao = LoadTexture("sprites/player/pacman_cut_in-Sheet.png");
+    assets->transicao_animacao = LoadTexture("sprites/ambiente/transicao2-Sheet.png");
 
     
     
@@ -65,4 +69,6 @@ void limpezaGeral(tAssets* assets)
     UnloadTexture(assets->grape);
     UnloadTexture(assets->blueberry);
     UnloadTexture(assets->strawberry);
+    UnloadTexture(assets->cut_in_animacao);
+    UnloadTexture(assets->transicao_animacao);
 }

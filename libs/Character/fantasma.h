@@ -466,16 +466,18 @@ void comeFantasma(tInimigo* fantasma, int indice)
     printf("%d", indice);
 }
 
-/*SUBTRAI A VIDA DO JOGADOR E, SE NECESSARIO, DA GAMEOVER*/
-void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, int indice, int numero_fantasma, GameState* state_atual, tCamera* camera_relativa)
+/*SUBTRAI A VIDA DO JOGADOR*/
+void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, int indice, int numero_fantasma, GameState* state_atual, tCamera* camera_relativa, tVfx* pontuacao)
 {
     if (indice == -1)
         return;
     float tempo_screenshake;
     float forca_screenshake;
+    int score = 0;
     switch(pacman->power_pellet)
     {
         case true:
+            score = 100;
             tempo_screenshake = 0.25;
             forca_screenshake = 200;
             comeFantasma(fantasma, indice);
@@ -483,6 +485,7 @@ void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, i
         break;
 
         case false:
+            score = -200;
             //tirei da minha cabeca mesmo o tempo de shake(e pelo visto ta batendo legal)
             tempo_screenshake = pacman->cutscene_morte.total_frames*pacman->cutscene_morte.tempo_frame - 1.25;
             forca_screenshake = 75;
@@ -492,6 +495,12 @@ void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, i
             pacman->spritesheet.x = 0;
             *state_atual = MORTE;
         break;
+    }
+    if(score != 0)
+    {
+        pontuacao->ativo = true;
+        pontuacao->parametro_especial = score;
+        pacman->score+= score;
     }
 }
 
