@@ -18,7 +18,7 @@ void spawnFruit(char** map, tJogador* pacman){
     fruit_timer++;
 
     //verifica se ja passou o tempo para spawnar a fruta
-    if(fruit_timer >= 1800){
+    if(fruit_timer >= 900){
         fruit_timer = 0;
 
         int x, y;
@@ -73,25 +73,26 @@ void getFruit(tJogador* pacman, char fruit_char){
 }
 
 void useFruit(tJogador* pacman){
-    switch(pacman->current_fruit){
-        case CHERRY:
-            pacman->cherry = true;
-            break;
+    if(pacman->cherry == false && pacman->strawberry == false && pacman->grape == false && pacman->blueberry == false){
+        switch(pacman->current_fruit){
+            case CHERRY:
+                pacman->cherry = true;
+                break;
 
-        case STRAWBERRY:
-            pacman->strawberry = true;
-            break;
+            case STRAWBERRY:
+                pacman->strawberry = true;
+                break;
 
-        case GRAPE:
-            pacman->grape = true;
-            break;
+            case GRAPE:
+                pacman->grape = true;
+                break;
 
-        case BLUEBERRY:
-            pacman->blueberry = true;
-            break;
+            case BLUEBERRY:
+                pacman->blueberry = true;
+                break;
+        }
+        pacman->current_fruit = -1;
     }
-
-    pacman->current_fruit = -1;
 }
 
 
@@ -125,9 +126,20 @@ void cherry(tJogador* pacman){
 void grape(tJogador* pacman){
         pacman->curFruitTimer += GetFrameTime();
         pacman->comendo.spritesheet.y = 120;
-        if(pacman->curFruitTimer >= 6)
+        if(pacman->curFruitTimer >= 4)
         {
             pacman->grape = false;
+            pacman->comendo.spritesheet.y = 0;
+            pacman->curFruitTimer = 0;
+        }  
+}
+
+void blueberry(tJogador* pacman){
+        pacman->curFruitTimer += GetFrameTime();
+        pacman->comendo.spritesheet.y = 160;
+        if(pacman->curFruitTimer >= 4)
+        {
+            pacman->blueberry = false;
             pacman->comendo.spritesheet.y = 0;
             pacman->curFruitTimer = 0;
         }  

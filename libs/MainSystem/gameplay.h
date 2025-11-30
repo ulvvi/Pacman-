@@ -81,11 +81,19 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
         menuData->subIndex = 0;
         *state_atual = PAUSE;
     }
+
+    //debug
     if(IsKeyPressed(KEY_F1)){
         pacman->current_fruit = CHERRY;
     }
+    if(IsKeyPressed(KEY_F2)){
+        pacman->current_fruit = STRAWBERRY;
+    }
     if(IsKeyPressed(KEY_F3)){
         pacman->current_fruit = GRAPE;
+    }
+    if(IsKeyPressed(KEY_F4)){
+        pacman->current_fruit = BLUEBERRY;
     }
 
     //spawn de frutas
@@ -114,6 +122,9 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
         grape(pacman);
     }
 
+    if(pacman->blueberry == true){
+        blueberry(pacman);
+    }
 
     //teleporte player
     if(checaPlayerDentroMapa(pacman) == false)

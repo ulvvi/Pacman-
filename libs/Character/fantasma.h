@@ -485,15 +485,25 @@ void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, i
         break;
 
         case false:
-            score = -200;
+            if(pacman->blueberry == false){
+                score = -200;
             //tirei da minha cabeca mesmo o tempo de shake(e pelo visto ta batendo legal)
-            tempo_screenshake = pacman->cutscene_morte.total_frames*pacman->cutscene_morte.tempo_frame - 1.25;
-            forca_screenshake = 75;
-            ativaCamera(camera_relativa, tempo_screenshake, forca_screenshake);
-            pacman->vida--;
-            //voltar o pacman pro sprite original
-            pacman->spritesheet.x = 0;
-            *state_atual = MORTE;
+                tempo_screenshake = pacman->cutscene_morte.total_frames*pacman->cutscene_morte.tempo_frame - 1.25;
+                forca_screenshake = 75;
+                ativaCamera(camera_relativa, tempo_screenshake, forca_screenshake);
+                pacman->vida--;
+                //voltar o pacman pro sprite original
+                pacman->spritesheet.x = 0;
+                *state_atual = MORTE;
+            }
+            else{
+                score = 100;
+                tempo_screenshake = 0.25;
+                forca_screenshake = 200;
+                comeFantasma(fantasma, indice);
+                ativaCamera(camera_relativa, tempo_screenshake, forca_screenshake);
+
+            }
         break;
     }
     if(score != 0)

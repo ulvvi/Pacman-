@@ -52,6 +52,10 @@ void inicializaPlayer(tJogador* pacman, int pellets, tAssets assets)
     pacman->spd = 2;
     //coisas gerais
     pacman->power_pellet = false;
+    pacman->cherry = false;
+    pacman->strawberry = false;
+    pacman->grape = false;
+    pacman->blueberry = false;
     pacman->score = 0;
     pacman->vida = 3; 
     pacman->remainingPellets = pellets;
