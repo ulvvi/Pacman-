@@ -155,6 +155,7 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
     trocaSpriteFantasma(fantasma, mapa->numero_fantasmas);
 }
 
+
 bool hasCollectedAllPellets(tJogador* pacman){
     if(pacman->remainingPellets <= 0 || IsKeyPressed(KEY_C)){
         return true;
@@ -182,8 +183,6 @@ tAssets assets)
     modificaFilename(filename, *level);
     inicializaMapa(mapa, filename, level, assets);
     mapa->numero_fantasmas = calculaFantasmas(mapa->grid_mapa);
-
-    
     inicializaPlayer(pacman, mapa->pellets_totais, assets);
     centralizaPlayer(pacman, mapa->grid_mapa);
 
@@ -246,7 +245,7 @@ bool gameLevel(int* level, tAssets assets){
 
     tCamera camera_principal;
     inicializaCamera(&camera_principal, pacman);
-    int dangerPellets = pacman.remainingPellets / 2;
+    int dangerPellets = pacman.remainingPellets / 3;
 
     Sound winJingle = LoadSound("audio/ambiente/win_jingle.wav");
     SetSoundVolume(winJingle, 1.5f);
