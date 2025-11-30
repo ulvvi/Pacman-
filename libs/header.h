@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <limits.h>
 #include "./MainSystem/system.h"
 #include "./Map/fruits.h"
 #include "Map/map.h"
