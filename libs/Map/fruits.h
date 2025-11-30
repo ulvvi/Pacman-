@@ -104,7 +104,7 @@ void cherry(tJogador* pacman){
             primeira_vez = false;
             pacman->comendo.spritesheet.y = 40;
             pacman->comendo.frame_atual = 0;
-            pacman->comendo.tempo_frame = 0.130;
+            pacman->comendo.tempo_frame = 0.100;
         }
         pacman->curFruitTimer += GetFrameTime();
         
@@ -123,13 +123,23 @@ void cherry(tJogador* pacman){
 }
 
 void grape(tJogador* pacman){
+        if(pacman->curFruitTimer == 0)
+        {
+            pacman->comendo.spritesheet.y = 120;
+            pacman->comendo.frame_atual = 0;
+            pacman->comendo.tempo_frame = 0.100;
+            
+        }
         pacman->curFruitTimer += GetFrameTime();
-        pacman->comendo.spritesheet.y = 120;
+       
+        
         if(pacman->curFruitTimer >= 4)
         {
             pacman->grape = false;
             pacman->comendo.spritesheet.y = 0;
             pacman->curFruitTimer = 0;
+            pacman->comendo.tempo_frame = 0.060;
+            
         }  
 }
 
