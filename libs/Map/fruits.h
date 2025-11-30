@@ -30,7 +30,6 @@ void spawnFruit(char** map, tJogador* pacman){
         if(map[y][x] == '.'){
             pacman->remainingPellets--;
         }
-
         //escolhe um tipo de fruta aleatoriamente
         FruitType fruit_type = (FruitType)GetRandomValue(0, 4);
         char fruit_char;
