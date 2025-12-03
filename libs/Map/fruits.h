@@ -134,6 +134,12 @@ void grape(tJogador* pacman, char** grid_mapa){
        
         int grid_i = pacman->pos.y/40;
         int grid_j = pacman->pos.x/40;
+
+        if(grid_i >= TAM_I || grid_j >= TAM_J || grid_i < 0 || grid_j < 0){
+            grid_i = TAM_I - 1;
+            grid_j = TAM_J - 1;
+        }
+
         if(pacman->curFruitTimer >= 4 && grid_mapa[grid_i][grid_j] != '#')
         {
             pacman->grape = false;
