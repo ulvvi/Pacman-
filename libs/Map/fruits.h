@@ -122,7 +122,7 @@ void cherry(tJogador* pacman){
         }  
 }
 
-void grape(tJogador* pacman){
+void grape(tJogador* pacman, char** grid_mapa){
         if(pacman->curFruitTimer == 0)
         {
             pacman->comendo.spritesheet.y = 120;
@@ -132,8 +132,9 @@ void grape(tJogador* pacman){
         }
         pacman->curFruitTimer += GetFrameTime();
        
-        
-        if(pacman->curFruitTimer >= 4)
+        int grid_i = pacman->pos.y/40;
+        int grid_j = pacman->pos.x/40;
+        if(pacman->curFruitTimer >= 4 && grid_mapa[grid_i][grid_j] != '#')
         {
             pacman->grape = false;
             pacman->comendo.spritesheet.y = 0;
@@ -144,12 +145,19 @@ void grape(tJogador* pacman){
 }
 
 void blueberry(tJogador* pacman){
+        if(pacman->curFruitTimer == 0)
+        {
+            pacman->comendo.spritesheet.y = 160;
+            pacman->comendo.frame_atual = 0;
+            pacman->comendo.tempo_frame = 0.080;
+        }
         pacman->curFruitTimer += GetFrameTime();
-        pacman->comendo.spritesheet.y = 160;
+        
         if(pacman->curFruitTimer >= 4)
         {
             pacman->blueberry = false;
             pacman->comendo.spritesheet.y = 0;
             pacman->curFruitTimer = 0;
+            pacman->comendo.tempo_frame = 0.060;
         }  
 }

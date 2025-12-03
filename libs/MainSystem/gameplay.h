@@ -119,7 +119,7 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
     }
 
     if(pacman->grape == true){
-        grape(pacman);
+        grape(pacman, mapa->grid_mapa);
     }
 
     if(pacman->blueberry == true){
@@ -196,7 +196,7 @@ tAssets assets)
     
     // --- ANIMAÇÕES/CUTSCENES ---
     *obj_cut_in = (tAnimacao){
-        0, 26, 0.075, 0, assets.cut_in_animacao, 
+        0, 24, 0.075, 0, assets.cut_in_animacao, 
         {0,0,LARGURA, 600}, {0, ALTURA/2 - 600/2}, 0, 0, 0
     };
 }
