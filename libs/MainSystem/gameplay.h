@@ -326,7 +326,9 @@ int gameLevel(int* level, tAssets assets){
 
             case PAUSE:
                 switchMusic(MENU, stems);
-                if(menuLogic(&menuData, &state_atual, &mapa, &pacman, fantasmas) == - 1){
+                if(menuLogic(&menuData, &state_atual, &mapa, &pacman, fantasmas) == - 1)
+                {
+                    return -1;
                 }
             break;
             
