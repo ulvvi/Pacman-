@@ -2,59 +2,46 @@
 #include "../header.h"
 #pragma once
 
-void whereToIntercept(tJogador* player, int* posXintercepta, int* posYintercepta, tMapa* mapa){
-    //calcula a direção do pacman
-    int dir_x = (player->move_x / player->spd);
-    int dir_y = (player->move_y / player->spd);
-    
+void whereToIntercept(tJogador* player, int* posXintercepta, int* posYintercepta, tMapa* mapa) {
 
-    //ve a posição do pacman
-    int currentX = (player->pos.x / TAM_GRID);
-    int currentY = (player->pos.y / TAM_GRID);
+    int currentX = (int)(player->pos.x / TAM_GRID);
+    int currentY = (int)(player->pos.y / TAM_GRID);
+    //se falhar, passa a direção do pacman
+    int targetX = currentX; 
+    int targetY = currentY; 
+
+    int dir_x = (int)(player->move_x / player->spd);
+    int dir_y = (int)(player->move_y / player->spd);
 
     const int blocksInAdvance = 8;
 
-    int targetX;
-    int targetY;
+    for (int i = 1; i <= blocksInAdvance; i++) {
+        int potentialX = currentX + (i * dir_x);
+        int potentialY = currentY + (i * dir_y);
 
-    for(int i = 1; i < blocksInAdvance; i++){
-        targetX = currentX + (i * dir_x);
-        targetY = currentY + (i * dir_y);
-        if(targetY > TAM_I - 1 || targetX > TAM_J - 1){
-            targetX = currentX + ((i-1) * dir_x);
-            targetY = currentY + ((i-1) * dir_y);
+        if (potentialY < 0 || potentialY >= TAM_I || potentialX < 0 || potentialX >= TAM_J) {
+            targetX = currentX + ((i - 1) * dir_x);
+            targetY = currentY + ((i - 1) * dir_y);
+            break; 
+        }
+
+        if (mapa->grid_mapa[potentialY][potentialX] == '#') {
+            targetX = currentX + ((i - 1) * dir_x);
+            targetY = currentY + ((i - 1) * dir_y);
             break;
         }
-        if (mapa->grid_mapa[targetY][targetX] == '#') {
-            targetX = currentX + ((i-1) * dir_x);
-            targetY = currentY + ((i-1) * dir_y);
-            break;
-        }
+        targetX = potentialX;
+        targetY = potentialY;
+    }
     
-    } 
-
     *posXintercepta = targetX;
     *posYintercepta = targetY;
-
-    //debug
-    /*
-    int drawX = targetX * TAM_GRID;
-    int drawY = targetY * TAM_GRID;
-
-    DrawRectangle(
-        drawX, 
-        drawY, 
-        TAM_GRID, 
-        TAM_GRID, 
-        (Color){ 255, 0, 0, 100 } 
-    );
-    */
 }
 
 int escolheDirIntercepta(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
 
-    int posXintercepta;
-    int posYintercepta;
+    int posXintercepta = 0;
+    int posYintercepta = 0;
 
     whereToIntercept(player, &posXintercepta, &posYintercepta, mapa);
     
@@ -90,7 +77,7 @@ int escolheDirIntercepta(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
     startNode->f = startNode->g + startNode->h;
     startNode->opened = true;
 
-    // Lista de movimentos vizinhos (Cima, Direita, Baixo, Esquerda)
+    // (Cima, Direita, Baixo, Esquerda)
     int dx[] = {0, 1, 0, -1};
     int dy[] = {-1, 0, 1, 0};
 
@@ -155,6 +142,10 @@ int escolheDirIntercepta(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
 
     //backtrack pro primeiro passo pra fazer o caminho
     tNode* pathNode = &nodeGrid[targetY][targetX];
+
+    if (pathNode == NULL) {
+        return -1; 
+    }
     
     //se nao tem caminho, retorna isso pra n dar bosta
     if (pathNode->parent == NULL) return -1;
