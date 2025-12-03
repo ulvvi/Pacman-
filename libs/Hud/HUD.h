@@ -179,7 +179,7 @@ int currentChosen(tMenu* menuData){
   }
 }
 
-void menuInputs(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo* ghosts){
+int menuInputs(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo* ghosts){
   if(IsKeyPressed(KEY_V) || currentChosen(menuData) == BACK){
     *state_atual = GAMEPLAY;
   }
@@ -187,8 +187,7 @@ void menuInputs(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* p
 
   }
   if(IsKeyPressed(KEY_Q) || currentChosen(menuData) == QUIT){
-    CloseWindow();
-    return;
+    return -1;
   }
   if(IsKeyPressed(KEY_S) || currentChosen(menuData) == SAVE){
     save(pacman, ghosts, map, 1); //salva no slot 1 por enquanto
@@ -212,10 +211,14 @@ void menuInputs(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* p
       menuData->index = QUIT;
     }
   }
+  return 0;
 }
 
-void menuLogic(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo* ghosts){
+int menuLogic(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo* ghosts){
   int subIndex = 0;
   drawMenu(menuData);
-  menuInputs(menuData, state_atual, map, pacman, ghosts);
+  if(menuInputs(menuData, state_atual, map, pacman, ghosts) == -1){
+    return -1;
+  }
+  return 0;
 }

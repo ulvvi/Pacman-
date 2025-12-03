@@ -19,7 +19,13 @@ int main(void)
         mainMenu();
         while(true){
             //roda a func gamelevel e retorna true ou false(true pra vitoria, false pra derrota)
-            if(gameLevel(&nivel_atual, assets) == true)
+            int state = gameLevel(&nivel_atual, assets);
+            
+            if(state == -1){
+                break;
+            }
+
+            if(state == 1)
             {
                 (nivel_atual)++;
             }

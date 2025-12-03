@@ -3,13 +3,11 @@
 
 typedef enum {
     MENU_START,
-    MENU_LOAD,
     MENU_QUIT
 } MainMenuOptions;
 
 const char* mainMenuText[] = {
-    "Iniciar Jogo",
-    "Carregar Jogo",
+    "Começar",
     "Sair"
 };
 static int menuIndex = 0;
@@ -23,7 +21,7 @@ static void drawMainMenu(void){
         int y = startY + i * 80;
         if(i == menuIndex){
             DrawRectangle((LARGURA/2) - 170, y - 10, 340, 60, LIGHTGRAY);
-            DrawText(">", (LARGURA/2) - 210, y + 5, 40, WHITE);
+            //DrawText(">", (LARGURA/2) - 210, y + 5, 40, WHITE);
             DrawText(mainMenuText[i], (LARGURA/2) - 140, y + 5, 40, BLACK);
         } 
         else {
@@ -50,7 +48,11 @@ static int mainMenuInputs(void){
 
 void mainMenu(void){
     menuIndex = 0;
+    Music theme = LoadMusicStream("audio/Music/title.wav");
+    PlayMusicStream(theme);
+
     while(true){
+        UpdateMusicStream(theme);
         BeginDrawing();
         drawMainMenu();
         EndDrawing();
@@ -58,10 +60,10 @@ void mainMenu(void){
         if(choice == -1) continue;
         switch(choice){
             case MENU_START:
+                UnloadMusicStream(theme);
                 return;
-            case MENU_LOAD:
-                break;
             case MENU_QUIT:
+                UnloadMusicStream(theme);
                 CloseWindow();
                 exit(0);
                 break;

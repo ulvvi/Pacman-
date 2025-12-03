@@ -216,9 +216,9 @@ void cleanup(tMapa* mapa, tMenu* menuData, Music stems[], Sound som_cut_in){
 
 
 
-bool gameLevel(int* level, tAssets assets){
+int gameLevel(int* level, tAssets assets){
     int cronometro = 0;
-    bool venceu = false;
+    int venceu = 0;
     
     GameState state_atual = TRANSICAO;
 
@@ -326,7 +326,8 @@ bool gameLevel(int* level, tAssets assets){
 
             case PAUSE:
                 switchMusic(MENU, stems);
-                menuLogic(&menuData, &state_atual, &mapa, &pacman, fantasmas);
+                if(menuLogic(&menuData, &state_atual, &mapa, &pacman, fantasmas) == - 1){
+                }
             break;
             
             //deuixar pa tu refatorar taylor
@@ -364,7 +365,7 @@ bool gameLevel(int* level, tAssets assets){
             if(hasCollectedAllPellets(&pacman) == true){
                 PlaySound(winJingle);
                 victoryScreen();
-                venceu = true;
+                venceu = 1;
                 break;
             }
         }
