@@ -49,6 +49,7 @@ static int mainMenuInputs(void){
 void mainMenu(void){
     menuIndex = 0;
     Music theme = LoadMusicStream("audio/Music/title.wav");
+    SetMusicVolume(theme, 1.25f);
     PlayMusicStream(theme);
 
     while(true){

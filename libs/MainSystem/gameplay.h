@@ -126,6 +126,10 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
         blueberry(pacman);
     }
 
+    if(pacman->strawberry == true){
+        strawberry(pacman, mapa->grid_mapa);
+    }
+
     //teleporte player
     if(checaPlayerDentroMapa(pacman) == false)
     {

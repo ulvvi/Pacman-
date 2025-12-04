@@ -97,7 +97,6 @@ void useFruit(tJogador* pacman){
 
 void cherry(tJogador* pacman){
         static bool primeira_vez = true;
-        //infelizmente n da pra usar o checaplayercentralizado, por causa de dependencia e sei la oq, mas isso q eu to checando ai
         if(primeira_vez == true && (((int)pacman->pos.x % TAM_GRID) == 0 && ((int)pacman->pos.y % TAM_GRID) == 0))
         {
             pacman->spd = 4;
@@ -165,5 +164,30 @@ void blueberry(tJogador* pacman){
             pacman->comendo.spritesheet.y = 0;
             pacman->curFruitTimer = 0;
             pacman->comendo.tempo_frame = 0.060;
-        }  
+        }
+}
+
+void strawberry(tJogador* pacman, char** grid_mapa){
+    int centerX = pacman->pos.x/TAM_GRID;
+    int centerY = pacman->pos.y/TAM_GRID;
+
+    int startX = centerX - 3;
+    int endX   = centerX + 3;
+    int startY = centerY - 3;
+    int endY   = centerY + 3;
+
+    DrawRectangle(startX*TAM_GRID, startY*TAM_GRID, 280, 280, RED);
+
+    for (int curY = startY; curY <= endY; curY++){
+        for (int curX = startX; curX <= endX; curX++){
+            if (curY >= 0 && curY < TAM_I && curX >= 0 && curX < TAM_J){
+                
+                if (grid_mapa[curY][curX] == '.'){
+                    grid_mapa[curY][curX] = ' '; 
+                }
+            }
+        }
+    }
+    
+    pacman->strawberry = false;
 }
