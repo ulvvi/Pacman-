@@ -184,7 +184,7 @@ int menuInputs(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* pa
     *state_atual = GAMEPLAY;
   }
   if(IsKeyPressed(KEY_N) || currentChosen(menuData) == NEW){
-
+    return -2;
   }
   if(IsKeyPressed(KEY_Q) || currentChosen(menuData) == QUIT){
     return -1;
@@ -217,8 +217,8 @@ int menuInputs(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* pa
 int menuLogic(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo* ghosts){
   int subIndex = 0;
   drawMenu(menuData);
-  if(menuInputs(menuData, state_atual, map, pacman, ghosts) == -1){
+  /*if(menuInputs(menuData, state_atual, map, pacman, ghosts) == -1){
     return -1;
-  }
-  return 0;
+  }*/
+  return menuInputs(menuData, state_atual, map, pacman, ghosts);
 }

@@ -323,6 +323,8 @@ int gameLevel(int* level, tAssets assets){
                     if(pacman.vida == 0)
                     {
                         EndDrawing();
+                        //limpezas pra dar game over
+                        cleanup(&mapa, &menuData, stems, som_cut_in);
                         return venceu;
                     }
                     centralizaPlayer(&pacman, mapa.grid_mapa);
@@ -333,10 +335,14 @@ int gameLevel(int* level, tAssets assets){
 
             case PAUSE:
                 switchMusic(MENU, stems);
-                if(menuLogic(&menuData, &state_atual, &mapa, &pacman, fantasmas) == - 1)
+                int aux = menuLogic(&menuData, &state_atual, &mapa, &pacman, fantasmas);
+                if(aux != 0)
                 {
-                    return -1;
+                    //limpezas para retornar ao menu ou para iniciar novo jogo
+                    cleanup(&mapa, &menuData, stems, som_cut_in);
+                    return aux;
                 }
+                
             break;
             
             //deuixar pa tu refatorar taylor
