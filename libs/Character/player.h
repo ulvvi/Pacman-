@@ -32,6 +32,15 @@ void centralizaPlayer(tJogador* pacman, char** grid_mapa)
                 pacman->colisao_player.y = pacman->pos.y + (TAM_GRID - pacman->colisao_player.height)/2;;
                 pacman->move_x = 0;
                 pacman->move_y = 0;
+                pacman->spd = 2;
+                pacman->comendo.spritesheet.y = 0;
+                pacman->comendo.tempo_frame = 0.060;
+                pacman->curFruitTimer = 0;
+                pacman->current_fruit = -1;
+                pacman->cherry = false;
+                pacman->strawberry = false;
+                pacman->grape = false;
+                pacman->blueberry = false;
                 break;
                
             }

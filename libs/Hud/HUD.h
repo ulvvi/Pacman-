@@ -81,7 +81,7 @@ void drawHUD(int score, int totalPellets, int curFruit, tMapa mapa){
 /*a ideia agr do game over é ele retornar um valor e na main a gnt fazer algo dependendo do retorno. como gameover so precisa ter o voltar pro menu, rejogar
 fase e fechar jogo, n vai encher a main de coisa n, eh de boa*/
 
-int gameOver()
+bool gameOver()
 {
     int tam_over = 80;
     int tam_resto = 20;
@@ -96,22 +96,17 @@ int gameOver()
         DrawText("FIM DE JOGO", (LARGURA - MeasureText(texto_over, tam_over))/2, ALTURA/2 - tam_over/2, 80, RED);
         DrawText("V para rejogar a fase", (LARGURA - MeasureText(texto_menu, tam_resto))/2, ALTURA/2 + tam_resto*3, tam_resto, YELLOW);
         DrawText("M para ir ao menu", (LARGURA - MeasureText(texto_menu, tam_resto))/2, ALTURA/2 + tam_resto*5, tam_resto, YELLOW);
-        DrawText("ESC para sair do jogo", (LARGURA - MeasureText(texto_sair, tam_resto))/2 - 20, ALTURA/2 + tam_resto*7, tam_resto, YELLOW);
         EndDrawing();
 
         if(IsKeyPressed(KEY_V))
         {
             //voltar ao menu de alguma forma
-            return 0;
+            return false;
         }
         if(IsKeyPressed(KEY_M))
         {
             //voltar ao menu de alguma forma
-            return 1;
-        }
-        if(IsKeyPressed(KEY_ESCAPE))
-        {
-            return 2;
+            return true;
         }
     }
 }

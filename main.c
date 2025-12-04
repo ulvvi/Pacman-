@@ -1,5 +1,11 @@
 #include "libs/header.h"
-
+typedef enum
+{
+    NG_PAUSE = -2,
+    QUIT_MENU,
+    DERROTA,
+    VITORIA
+}STATE_MAIN;
 //MAIN
 
 int main(void)
@@ -19,24 +25,24 @@ int main(void)
         if(mainMenu() == 1) nivel_atual = 1;
         while(true){
             //roda a func gamelevel e retorna true ou false(true pra vitoria, false pra derrota)
-            int state = gameLevel(&nivel_atual, assets);
+            STATE_MAIN state = gameLevel(&nivel_atual, assets);
 
-            //iniciar novo jogo
-            if(state == -2)
+            //iniciar novo jogo a partir do menu
+            if(state == NG_PAUSE)
             {
                 nivel_atual = 1;
             }
             //ir ao menu principal
-            if(state == -1){
+            if(state == QUIT_MENU){
                 break;
             }
-            //venceu a fase
-            if(state == 1)
+            //passar de fase
+            if(state == VITORIA)
             {
                 (nivel_atual)++;
             }
-            //perdeu a fase
-            if(state == 0)
+            //gameover
+            if(state == DERROTA)
             {
                 //evitar loop infinito se ja foi apertado o ESC(ou o X)
                 if(WindowShouldClose())

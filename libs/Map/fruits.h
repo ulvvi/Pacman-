@@ -96,15 +96,13 @@ void useFruit(tJogador* pacman){
 
 
 void cherry(tJogador* pacman){
-        static bool primeira_vez = true;
-        if(primeira_vez == true && (((int)pacman->pos.x % TAM_GRID) == 0 && ((int)pacman->pos.y % TAM_GRID) == 0))
+        if(pacman->curFruitTimer == 0)
         {
-            pacman->spd = 4;
-            primeira_vez = false;
             pacman->comendo.spritesheet.y = 40;
             pacman->comendo.frame_atual = 0;
             pacman->comendo.tempo_frame = 0.100;
         }
+        if((((int)pacman->pos.x % TAM_GRID) == 0 && ((int)pacman->pos.y % TAM_GRID) == 0)) pacman->spd = 4;
         pacman->curFruitTimer += GetFrameTime();
         
         
@@ -116,8 +114,6 @@ void cherry(tJogador* pacman){
             pacman->comendo.frame_atual = 0;
             pacman->comendo.tempo_frame = 0.060;
             pacman->curFruitTimer = 0;
-            primeira_vez = true;
-           
         }  
 }
 
