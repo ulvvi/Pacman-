@@ -96,7 +96,7 @@ int gameOver()
         DrawText("FIM DE JOGO", (LARGURA - MeasureText(texto_over, tam_over))/2, ALTURA/2 - tam_over/2, 80, RED);
         DrawText("V para rejogar a fase", (LARGURA - MeasureText(texto_menu, tam_resto))/2, ALTURA/2 + tam_resto*3, tam_resto, YELLOW);
         DrawText("M para ir ao menu", (LARGURA - MeasureText(texto_menu, tam_resto))/2, ALTURA/2 + tam_resto*5, tam_resto, YELLOW);
-        DrawText("ESC para sair do jogo", (LARGURA - MeasureText(texto_sair, tam_resto))/2, ALTURA/2 + tam_resto*7, tam_resto, YELLOW);
+        DrawText("ESC para sair do jogo", (LARGURA - MeasureText(texto_sair, tam_resto))/2 - 20, ALTURA/2 + tam_resto*7, tam_resto, YELLOW);
         EndDrawing();
 
         if(IsKeyPressed(KEY_V))
