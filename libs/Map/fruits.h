@@ -152,7 +152,7 @@ void blueberry(tJogador* pacman){
             pacman->comendo.frame_atual = 0;
             pacman->comendo.tempo_frame = 0.080;
         }
-        //pacman->curFruitTimer += GetFrameTime();
+        pacman->curFruitTimer += GetFrameTime();
         
         if(pacman->curFruitTimer >= 4)
         {
