@@ -156,7 +156,7 @@ void blueberry(tJogador* pacman){
             pacman->comendo.frame_atual = 0;
             pacman->comendo.tempo_frame = 0.080;
         }
-        pacman->curFruitTimer += GetFrameTime();
+        //pacman->curFruitTimer += GetFrameTime();
         
         if(pacman->curFruitTimer >= 4)
         {
@@ -183,7 +183,8 @@ void strawberry(tJogador* pacman, char** grid_mapa){
             if (curY >= 0 && curY < TAM_I && curX >= 0 && curX < TAM_J){
                 
                 if (grid_mapa[curY][curX] == '.'){
-                    grid_mapa[curY][curX] = ' '; 
+                    grid_mapa[curY][curX] = ' ';
+                    pacman->remainingPellets--; 
                 }
             }
         }

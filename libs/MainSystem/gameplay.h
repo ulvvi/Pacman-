@@ -95,6 +95,9 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
     if(IsKeyPressed(KEY_F4)){
         pacman->current_fruit = BLUEBERRY;
     }
+    if(IsKeyDown(KEY_Q)){
+        pacman->remainingPellets--;
+    }
 
     //spawn de frutas
     spawnFruit(mapa->grid_mapa, pacman);
