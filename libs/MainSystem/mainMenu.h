@@ -49,6 +49,7 @@ static int mainMenuInputs(void){
 void mainMenu(void){
     menuIndex = 0;
     Music theme = LoadMusicStream("audio/Music/title.wav");
+    Sound end = LoadSound("audio/Music/title_end.wav");
     SetMusicVolume(theme, 1.25f);
     PlayMusicStream(theme);
 
@@ -61,9 +62,10 @@ void mainMenu(void){
         if(choice == -1) continue;
         switch(choice){
             case MENU_START:
-                UnloadMusicStream(theme);
+                PlaySound(end);
                 return;
             case MENU_QUIT:
+                UnloadSound(end);
                 UnloadMusicStream(theme);
                 CloseWindow();
                 exit(0);
