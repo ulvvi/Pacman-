@@ -6,12 +6,6 @@
 #define TAM_J 40
 #define TAM_GRID 40
 
-typedef enum {
-    CHERRY,
-    STRAWBERRY,
-    GRAPE,
-    BLUEBERRY
-} FruitType;
 
 void spawnFruit(char** map, tJogador* pacman){
     static int fruit_timer = 0;
@@ -72,24 +66,8 @@ void getFruit(tJogador* pacman, char fruit_char){
 }
 
 void useFruit(tJogador* pacman){
-    if(pacman->cherry == false && pacman->strawberry == false && pacman->grape == false && pacman->blueberry == false){
-        switch(pacman->current_fruit){
-            case CHERRY:
-                pacman->cherry = true;
-                break;
-
-            case STRAWBERRY:
-                pacman->strawberry = true;
-                break;
-
-            case GRAPE:
-                pacman->grape = true;
-                break;
-
-            case BLUEBERRY:
-                pacman->blueberry = true;
-                break;
-        }
+    if(pacman->fruta_ativa == -1){
+        pacman->fruta_ativa = pacman->current_fruit;
         pacman->current_fruit = -1;
     }
 }
@@ -98,9 +76,9 @@ void useFruit(tJogador* pacman){
 void cherry(tJogador* pacman){
         if(pacman->curFruitTimer == 0)
         {
-            pacman->comendo.spritesheet.y = 40;
+            // pacman->comendo.spritesheet.y = 40;
             pacman->comendo.frame_atual = 0;
-            pacman->comendo.tempo_frame = 0.100;
+            //pacman->comendo.tempo_frame = 0.100;
         }
         if((((int)pacman->pos.x % TAM_GRID) == 0 && ((int)pacman->pos.y % TAM_GRID) == 0)) pacman->spd = 4;
         pacman->curFruitTimer += GetFrameTime();
@@ -108,11 +86,11 @@ void cherry(tJogador* pacman){
         
         if(pacman->curFruitTimer >= 6)
         {
-            pacman->cherry = false;
+            pacman->fruta_ativa = -1;
             pacman->spd = 2;
-            pacman->comendo.spritesheet.y = 0;
-            pacman->comendo.frame_atual = 0;
-            pacman->comendo.tempo_frame = 0.060;
+            // pacman->comendo.spritesheet.y = 0;
+            // pacman->comendo.frame_atual = 0;
+            // pacman->comendo.tempo_frame = 0.060;
             pacman->curFruitTimer = 0;
         }  
 }
@@ -120,9 +98,9 @@ void cherry(tJogador* pacman){
 void grape(tJogador* pacman, char** grid_mapa){
         if(pacman->curFruitTimer == 0)
         {
-            pacman->comendo.spritesheet.y = 120;
+            // pacman->comendo.spritesheet.y = 120;
             pacman->comendo.frame_atual = 0;
-            pacman->comendo.tempo_frame = 0.100;
+            //pacman->comendo.tempo_frame = 0.100;
             
         }
         pacman->curFruitTimer += GetFrameTime();
@@ -137,10 +115,10 @@ void grape(tJogador* pacman, char** grid_mapa){
 
         if(pacman->curFruitTimer >= 4 && grid_mapa[grid_i][grid_j] != '#')
         {
-            pacman->grape = false;
-            pacman->comendo.spritesheet.y = 0;
+            pacman->fruta_ativa= -1;
+            // pacman->comendo.spritesheet.y = 0;
             pacman->curFruitTimer = 0;
-            pacman->comendo.tempo_frame = 0.060;
+            // pacman->comendo.tempo_frame = 0.060;
             
         }  
 }
@@ -148,18 +126,18 @@ void grape(tJogador* pacman, char** grid_mapa){
 void blueberry(tJogador* pacman){
         if(pacman->curFruitTimer == 0)
         {
-            pacman->comendo.spritesheet.y = 160;
+            // pacman->comendo.spritesheet.y = 160;
             pacman->comendo.frame_atual = 0;
-            pacman->comendo.tempo_frame = 0.080;
+            //pacman->comendo.tempo_frame = 0.080;
         }
         pacman->curFruitTimer += GetFrameTime();
         
         if(pacman->curFruitTimer >= 4)
         {
-            pacman->blueberry = false;
-            pacman->comendo.spritesheet.y = 0;
+            pacman->fruta_ativa = -1;
+            // pacman->comendo.spritesheet.y = 0;
             pacman->curFruitTimer = 0;
-            pacman->comendo.tempo_frame = 0.060;
+            // pacman->comendo.tempo_frame = 0.060;
         }
 }
 
@@ -186,5 +164,5 @@ void strawberry(tJogador* pacman, char** grid_mapa){
         }
     }
     
-    pacman->strawberry = false;
+    pacman->fruta_ativa = -1;
 }

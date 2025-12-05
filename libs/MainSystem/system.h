@@ -11,6 +11,14 @@
 #define MAP_SIZE (TAM_I * TAM_J)
 #define MASK_SIZE ((TAM_I/2) * (TAM_J/2))
 //struct dos possiveis vfx
+typedef enum {
+    CHERRY,
+    STRAWBERRY,
+    GRAPE,
+    BLUEBERRY
+} FruitType;
+
+
 typedef struct
 {
     float tempo;
@@ -66,10 +74,7 @@ typedef struct
     int remainingPellets;
     int dir;
     int current_fruit;
-    bool cherry;
-    bool strawberry;
-    bool grape;
-    bool blueberry;
+    FruitType fruta_ativa;
     float curFruitTimer;
 
     bool desenho;
