@@ -3,6 +3,46 @@
 #include "../MainSystem/system.h"
 #include "../Character/player.h"
 
+void criaNovoFantasma(tInimigo** fantasma, tAssets assets, tMapa mapa)
+{
+    for(int i = 0; i < mapa.numero_fantasmas; i++)
+    {
+        //n eh um array bidimensional ok, é so q to tendo q usar o endereco do endereco de fantasmas, ent so assim pra acessar(ate onde eu sei)
+        //to tendo q usar endereco de endereco pq o realloc antes realocava a copia do endereco de memoria passada pelo argumento da funcao. agr eu to passando a copia do
+        //endereco do endereco pra ai sim mexer no endereco de fato, q n é uma copia
+        fantasma[0][i].desenho = true;
+        fantasma[0][i].sprite_normal = assets.fantasma_normal_sprite;
+        fantasma[0][i].sprite_fuga = assets.fantasma_fuga_sprite;
+        fantasma[0][i].spritesheet.height = 40;
+        fantasma[0][i].spritesheet.width = 40;
+        fantasma[0][i].spritesheet.x = 0;
+        fantasma[0][i].spritesheet.y = 40*(i%4);
+
+        //animacao morte
+        fantasma[0][i].morte.frame_atual = 0;
+        fantasma[0][i].morte.total_frames = 14;
+        fantasma[0][i].morte.tempo_frame = 0.110;
+        fantasma[0][i].morte.sprite = assets.fantasma_morte_sprite;
+        fantasma[0][i].morte.spritesheet.width = 40;
+        fantasma[0][i].morte.spritesheet.height = 40;
+        fantasma[0][i].morte.spritesheet.x = 0;
+        fantasma[0][i].morte.spritesheet.y = fantasma[0][i].spritesheet.y;
+        fantasma[0][i].morte.rotacao = 0;
+
+        //animacao morto(descanso)
+        fantasma[0][i].morto.frame_atual = 0;
+        fantasma[0][i].morto.total_frames = 7;
+        fantasma[0][i].morto.tempo_frame = 0.130;
+        fantasma[0][i].morto.sprite = assets.fantasma_morto_sprite;
+        fantasma[0][i].morto.spritesheet.width = 40;
+        fantasma[0][i].morto.spritesheet.height = 40;
+        fantasma[0][i].morto.spritesheet.x = 0;
+        fantasma[0][i].morto.spritesheet.y = fantasma[0][i].spritesheet.y;
+        fantasma[0][i].morto.rotacao = 0;
+        fantasma[0][i].morto.pos.x = fantasma[0][i].pos_inicial.x;
+        fantasma[0][i].morto.pos.y = fantasma[0][i].pos_inicial.y;
+    }
+}
 
 void save_player(tJogador* pacman, FILE* arq)
 {
@@ -37,6 +77,12 @@ void save_fantasma(tInimigo* fantasma, tMapa map, FILE* arq)
         fwrite(&fantasma[i].tempo_morto, sizeof(float), 1, arq);; 
         fwrite(&fantasma[i].pos, sizeof(Vector2), 1, arq);
         fwrite(&fantasma[i].pos_inicial, sizeof(Vector2), 1, arq);
+        fwrite(&fantasma[i].type, sizeof(int), 1, arq);
+        fwrite(&fantasma[i].desenho, sizeof(bool), 1, arq);
+        fwrite(&fantasma[i].morte.contador, sizeof(float), 1, arq);
+        fwrite(&fantasma[i].morto.contador, sizeof(float), 1, arq);
+        fwrite(&fantasma[i].colisao_fantasma, sizeof(Rectangle),1,arq);
+
     }
 }
 
@@ -85,30 +131,33 @@ void writeToBin(char* path, tJogador* pacman, tInimigo* ghost, tMapa* map){
     return;
 }
 
-void load_map(tMapa* mapa, FILE* fp) {
+
+void load_map(tMapa* mapa, FILE* fp, tInimigo** fantasma, tAssets assets) {
     
     if (!mapa->grid_mapa || !mapa->matriz_auxiliar || !mapa->mapa_mascaras) {
         return; 
     }
-
-    //fread(&mapa->tileset_parede, sizeof(Texture2D), 1, fp); 
+    int numero_fantasmas_antigo = mapa->numero_fantasmas;
     fread(&mapa->spritesheet, sizeof(Rectangle), 1, fp);
     fread(&mapa->tamanho_spritesheet, sizeof(int), 1, fp);
     fread(&mapa->pellets_totais, sizeof(int), 1, fp);
     fread(&mapa->frame_counter, sizeof(int), 1, fp);
     fread(&mapa->numero_fantasmas, sizeof(int),1,fp);
     fread(mapa->level, sizeof(int),1,fp);
-    
+
+    //se difere o numero de fantasmas
+    if(numero_fantasmas_antigo != mapa->numero_fantasmas)
+    {
+        *fantasma = realloc(*fantasma, sizeof(tInimigo)*mapa->numero_fantasmas);
+        //correcao de sprites pra caso haja um ou mais fantasmas adicionais
+        criaNovoFantasma(fantasma, assets, *mapa);
+    }
 
     for (int i = 0; i < TAM_I; i++) {
-
-        //mapa->grid_mapa[i] = (char*)malloc(TAM_J * sizeof(char));
         fread(mapa->grid_mapa[i], sizeof(char), TAM_J, fp);
     }
 
     for (int i = 0; i < TAM_I; i++) {
-
-        //mapa->matriz_auxiliar[i] = (int*)malloc(TAM_J * sizeof(int));
         fread(mapa->matriz_auxiliar[i], sizeof(int), TAM_J, fp);
     }
     
@@ -141,7 +190,6 @@ void load_player(tJogador* pacman, FILE* arq)
 void load_fantasma(tInimigo* fantasma, tMapa map, FILE* arq)
 {   
     //realoca dependendo do numero de fantasmas do mapa que sera carregado
-    fantasma = realloc(fantasma, sizeof(tInimigo)*map.numero_fantasmas);
     if(fantasma == NULL)
     {
         puts("[LOAD] erro de carregamento de fantasmas\n");
@@ -155,10 +203,15 @@ void load_fantasma(tInimigo* fantasma, tMapa map, FILE* arq)
         fread(&fantasma[i].tempo_morto, sizeof(float), 1, arq);; 
         fread(&fantasma[i].pos, sizeof(Vector2), 1, arq);
         fread(&fantasma[i].pos_inicial, sizeof(Vector2), 1, arq);
+        fread(&fantasma[i].type, sizeof(int), 1, arq);
+        fread(&fantasma[i].desenho, sizeof(bool), 1, arq);
+        fread(&fantasma[i].morte.contador, sizeof(float), 1, arq);
+        fread(&fantasma[i].morto.contador, sizeof(float), 1, arq);
+        fread(&fantasma[i].colisao_fantasma, sizeof(Rectangle),1,arq);
     }
 }
 
-void readFromBin(char* path, tJogador* pacman, tInimigo* ghosts, tMapa* map){
+void readFromBin(char* path, tJogador* pacman, tInimigo** ghosts, tMapa* map, tAssets assets){
     FILE* arq;
     arq = fopen(path, "rb");
     if(arq == NULL){
@@ -166,9 +219,9 @@ void readFromBin(char* path, tJogador* pacman, tInimigo* ghosts, tMapa* map){
         return;
     }
 
-    load_map(map, arq);
+    load_map(map, arq, ghosts, assets);
     load_player(pacman, arq);
-    load_fantasma(ghosts, *map, arq);
+    load_fantasma(*ghosts, *map, arq);
 
     fclose(arq);
     return;
@@ -181,9 +234,9 @@ void save(tJogador* pacman, tInimigo* ghosts, tMapa* map, int slot) {
     writeToBin(path, pacman, ghosts, map);
 }
 
-void load(tJogador* pacman, tInimigo* ghosts, tMapa* map, int slot){
+void load(tJogador* pacman, tInimigo** ghosts, tMapa* map, int slot, tAssets assets){
     char path[256];
     snprintf(path, sizeof(path), "saves/save%d.bin", slot);
-    readFromBin(path, pacman, ghosts, map);
+    readFromBin(path, pacman, ghosts, map, assets);
     return;
 }

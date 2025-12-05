@@ -174,7 +174,7 @@ int currentChosen(tMenu* menuData){
   }
 }
 
-int menuInputs(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo* ghosts){
+int menuInputs(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo** ghosts, tAssets assets){
   if(IsKeyPressed(KEY_V) || currentChosen(menuData) == BACK){
     *state_atual = GAMEPLAY;
   }
@@ -185,10 +185,10 @@ int menuInputs(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* pa
     return -1;
   }
   if(IsKeyPressed(KEY_S) || currentChosen(menuData) == SAVE){
-    save(pacman, ghosts, map, 1); //salva no slot 1 por enquanto
+    save(pacman, *ghosts, map, 1); //salva no slot 1 por enquanto
   }
   if(IsKeyPressed(KEY_L) || currentChosen(menuData) == LOAD){
-    load(pacman, ghosts, map, 1); //carrega do slot 1 por enquanto
+    load(pacman, ghosts, map, 1, assets); //carrega do slot 1 por enquanto
   }
 
   //verifica o input para mudar a opcao selecionada
@@ -209,11 +209,11 @@ int menuInputs(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* pa
   return 0;
 }
 
-int menuLogic(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo* ghosts){
+int menuLogic(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo** ghosts, tAssets assets){
   int subIndex = 0;
   drawMenu(menuData);
   /*if(menuInputs(menuData, state_atual, map, pacman, ghosts) == -1){
     return -1;
   }*/
-  return menuInputs(menuData, state_atual, map, pacman, ghosts);
+  return menuInputs(menuData, state_atual, map, pacman, ghosts, assets);
 }

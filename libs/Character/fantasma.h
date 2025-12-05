@@ -375,7 +375,7 @@ void inicializaFantasmas(tInimigo* fantasma, char** grid_mapa, tAssets assets)
                 fantasma[contador].spd = 2;
                 fantasma[contador].vulneravel = false;
                 fantasma[contador].direcao = 0;
-                fantasma[contador].type = contador;
+                fantasma[contador].type = contador%4;
                 //colisao
                 fantasma[contador].colisao_fantasma.height = TAM_GRID;
                 fantasma[contador].colisao_fantasma.width = TAM_GRID;
@@ -395,7 +395,7 @@ void inicializaFantasmas(tInimigo* fantasma, char** grid_mapa, tAssets assets)
                 fantasma[contador].spritesheet.height = 40;
                 fantasma[contador].spritesheet.width = 40;
                 fantasma[contador].spritesheet.x = 0;
-                fantasma[contador].spritesheet.y = 40*contador;
+                fantasma[contador].spritesheet.y = 40*(contador%4);
 
                 //animacao morte
                 fantasma[contador].morte.frame_atual = 0;
@@ -423,6 +423,7 @@ void inicializaFantasmas(tInimigo* fantasma, char** grid_mapa, tAssets assets)
                 fantasma[contador].morto.pos.x = fantasma[contador].pos_inicial.x;
                 fantasma[contador].morto.pos.y = fantasma[contador].pos_inicial.y;
                 contador++;
+                
             }
         }
     }
@@ -527,5 +528,3 @@ void reviveFantasma(tInimigo* fantasma, int indice)
         fantasma[indice].spd = 2;
     }
 }
-
-

@@ -210,7 +210,7 @@ tAssets assets)
 
 
 //limpezas no geral
-void cleanup(tMapa* mapa, tMenu* menuData, Music stems[], Sound som_cut_in){  
+void cleanup(tMapa* mapa, tMenu* menuData, Music stems[], Sound som_cut_in, tInimigo* fantasmas){  
     //unload nos assets
     UnloadSound(som_cut_in);
     stopAllMusic(stems);
@@ -219,6 +219,8 @@ void cleanup(tMapa* mapa, tMenu* menuData, Music stems[], Sound som_cut_in){
     freeMascaras(mapa->mapa_mascaras);
     freeDiddy(mapa->grid_mapa);
     freeMatrizAux(mapa->matriz_auxiliar);
+    free(fantasmas);
+    
 }
 
 
@@ -324,7 +326,7 @@ int gameLevel(int* level, tAssets assets){
                     {
                         EndDrawing();
                         //limpezas pra dar game over
-                        cleanup(&mapa, &menuData, stems, som_cut_in);
+                        cleanup(&mapa, &menuData, stems, som_cut_in, fantasmas);
                         return venceu;
                     }
                     centralizaPlayer(&pacman, mapa.grid_mapa);
@@ -335,11 +337,11 @@ int gameLevel(int* level, tAssets assets){
 
             case PAUSE:
                 switchMusic(MENU, stems);
-                int aux = menuLogic(&menuData, &state_atual, &mapa, &pacman, fantasmas);
+                int aux = menuLogic(&menuData, &state_atual, &mapa, &pacman, &fantasmas, assets);
                 if(aux != 0)
                 {
                     //limpezas para retornar ao menu ou para iniciar novo jogo
-                    cleanup(&mapa, &menuData, stems, som_cut_in);
+                    cleanup(&mapa, &menuData, stems, som_cut_in, fantasmas);
                     return aux;
                 }
                 
@@ -386,6 +388,6 @@ int gameLevel(int* level, tAssets assets){
         }
     }
 
-    cleanup(&mapa, &menuData, stems, som_cut_in);
+    cleanup(&mapa, &menuData, stems, som_cut_in, fantasmas);
     return venceu;
 }
