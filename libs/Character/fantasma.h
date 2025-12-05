@@ -4,6 +4,7 @@
 #include "../header.h"
 #include "persegue.h"
 #include "intercepta.h"
+#include "pincer.h"
 
 enum {
     PERSEGUIDOR,
@@ -285,28 +286,32 @@ int fogePacman(tInimigo fantasma, char** grid_mapa, tJogador pacman){
     
 }
 
-tInimigo moveFantasma(tInimigo fantasma, tMapa mapa, int indice, tJogador pacman){
+tInimigo moveFantasma(tInimigo fantasma, tInimigo blinky, tMapa mapa, int indice, tJogador pacman){
     
     if(saindoMapa(fantasma)!=-1){
         fantasma.pos=teleportaFantasma(fantasma);
     }
     if((indice%20==0 && (fantasma.pos.x>=40 && fantasma.pos.x<=1520) && (fantasma.pos.y>=40 && fantasma.pos.y<=720)) && !pacman.power_pellet){
         switch(fantasma.type){
+
             case PERSEGUIDOR:
                 fantasma.direcao=escolheDirPersegue(&fantasma, &pacman, &mapa);
                 if(fantasma.direcao == -1){
                     fantasma.direcao=escolheDirecaoRand(fantasma, mapa.grid_mapa);
                 }
                 break;
+
             case INTERCEPTADOR:
                 fantasma.direcao=escolheDirIntercepta(&fantasma, &pacman, &mapa);
                 if(fantasma.direcao == -1){
                     fantasma.direcao=escolheDirecaoRand(fantasma, mapa.grid_mapa);
                 }
                 break;
+
             case GUARDA:
-                fantasma.direcao=escolheDirecaoRand(fantasma, mapa.grid_mapa);
+                fantasma.direcao=escolheDirPinch(&fantasma, &blinky, &pacman, &mapa);
                 break;
+
             case RETARDO:
                 fantasma.direcao=escolheDirecaoRand(fantasma, mapa.grid_mapa);
                 break;

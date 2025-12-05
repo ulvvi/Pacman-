@@ -6,28 +6,28 @@ void whereToIntercept(tJogador* player, int* posXintercepta, int* posYintercepta
 
     int currentX = (int)(player->pos.x / TAM_GRID);
     int currentY = (int)(player->pos.y / TAM_GRID);
-    //se falhar, passa a direção do pacman
+
     int targetX = currentX; 
     int targetY = currentY; 
 
-    int dir_x = (int)(player->move_x / player->spd);
-    int dir_y = (int)(player->move_y / player->spd);
+    int dirX = (player->move_x / player->spd);
+    int dirY = (player->move_y / player->spd);
 
     const int blocksInAdvance = 8;
 
-    for (int i = 1; i <= blocksInAdvance; i++) {
-        int potentialX = currentX + (i * dir_x);
-        int potentialY = currentY + (i * dir_y);
+    for (int i = 1; i <= blocksInAdvance; i++){
+        int potentialX = currentX + (i * dirX);
+        int potentialY = currentY + (i * dirY);
 
-        if (potentialY < 0 || potentialY >= TAM_I || potentialX < 0 || potentialX >= TAM_J) {
-            targetX = currentX + ((i - 1) * dir_x);
-            targetY = currentY + ((i - 1) * dir_y);
+        if (potentialY < 0 || potentialY >= TAM_I || potentialX < 0 || potentialX >= TAM_J){
+            targetX = currentX + ((i - 1) * dirX);
+            targetY = currentY + ((i - 1) * dirY);
             break; 
         }
 
-        if (mapa->grid_mapa[potentialY][potentialX] == '#') {
-            targetX = currentX + ((i - 1) * dir_x);
-            targetY = currentY + ((i - 1) * dir_y);
+        if (mapa->grid_mapa[potentialY][potentialX] == '#'){
+            targetX = currentX + ((i - 1) * dirX);
+            targetY = currentY + ((i - 1) * dirY);
             break;
         }
         targetX = potentialX;
@@ -58,7 +58,7 @@ int escolheDirIntercepta(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
     static tNode nodeGrid[TAM_I][TAM_J]; 
 
     for (int y = 0; y < TAM_I; y++) {
-        for (int x = 0; x < TAM_J; x++) {
+        for (int x = 0; x < TAM_J; x++){
             nodeGrid[y][x].x = x;
             nodeGrid[y][x].y = y;
             nodeGrid[y][x].g = INT_MAX;
@@ -82,13 +82,13 @@ int escolheDirIntercepta(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
     int dy[] = {-1, 0, 1, 0};
 
     //o while principal do A*
-    while (true) {
+    while (true){
         tNode* current = NULL;
         int lowestF = INT_MAX;
 
-        for (int y = 0; y < TAM_I; y++) {
-            for (int x = 0; x < TAM_J; x++) {
-                if (nodeGrid[y][x].opened && nodeGrid[y][x].f < lowestF) {
+        for (int y = 0; y < TAM_I; y++){
+            for (int x = 0; x < TAM_J; x++){
+                if (nodeGrid[y][x].opened && nodeGrid[y][x].f < lowestF){
                     lowestF = nodeGrid[y][x].f;
                     current = &nodeGrid[y][x];
                 }
@@ -109,7 +109,7 @@ int escolheDirIntercepta(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
         current->explored = true;
 
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++){
             int newX = current->x + dx[i];
             int newY = current->y + dy[i];
 
@@ -143,7 +143,7 @@ int escolheDirIntercepta(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
     //backtrack pro primeiro passo pra fazer o caminho
     tNode* pathNode = &nodeGrid[targetY][targetX];
 
-    if (pathNode == NULL) {
+    if (pathNode == NULL){
         return -1; 
     }
     
@@ -151,7 +151,7 @@ int escolheDirIntercepta(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
     if (pathNode->parent == NULL) return -1;
 
     // retorna ate o fi do no inicial (pra saber qual o primeiro passo)
-    while (pathNode->parent != NULL && pathNode->parent != startNode) {
+    while (pathNode->parent != NULL && pathNode->parent != startNode){
         pathNode = pathNode->parent;
     }
 
@@ -166,5 +166,5 @@ int escolheDirIntercepta(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
     if (pathNode->y > startY) return BAIXO;
     if (pathNode->y < startY) return CIM;
 
-    return fantasma->direcao;; //caso tudo de errado retorna a direcao atual
+    return fantasma->direcao; //caso tudo de errado retorna a direcao atual
 }

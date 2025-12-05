@@ -146,7 +146,7 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
     //iteracao dos fantasmas
     for(int i = 0; i < mapa->numero_fantasmas; i++)
     {
-        fantasma[i] = moveFantasma(fantasma[i], *mapa, mapa->frame_counter, *pacman);
+        fantasma[i] = moveFantasma(fantasma[i], fantasma[0], *mapa, mapa->frame_counter, *pacman);
         if(fantasma[i].desenho == false)
         {
             //so roda se tiver algum fantasma morto

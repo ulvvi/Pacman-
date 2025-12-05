@@ -1,58 +1,89 @@
-//coisas do alg astaritmo A* para perseguir o pacman
-#pragma once
+#include "persegue.h"
 #include "../header.h"
+#pragma once
 
-typedef enum {
-    CIM = 1, //precisa começar do 1 pra ser compatível com o codigo do xande     
-    DIREITA,   
-    BAIXO,     
-    ESQUERDA   
-} tDirection;
+//pega a direcao que o pinch deve seguir
+int sign(int x) {
+    return (x > 0) - (x < 0);
+}
 
-typedef struct Node {
-    int x, y;
-    int g;     
-    int h;     
-    int f;     
-    bool explored; //ta na closed list (explorado ja paezão)
-    bool opened; //basicmente ta na open list
-    struct Node* parent;// o kra que deu origem a ele
-} tNode;
-
-//manhatttan :DDDDD
-int Heuristica(int x1, int y1, int x2, int y2){
-    int dx = abs(x1 - x2);
-    int dy = abs(y1 - y2);
-
-    if (dx > TAM_J / 2)
-        dx = TAM_J - dx;
+void whereToPinch(tJogador* player, tInimigo* blinky, tMapa* mapa, int* targetX, int* targetY) {
     
+    int P_x = (player->pos.x / TAM_GRID);
+    int P_y = (player->pos.y / TAM_GRID);
+    
+    int B_x = (blinky->pos.x / TAM_GRID);
+    int B_y = (blinky->pos.y / TAM_GRID);
 
-    if (dy > TAM_I / 2) 
-        dy = TAM_I - dy; 
+    int dir_x = (player->move_x / player->spd);
+    int dir_y = (player->move_y / player->spd);
 
-    return dx + dy;
-}
+    const int blocksToPredict = 2; 
+    int R_x = P_x;
+    int R_y = P_y;
 
-//fora do grid ou parede eh paia
-bool EhValido(int x, int y, tMapa* mapa){
-    if (x < 0 || x >= TAM_J || y < 0 || y >= TAM_I)
-        return false;
+    if (dir_x == 0 && dir_y < 0) { 
+        R_x = P_x - 2; R_y = P_y - 2;
+    } else { 
+        for (int i = 1; i <= blocksToPredict; i++) {
+            int potX = P_x + (i * dir_x);
+            int potY = P_y + (i * dir_y);
 
-    if (mapa->grid_mapa[y][x] == '#') { 
-        return false;
+            //sai do mapa
+            if (potY < 0 || potY >= TAM_I || potX < 0 || potX >= TAM_J || 
+                mapa->grid_mapa[potY][potX] == '#') {
+                
+                R_x = P_x + ((i - 1) * dir_x);
+                R_y = P_y + ((i - 1) * dir_y);
+                goto end_reference_calc;
+            }
+            R_x = potX; R_y = potY;
+        }
     }
-    return true;
+    end_reference_calc:;
+
+    
+    int T_x = (2 * R_x) - B_x;
+    int T_y = (2 * R_y) - B_y;
+
+
+    //clampeia    
+    if (T_x < 0) T_x = 0;
+    if (T_x >= TAM_J) T_x = TAM_J - 1;
+    if (T_y < 0) T_y = 0;
+    if (T_y >= TAM_I) T_y = TAM_I - 1;
+
+
+    while (mapa->grid_mapa[T_y][T_x] == '#') {
+        if (T_x == R_x && T_y == R_y) break;
+
+        int dx = R_x - T_x;
+        int dy = R_y - T_y;
+
+        // avança em x
+        if (dx != 0) T_x += sign(dx);
+        // avança em y
+        if (dy != 0) T_y += sign(dy);
+    }
+
+    //retorno
+    *targetX = T_x;
+    *targetY = T_y;
 }
 
+int escolheDirPinch(tInimigo* fantasma, tInimigo* blinky, tJogador* player, tMapa* mapa) {
 
-int escolheDirPersegue(tInimigo* fantasma, tJogador* player, tMapa* mapa){
+    int posXpinch = 0;
+    int posYpinch = 0;
+
+    whereToPinch(player, blinky, mapa, &posXpinch, &posYpinch);
+    DrawRectangle(posXpinch*40, posYpinch*40, 40, 40, RED); //desenha o alvo pinch pra teste
     
     //converte pra matriz
     int startX = (int)(fantasma->pos.x / TAM_GRID);
     int startY = (int)(fantasma->pos.y / TAM_GRID);
-    int targetX = (int)(player->pos.x / TAM_GRID);
-    int targetY = (int)(player->pos.y / TAM_GRID);
+    int targetX = posXpinch;
+    int targetY = posYpinch;
 
     //se por alguma razão ele ta dentro do pacman
     if (startX == targetX && startY == targetY) return fantasma->direcao;
@@ -60,8 +91,8 @@ int escolheDirPersegue(tInimigo* fantasma, tJogador* player, tMapa* mapa){
     //inicializa o grid de nodes
     static tNode nodeGrid[TAM_I][TAM_J]; 
 
-    for (int y = 0; y < TAM_I; y++){
-        for (int x = 0; x < TAM_J; x++){
+    for (int y = 0; y < TAM_I; y++) {
+        for (int x = 0; x < TAM_J; x++) {
             nodeGrid[y][x].x = x;
             nodeGrid[y][x].y = y;
             nodeGrid[y][x].g = INT_MAX;
@@ -80,18 +111,18 @@ int escolheDirPersegue(tInimigo* fantasma, tJogador* player, tMapa* mapa){
     startNode->f = startNode->g + startNode->h;
     startNode->opened = true;
 
-    // Lista de movimentos vizinhos (Cima, Direita, Baixo, Esquerda)
+    // (Cima, Direita, Baixo, Esquerda)
     int dx[] = {0, 1, 0, -1};
     int dy[] = {-1, 0, 1, 0};
 
     //o while principal do A*
-    while (true){
+    while (true) {
         tNode* current = NULL;
         int lowestF = INT_MAX;
 
-        for (int y = 0; y < TAM_I; y++){
-            for (int x = 0; x < TAM_J; x++){
-                if (nodeGrid[y][x].opened && nodeGrid[y][x].f < lowestF){
+        for (int y = 0; y < TAM_I; y++) {
+            for (int x = 0; x < TAM_J; x++) {
+                if (nodeGrid[y][x].opened && nodeGrid[y][x].f < lowestF) {
                     lowestF = nodeGrid[y][x].f;
                     current = &nodeGrid[y][x];
                 }
@@ -102,7 +133,7 @@ int escolheDirPersegue(tInimigo* fantasma, tJogador* player, tMapa* mapa){
         if (current == NULL) break; 
 
         // Se chegamos ao destino (ou muito perto)
-        if (current->x == targetX && current->y == targetY){
+        if (current->x == targetX && current->y == targetY) {
             //deu bosta
             break; //volta filhão
         }
@@ -112,7 +143,7 @@ int escolheDirPersegue(tInimigo* fantasma, tJogador* player, tMapa* mapa){
         current->explored = true;
 
 
-        for (int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             int newX = current->x + dx[i];
             int newY = current->y + dy[i];
 
@@ -133,7 +164,7 @@ int escolheDirPersegue(tInimigo* fantasma, tJogador* player, tMapa* mapa){
 
             int tentativeG = current->g + 1; // custo pra mover é sempre 1 no grid mt brabo
 
-            if (!neighbor->opened || tentativeG < neighbor->g){
+            if (!neighbor->opened || tentativeG < neighbor->g) {
                 neighbor->parent = current;
                 neighbor->g = tentativeG;
                 neighbor->h = Heuristica(newX, newY, targetX, targetY);
@@ -145,12 +176,16 @@ int escolheDirPersegue(tInimigo* fantasma, tJogador* player, tMapa* mapa){
 
     //backtrack pro primeiro passo pra fazer o caminho
     tNode* pathNode = &nodeGrid[targetY][targetX];
+
+    if (pathNode == NULL) {
+        return -1; 
+    }
     
     //se nao tem caminho, retorna isso pra n dar bosta
     if (pathNode->parent == NULL) return -1;
 
     // retorna ate o fi do no inicial (pra saber qual o primeiro passo)
-    while (pathNode->parent != NULL && pathNode->parent != startNode){
+    while (pathNode->parent != NULL && pathNode->parent != startNode) {
         pathNode = pathNode->parent;
     }
 
@@ -165,8 +200,5 @@ int escolheDirPersegue(tInimigo* fantasma, tJogador* player, tMapa* mapa){
     if (pathNode->y > startY) return BAIXO;
     if (pathNode->y < startY) return CIM;
 
-    return fantasma->direcao; //caso tudo de errado retorna a direcao atual
+    return fantasma->direcao;; //caso tudo de errado retorna a direcao atual
 }
-
-
-
