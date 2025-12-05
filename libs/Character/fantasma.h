@@ -486,7 +486,7 @@ void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, i
         break;
 
         case false:
-            if(pacman->blueberry == false){
+            if(pacman->fruta_ativa != BLUEBERRY){
                 score = -200;
             //tirei da minha cabeca mesmo o tempo de shake(e pelo visto ta batendo legal)
                 tempo_screenshake = pacman->cutscene_morte.total_frames*pacman->cutscene_morte.tempo_frame - 1.25;

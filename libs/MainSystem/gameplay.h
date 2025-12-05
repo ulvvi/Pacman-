@@ -117,20 +117,24 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
         powerPellet(pacman, mapa);
     }
 
-    if(pacman->cherry == true){
-        cherry(pacman);
-    }
+    //cronometro das frutas e ativacao de seus respectivos poderes
+    switch(pacman->fruta_ativa)
+    {
+        case GRAPE:
+            grape(pacman, mapa->grid_mapa);
+        break;
 
-    if(pacman->grape == true){
-        grape(pacman, mapa->grid_mapa);
-    }
+        case STRAWBERRY:
+            strawberry(pacman, mapa->grid_mapa);
+        break;
 
-    if(pacman->blueberry == true){
-        blueberry(pacman);
-    }
+        case BLUEBERRY:
+            blueberry(pacman);
+        break;
 
-    if(pacman->strawberry == true){
-        strawberry(pacman, mapa->grid_mapa);
+        case CHERRY:
+            cherry(pacman);
+        break;
     }
 
     //teleporte player

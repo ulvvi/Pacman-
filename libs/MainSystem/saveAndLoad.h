@@ -46,10 +46,6 @@ void criaNovoFantasma(tInimigo** fantasma, tAssets assets, tMapa mapa)
 
 void save_player(tJogador* pacman, FILE* arq)
 {
-    //fwrite(&pacman, sizeof(tJogador), 1, arq);
-    //eh red flag total salvar as texturas, por isso q n pode salvar a struct toda do pacman
-    //resumidamente, a texture2d é um ID, que muda a cada execucao do jogo, salvar isso causa comportamento indeterminado
-    //alem disso, a textura ja vai ta carregada no momento do load do jogo, ent ta tudo ok
     fwrite(&pacman->pos.x, sizeof(float), 1, arq);
     fwrite(&pacman->pos.y, sizeof(float), 1, arq);
     fwrite(&pacman->dir, sizeof(int), 1, arq);
@@ -65,6 +61,9 @@ void save_player(tJogador* pacman, FILE* arq)
     fwrite(&pacman->current_fruit, sizeof(int), 1, arq);
     fwrite(&pacman->comendo.rotacao, sizeof(int),1, arq);
     fwrite(&pacman->comendo.spritesheet.width, sizeof(int), 1, arq);
+    fwrite(&pacman->fruta_ativa, sizeof(FruitType), 1, arq);
+    fwrite(&pacman->curFruitTimer, sizeof(float), 1, arq);
+    fwrite(&pacman->current_fruit, sizeof(int), 1, arq);
 }
 
 void save_fantasma(tInimigo* fantasma, tMapa map, FILE* arq)
@@ -85,7 +84,6 @@ void save_fantasma(tInimigo* fantasma, tMapa map, FILE* arq)
 
     }
 }
-
 
 void save_map(tMapa* mapa, FILE* fp) {
 
@@ -182,6 +180,9 @@ void load_player(tJogador* pacman, FILE* arq)
     fread(&pacman->current_fruit, sizeof(int), 1, arq);
     fread(&pacman->comendo.rotacao, sizeof(int),1, arq);
     fread(&pacman->comendo.spritesheet.width, sizeof(int), 1, arq);
+    fread(&pacman->fruta_ativa, sizeof(FruitType), 1, arq);
+    fread(&pacman->curFruitTimer, sizeof(float), 1, arq);
+    fread(&pacman->current_fruit, sizeof(int), 1, arq);
     //att da pos da animacao pra sincronizar os bgl
     pacman->comendo.pos.x = pacman->pos.x;
     pacman->comendo.pos.y = pacman->pos.y;

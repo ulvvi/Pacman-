@@ -37,10 +37,7 @@ void centralizaPlayer(tJogador* pacman, char** grid_mapa)
                 pacman->comendo.tempo_frame = 0.060;
                 pacman->curFruitTimer = 0;
                 pacman->current_fruit = -1;
-                pacman->cherry = false;
-                pacman->strawberry = false;
-                pacman->grape = false;
-                pacman->blueberry = false;
+                pacman->fruta_ativa = -1;
                 break;
                
             }
@@ -61,10 +58,7 @@ void inicializaPlayer(tJogador* pacman, int pellets, tAssets assets)
     pacman->spd = 2;
     //coisas gerais
     pacman->power_pellet = false;
-    pacman->cherry = false;
-    pacman->strawberry = false;
-    pacman->grape = false;
-    pacman->blueberry = false;
+    pacman->fruta_ativa = -1;
     pacman->score = 0;
     pacman->vida = 3; 
     pacman->remainingPellets = pellets;
@@ -116,6 +110,35 @@ void trocaSpritePacman(tJogador* pacman)
     pacman->comendo.spritesheet.width = abs(pacman->comendo.spritesheet.width);
     pacman->cutscene_morte.rotacao = 0;
     pacman->comendo.rotacao = 0;
+    switch(pacman->fruta_ativa)
+    {
+        case GRAPE:
+            pacman->comendo.tempo_frame = 0.100;
+        break;
+        case STRAWBERRY:
+        break;
+
+        case BLUEBERRY:
+            pacman->comendo.tempo_frame = 0.080;
+        break;
+
+        case CHERRY:
+            pacman->comendo.tempo_frame = 0.100;
+        break;
+
+        case -1:
+            pacman->comendo.tempo_frame = 0.060;
+        break;
+        pacman->comendo.spritesheet.y = 40*pacman->fruta_ativa;
+    }
+    
+    //mudanca de sprite dependendo da fruta ativa
+    if(pacman->fruta_ativa != -1)
+    {
+        pacman->comendo.spritesheet.y = 40 + 40*pacman->fruta_ativa;
+    }else{pacman->comendo.spritesheet.y = 0;}
+    
+
     if(pacman->move_x > 0)
     {
         pacman->spritesheet.x = 0;
@@ -269,7 +292,7 @@ void movePlayer(char** grid_mapa, tJogador* pacman)
         int grid_i = pacman->pos.y/TAM_GRID;
         int grid_j = pacman->pos.x/TAM_GRID;
 
-        if(pacman->grape == false){
+        if(pacman->fruta_ativa != GRAPE){
             if(move_alvo_y != 0 && grid_mapa[grid_i+move_alvo_y][grid_j] != '#')
             {
                 pacman->move_y = move_alvo_y*pacman->spd;
