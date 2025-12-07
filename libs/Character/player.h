@@ -86,6 +86,7 @@ void inicializaPlayer(tJogador* pacman, int pellets, tAssets assets)
     pacman->comendo.spritesheet.y = 0;
     pacman->comendo.pos.x = 0;
     pacman->comendo.pos.y = 0;
+    pacman->comendo.escala = 1;
 
     //animacao morte
     pacman->cutscene_morte.frame_atual = 0;
@@ -99,6 +100,7 @@ void inicializaPlayer(tJogador* pacman, int pellets, tAssets assets)
     pacman->cutscene_morte.spritesheet.y = 0;
     pacman->cutscene_morte.coluna_atual = 0;
     pacman->cutscene_morte.linha_atual = 0;
+    pacman->cutscene_morte.escala = 1;
         //a pos do objeto cutscene n precisa inicializar, pra ela tanto faz, vai ser atualizada por frame
     pacman->cutscene_morte.rotacao = 0.0;
 }

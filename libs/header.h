@@ -19,8 +19,8 @@
 #include "Character/fantasma.h"
 #include "Audio/music.h"
 #include "MainSystem/mainMenu.h"
-#include "MainSystem/vicScreen.h"
 #include "Character/animacao.h"
+#include "MainSystem/vicScreen.h"
 #include "MainSystem/gameplay.h"
 
 

@@ -21,6 +21,8 @@ typedef struct
     //animacoes
     Texture2D cut_in_animacao;
     Texture2D transicao_animacao;
+    Texture2D vitoria_cutscene;
+    Texture2D confete_animacao;
     
 
 
@@ -50,6 +52,8 @@ void inicializaAssets(tAssets* assets)
     //animacoes "soltas(n ligadas a alguma struct de struct)"
     assets->cut_in_animacao = LoadTexture("sprites/player/pacman_cut_in-Sheet.png");
     assets->transicao_animacao = LoadTexture("sprites/ambiente/transicao2-Sheet.png");
+    assets->vitoria_cutscene = LoadTexture("sprites/ambiente/vitoria-Sheet.png");
+    assets->confete_animacao = LoadTexture("sprites/ambiente/confetes-Sheet.png");
 
     
     
@@ -71,4 +75,6 @@ void limpezaGeral(tAssets* assets)
     UnloadTexture(assets->strawberry);
     UnloadTexture(assets->cut_in_animacao);
     UnloadTexture(assets->transicao_animacao);
+    UnloadTexture(assets->vitoria_cutscene);
+    UnloadTexture(assets->confete_animacao);
 }

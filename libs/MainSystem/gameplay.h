@@ -178,7 +178,7 @@ bool hasCollectedAllPellets(tJogador* pacman){
 
 
 void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasmas, tMenu* menu, Music stems[3], Sound* som_cut_in, Sound* jingle, tAnimacao* obj_cut_in,
-tAssets assets) 
+tAssets assets, tAnimacao* obj_vitoria, tAnimacao* obj_confete) 
 {
 
     // --- ÁUDIO ---
@@ -208,8 +208,17 @@ tAssets assets)
     // --- ANIMAÇÕES/CUTSCENES ---
     *obj_cut_in = (tAnimacao){
         0, 24, 0.075, 0, assets.cut_in_animacao, 
-        {0,0,LARGURA, 600}, {0, ALTURA/2 - 600/2}, 0, 0, 0
+        {0,0,LARGURA, 600}, {0, ALTURA/2 - 600/2}, 0, 0, 0, 1
     };
+    *obj_vitoria = (tAnimacao){
+        0, 12, 0.080, 0, assets.vitoria_cutscene, 
+        {0,0,LARGURA, ALTURA}, {0,0}, 0, 0, 0, 1
+    };
+    *obj_confete = (tAnimacao){
+        0, 8, 0.160, 0, assets.confete_animacao, 
+        {0,0,LARGURA, ALTURA}, {0,0}, 0, 0, 0, 10
+    };
+
 }
 
 
@@ -250,11 +259,13 @@ int gameLevel(int* level, tAssets assets){
     tInimigo* fantasmas;
     
     tAnimacao obj_cut_in;
-    tAnimacao obj_transicao = {0, 18, 0.100, 0, assets.transicao_animacao,{0,0,LARGURA, ALTURA}, {0,0}, 0, 0, 0};
+    tAnimacao obj_transicao = {0, 18, 0.100, 0, assets.transicao_animacao,{0,0,LARGURA, ALTURA}, {0,0}, 0, 0, 0, 1};
+    tAnimacao obj_vitoria;
+    tAnimacao obj_confete;
 
     tVfx pontuacao = {3, 3, false, {0,0}, 0};
 
-    initGameLevel(level, &mapa, &pacman, &fantasmas, &menuData, stems, &som_cut_in, &jingle, &obj_cut_in, assets);
+    initGameLevel(level, &mapa, &pacman, &fantasmas, &menuData, stems, &som_cut_in, &jingle, &obj_cut_in, assets, &obj_vitoria, &obj_confete);
 
     tCamera camera_principal;
     inicializaCamera(&camera_principal, pacman);
@@ -372,22 +383,36 @@ int gameLevel(int* level, tAssets assets){
                 }
                 
             break;
+            case VITORIA_CUTSCENE:
+                pauseAllMusic(stems);
+                cutscene(&obj_vitoria, &state_atual, GAMEPLAY);
+                if(state_atual == GAMEPLAY)
+                {
+                    PlaySound(winJingle);
+                    victoryScreen(obj_vitoria, obj_confete);
+                    venceu = 1;
+                    return venceu;
+                }
+            break;    
             
             case TRANSICAO:
                pauseAllMusic(stems); 
                camera_principal.camera.zoom = 8;
                cutscene(&obj_transicao, &state_atual, PRIMEIRO_MOVIMENTO);
             break;
+
+
         }
         EndDrawing();
 
         //logica de vitoria
         if(state_atual == GAMEPLAY){
             if(hasCollectedAllPellets(&pacman) == true){
-                PlaySound(winJingle);
-                victoryScreen();
-                venceu = 1;
-                break;
+                state_atual = VITORIA_CUTSCENE;
+                // PlaySound(winJingle);
+                // victoryScreen();
+                // venceu = 1;
+                // break;
             }
         }
     }

@@ -4,9 +4,10 @@
 //animacao de "objetos", sempre q atinge o frame final, recomeca
 void animaObjeto(tAnimacao* objeto)
 {
-    Vector2 origem = {objeto->spritesheet.width/2, objeto->spritesheet.height/2};
+    float escala = objeto->escala;
+    Vector2 origem = {(objeto->spritesheet.width*escala)/2, (objeto->spritesheet.height*escala)/2};
     //correcao da posicao em relacao ao pivot origem
-    Rectangle dest = {objeto->pos.x + origem.x, objeto->pos.y + origem.y, objeto->spritesheet.width, objeto->spritesheet.height};
+    Rectangle dest = {objeto->pos.x + origem.x, objeto->pos.y + origem.y, objeto->spritesheet.width*escala, objeto->spritesheet.height*escala};
 
     objeto->contador+= GetFrameTime();
     if(objeto->contador > objeto->tempo_frame)
@@ -14,7 +15,7 @@ void animaObjeto(tAnimacao* objeto)
        objeto->frame_atual++;
        objeto->contador = 0;
     }
-    if(objeto->frame_atual > objeto->total_frames)
+    if(objeto->frame_atual >= objeto->total_frames)
         objeto->frame_atual = 0;
 
     objeto->spritesheet.x = objeto->frame_atual*objeto->spritesheet.width;

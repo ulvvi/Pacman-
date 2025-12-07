@@ -28,6 +28,7 @@ void criaNovoFantasma(tInimigo** fantasma, tAssets assets, tMapa mapa)
         fantasma[0][i].morte.spritesheet.x = 0;
         fantasma[0][i].morte.spritesheet.y = fantasma[0][i].spritesheet.y;
         fantasma[0][i].morte.rotacao = 0;
+        fantasma[0][i].morte.escala = 1;
 
         //animacao morto(descanso)
         fantasma[0][i].morto.frame_atual = 0;
@@ -41,6 +42,7 @@ void criaNovoFantasma(tInimigo** fantasma, tAssets assets, tMapa mapa)
         fantasma[0][i].morto.rotacao = 0;
         fantasma[0][i].morto.pos.x = fantasma[0][i].pos_inicial.x;
         fantasma[0][i].morto.pos.y = fantasma[0][i].pos_inicial.y;
+        fantasma[0][i].morto.escala = 1;
     }
 }
 

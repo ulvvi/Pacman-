@@ -42,6 +42,7 @@ typedef struct
     float rotacao;
     int coluna_atual;
     int linha_atual;
+    float escala;
 
 } tAnimacao;
 
@@ -140,8 +141,8 @@ typedef enum GameState
     CUT_IN,
     PRIMEIRO_MOVIMENTO,
     MORTE,
-    TRANSICAO
-
+    TRANSICAO,
+    VITORIA_CUTSCENE
 }GameState;
 
 

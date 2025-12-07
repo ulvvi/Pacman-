@@ -14,6 +14,7 @@ enum {
 } ghostTypes;
 
 
+
 void trocaSpriteFantasma(tInimigo* fantasma, int numero_fantasma)
 { 
     for(int i = 0; i < numero_fantasma; i++)
@@ -413,6 +414,7 @@ void inicializaFantasmas(tInimigo* fantasma, char** grid_mapa, tAssets assets)
                 fantasma[contador].morte.spritesheet.x = 0;
                 fantasma[contador].morte.spritesheet.y = fantasma[contador].spritesheet.y;
                 fantasma[contador].morte.rotacao = 0;
+                fantasma[contador].morte.escala = 1;
 
                 //animacao morto(descanso)
                 fantasma[contador].morto.frame_atual = 0;
@@ -427,6 +429,7 @@ void inicializaFantasmas(tInimigo* fantasma, char** grid_mapa, tAssets assets)
                 fantasma[contador].morto.rotacao = 0;
                 fantasma[contador].morto.pos.x = fantasma[contador].pos_inicial.x;
                 fantasma[contador].morto.pos.y = fantasma[contador].pos_inicial.y;
+                fantasma[contador].morto.escala = 1;
                 contador++;
                 
             }
