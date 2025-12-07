@@ -121,16 +121,17 @@ void trocaSpritePacman(tJogador* pacman)
         break;
 
         case BLUEBERRY:
-            pacman->comendo.tempo_frame = 0.080;
+            pacman->comendo.tempo_frame = 0.090;
         break;
 
         case CHERRY:
-            pacman->comendo.tempo_frame = 0.100;
+            pacman->comendo.tempo_frame = 0.120;
         break;
 
         case -1:
             pacman->comendo.tempo_frame = 0.060;
         break;
+        
         pacman->comendo.spritesheet.y = 40*pacman->fruta_ativa;
     }
     
@@ -138,7 +139,8 @@ void trocaSpritePacman(tJogador* pacman)
     if(pacman->fruta_ativa != -1)
     {
         pacman->comendo.spritesheet.y = 40 + 40*pacman->fruta_ativa;
-    }else{pacman->comendo.spritesheet.y = 0;}
+        pacman->spritesheet.y = 40 + 40*pacman->fruta_ativa;
+    }else{pacman->comendo.spritesheet.y = 0; pacman->spritesheet.y = 0;}
     
 
     if(pacman->move_x > 0)
