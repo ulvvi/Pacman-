@@ -21,27 +21,6 @@ void whereToPinch(tJogador* player, tInimigo* blinky, tMapa* mapa, int* targetX,
     const int blocksToPredict = 2; 
     int R_x = P_x;
     int R_y = P_y;
-
-    if (dir_x == 0 && dir_y < 0) { 
-        R_x = P_x - 2; R_y = P_y - 2;
-    } else { 
-        for (int i = 1; i <= blocksToPredict; i++) {
-            int potX = P_x + (i * dir_x);
-            int potY = P_y + (i * dir_y);
-
-            //sai do mapa
-            if (potY < 0 || potY >= TAM_I || potX < 0 || potX >= TAM_J || 
-                mapa->grid_mapa[potY][potX] == '#') {
-                
-                R_x = P_x + ((i - 1) * dir_x);
-                R_y = P_y + ((i - 1) * dir_y);
-                goto end_reference_calc;
-            }
-            R_x = potX; R_y = potY;
-        }
-    }
-    end_reference_calc:;
-
     
     int T_x = (2 * R_x) - B_x;
     int T_y = (2 * R_y) - B_y;
@@ -77,7 +56,8 @@ int escolheDirPinch(tInimigo* fantasma, tInimigo* blinky, tJogador* player, tMap
     int posYpinch = 0;
 
     whereToPinch(player, blinky, mapa, &posXpinch, &posYpinch);
-    DrawRectangle(posXpinch*40, posYpinch*40, 40, 40, RED); //desenha o alvo pinch pra teste
+   
+    //DrawRectangle(posXpinch*40, posYpinch*40, 40, 40, RED); //desenha o alvo pinch pra teste
     
     //converte pra matriz
     int startX = (int)(fantasma->pos.x / TAM_GRID);
