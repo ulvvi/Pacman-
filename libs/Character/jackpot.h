@@ -1,6 +1,8 @@
 #include "player.h"
 #include "fantasma.h"
 
+//ESSE EH UM .H não utilizado, n deu tempo de fazer e descartamos///
+
 //enum pra poupar minha vida
 typedef enum
 {

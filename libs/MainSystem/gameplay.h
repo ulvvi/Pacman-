@@ -366,7 +366,7 @@ int gameLevel(int* level, tAssets assets){
                 if(primeira_vez)
                 {
                     PlaySound(gameSFX[5]);
-                    pauseAllMusic(stems);
+                    SetMusicVolume(stems[1], 0.25f);
                     trocaCorEXT(&mapa, 8);  
                     primeira_vez = false;
                 }
@@ -376,6 +376,7 @@ int gameLevel(int* level, tAssets assets){
                 if(state_atual == GAMEPLAY)
                 {
                     resumeAllMusic(stems);
+                    SetMusicVolume(stems[1], 1.5f);
                     //trocaCorEXT(&mapa, cor_atual);     
                     primeira_vez = true;        
                 }
