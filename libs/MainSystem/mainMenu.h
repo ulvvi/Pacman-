@@ -13,7 +13,7 @@ const char* mainMenuText[] = {
 static int menuIndex = 0;
 static void drawMainMenu(void){
     ClearBackground(BLACK);
-    const char* title = "PAC-MENOS";
+    const char* title = "PACMAN+";
     int titleW = MeasureText(title, 90);
     DrawText(title, (LARGURA - titleW)/2, 120, 90, YELLOW);
     int startY = 300;
@@ -49,7 +49,6 @@ static int mainMenuInputs(void){
 int mainMenu(void){
     menuIndex = 0;
     Music theme = LoadMusicStream("audio/Music/title.wav");
-    Sound end = LoadSound("audio/Music/title_end.wav");
     SetMusicVolume(theme, 1.25f);
     PlayMusicStream(theme);
 
@@ -62,10 +61,8 @@ int mainMenu(void){
         if(choice == -1) continue;
         switch(choice){
             case MENU_START:
-                PlaySound(end);
                 return 1;
             case MENU_QUIT:
-                UnloadSound(end);
                 UnloadMusicStream(theme);
                 CloseWindow();
                 exit(0);

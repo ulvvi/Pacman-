@@ -476,7 +476,7 @@ void comeFantasma(tInimigo* fantasma, int indice)
 }
 
 /*SUBTRAI A VIDA DO JOGADOR*/
-void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, int indice, int numero_fantasma, GameState* state_atual, tCamera* camera_relativa, tVfx* pontuacao)
+void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, int indice, int numero_fantasma, GameState* state_atual, tCamera* camera_relativa, tVfx* pontuacao, Sound gameSFX[])
 {
     if (indice == -1)
         return;
@@ -486,6 +486,7 @@ void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, i
     switch(pacman->power_pellet)
     {
         case true:
+            PlaySound(gameSFX[4]); //som de comer fantasma
             score = 100;
             tempo_screenshake = 0.25;
             forca_screenshake = 200;
@@ -495,8 +496,9 @@ void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, i
 
         case false:
             if(pacman->fruta_ativa != BLUEBERRY){
+                PlaySound(gameSFX[3]); //som de morte
                 score = -200;
-            //tirei da minha cabeca mesmo o tempo de shake(e pelo visto ta batendo legal)
+                 //tirei da minha cabeca mesmo o tempo de shake(e pelo visto ta batendo legal)
                 tempo_screenshake = pacman->cutscene_morte.total_frames*pacman->cutscene_morte.tempo_frame - 1.25;
                 forca_screenshake = 75;
                 ativaCamera(camera_relativa, tempo_screenshake, forca_screenshake);

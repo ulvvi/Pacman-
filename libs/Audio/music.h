@@ -62,7 +62,7 @@ void switchMusic(GameState state, Music stems[]){
     }
 }
 
-void initiateAudio(Music stems[], tMenu* menu, int level){
+void initiateAudio(Music stems[], Sound* gameSFX, tMenu* menu, int level){
 
     switch(level){
         case 2:
@@ -80,11 +80,27 @@ void initiateAudio(Music stems[], tMenu* menu, int level){
             stems[1] = LoadMusicStream("audio/Music/level_3.wav");
             stems[2] = LoadMusicStream("audio/Music/power_3.wav");
             break;
+        default:
+            stems[0] = LoadMusicStream("audio/Music/pause_1.wav");
+            stems[1] = LoadMusicStream("audio/Music/level_1.wav");
+            stems[2] = LoadMusicStream("audio/Music/power_1.wav");
+            break;
     }
 
     menu->menuSFX[0] = LoadSound("audio/menuSFX/menu1.wav");
     menu->menuSFX[1] = LoadSound("audio/menuSFX/confirm.wav");
 
+    gameSFX[0] = LoadSound("audio/Music/title_end.wav");
+    gameSFX[1] = LoadSound("audio/ambiente/jingle.wav");
+    SetSoundVolume(gameSFX[1], 2.0f);
+    gameSFX[2] = LoadSound("audio/ambiente/win_jingle.wav");
+    SetSoundVolume(gameSFX[2], 1.5f);
+    gameSFX[3] = LoadSound("audio/ambiente/death.wav");
+    SetSoundVolume(gameSFX[3], 2.0f);
+    gameSFX[4] = LoadSound("audio/ambiente/eat_ghost.wav");
+    SetSoundVolume(gameSFX[4], 1.5f);
+    gameSFX[5] = LoadSound("audio/ambiente/CUTIN.mp3");
+    SetSoundVolume(gameSFX[5], 0.5f);
 
     return;
 }

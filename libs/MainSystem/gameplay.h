@@ -72,7 +72,7 @@ void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual, tInimigo *fan
 }
 
 //updata o jogo a cada frame
-void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* menuData, tInimigo* fantasma, tCamera* camera_principal, tVfx* pontuacao){
+void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* menuData, tInimigo* fantasma, tCamera* camera_principal, tVfx* pontuacao, Sound gameSFX[5]){
     //contabilizador de frames pro fantasma 
     mapa->frame_counter++;
     if(IsKeyPressed(KEY_TAB))
@@ -159,7 +159,7 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
     }
     atualizaColisaoFantasma(fantasma, mapa->numero_fantasmas);
     ConcretizaColisao(pacman, fantasma, mapa->grid_mapa, checaColisaoFantasma(pacman->colisao_player, fantasma, mapa->numero_fantasmas), mapa->numero_fantasmas, 
-    state_atual, camera_principal, pontuacao);
+    state_atual, camera_principal, pontuacao, gameSFX);
 
     //n consegui encaixar esse troca sprite dentro da func do alexandre, por ela n receber um pointer
     if(camera_principal->ativa == true) screenShake(camera_principal);
@@ -177,17 +177,13 @@ bool hasCollectedAllPellets(tJogador* pacman){
 
 
 
-void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasmas, tMenu* menu, Music stems[3], Sound* som_cut_in, Sound* jingle, tAnimacao* obj_cut_in,
+void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasmas, tMenu* menu, Music stems[3], Sound* gameSFX, tAnimacao* obj_cut_in,
 tAssets assets, tAnimacao* obj_vitoria, tAnimacao* obj_confete) 
 {
 
     // --- ÁUDIO ---
-    initiateAudio(stems, menu, *level);
+    initiateAudio(stems, gameSFX, menu, *level);
     playMusic(stems);
-    *som_cut_in = LoadSound("audio/ambiente/CUTIN.mp3");
-    SetSoundVolume(*som_cut_in, 0.5f);
-    *jingle = LoadSound("audio/ambiente/jingle.wav");
-    SetSoundVolume(*jingle, 2.0f);
     
     // --- MAPA e PLAYER ---
     char filename[30];
@@ -223,11 +219,16 @@ tAssets assets, tAnimacao* obj_vitoria, tAnimacao* obj_confete)
 
 
 //limpezas no geral
-void cleanup(tMapa* mapa, tMenu* menuData, Music stems[], Sound som_cut_in, tInimigo* fantasmas){  
+void cleanup(tMapa* mapa, tMenu* menuData, Music stems[], tInimigo* fantasmas, Sound gameSFX[5]){  
     //unload nos assets
-    UnloadSound(som_cut_in);
     stopAllMusic(stems);
 
+    for(int i = 0; i < 3; i++){
+        UnloadMusicStream(stems[i]);
+    }
+    for(int i = 0; i < 6; i++){
+        UnloadSound(gameSFX[i]);
+    }
     //liberar memoria
     freeMascaras(mapa->mapa_mascaras);
     freeDiddy(mapa->grid_mapa);
@@ -241,15 +242,14 @@ void cleanup(tMapa* mapa, tMenu* menuData, Music stems[], Sound som_cut_in, tIni
 int gameLevel(int* level, tAssets assets){
     int cronometro = 0;
     int venceu = 0;
+    int firstTimeTransicao = 1;
     
     GameState state_atual = TRANSICAO;
 
     tMenu menuData;
 
     Music stems[3];
-    
-    Sound som_cut_in;
-    Sound jingle;
+    Sound gameSFX[6];
 
     tMapa mapa = {0};
     
@@ -265,14 +265,12 @@ int gameLevel(int* level, tAssets assets){
 
     tVfx pontuacao = {3, 3, false, {0,0}, 0};
 
-    initGameLevel(level, &mapa, &pacman, &fantasmas, &menuData, stems, &som_cut_in, &jingle, &obj_cut_in, assets, &obj_vitoria, &obj_confete);
+    initGameLevel(level, &mapa, &pacman, &fantasmas, &menuData, stems, gameSFX, &obj_cut_in, assets, &obj_vitoria, &obj_confete);
+    PlaySound(gameSFX[0]);
 
     tCamera camera_principal;
     inicializaCamera(&camera_principal, pacman);
     int dangerPellets = pacman.remainingPellets / 3;
-
-    Sound winJingle = LoadSound("audio/ambiente/win_jingle.wav");
-    SetSoundVolume(winJingle, 1.5f);
     
     
     /************************************
@@ -301,7 +299,7 @@ int gameLevel(int* level, tAssets assets){
                     SetMusicPitch(stems[1], 1.10f);
                     SetMusicPitch(stems[2], 1.10f);
                 }
-                updateLogic(&pacman, &mapa, &state_atual, &menuData, fantasmas, &camera_principal, &pontuacao);
+                updateLogic(&pacman, &mapa, &state_atual, &menuData, fantasmas, &camera_principal, &pontuacao, gameSFX);
                 if(IsKeyDown(KEY_A)) 
                 {
                     pacman.vida--; 
@@ -315,7 +313,7 @@ int gameLevel(int* level, tAssets assets){
                 
                 pauseAllMusic(stems);
                 if(cronometro == 0){
-                    PlaySound(jingle);
+                    PlaySound(gameSFX[1]);
                     ativaCamera(&camera_principal, 4.0, 0);
                 }
                 if(temporizador(&cronometro) >= 5.0)
@@ -327,7 +325,7 @@ int gameLevel(int* level, tAssets assets){
                 if(camera_principal.ativa == true) zoomInOut(&camera_principal, 1);
             break;
 
-            case MORTE:
+            case MORTE:  
                 if(camera_principal.ativa == true) screenShake(&camera_principal);
                 pauseAllMusic(stems);
                 pacman.cutscene_morte.pos.x = pacman.pos.x;
@@ -341,7 +339,7 @@ int gameLevel(int* level, tAssets assets){
                     {
                         EndDrawing();
                         //limpezas pra dar game over
-                        cleanup(&mapa, &menuData, stems, som_cut_in, fantasmas);
+                        cleanup(&mapa, &menuData, stems, fantasmas, gameSFX);
                         return venceu;
                     }
                     centralizaPlayer(&pacman, mapa.grid_mapa);
@@ -356,7 +354,7 @@ int gameLevel(int* level, tAssets assets){
                 if(aux != 0)
                 {
                     //limpezas para retornar ao menu ou para iniciar novo jogo
-                    cleanup(&mapa, &menuData, stems, som_cut_in, fantasmas);
+                    cleanup(&mapa, &menuData, stems, fantasmas, gameSFX);
                     return aux;
                 }
                 
@@ -367,7 +365,7 @@ int gameLevel(int* level, tAssets assets){
                 static bool primeira_vez = true;
                 if(primeira_vez)
                 {
-                    PlaySound(som_cut_in);
+                    PlaySound(gameSFX[5]);
                     pauseAllMusic(stems);
                     trocaCorEXT(&mapa, 8);  
                     primeira_vez = false;
@@ -388,7 +386,6 @@ int gameLevel(int* level, tAssets assets){
                 cutscene(&obj_vitoria, &state_atual, GAMEPLAY);
                 if(state_atual == GAMEPLAY)
                 {
-                    PlaySound(winJingle);
                     victoryScreen(obj_vitoria, obj_confete);
                     venceu = 1;
                     return venceu;
@@ -408,15 +405,13 @@ int gameLevel(int* level, tAssets assets){
         //logica de vitoria
         if(state_atual == GAMEPLAY){
             if(hasCollectedAllPellets(&pacman) == true){
+                PlaySound(gameSFX[2]);
                 state_atual = VITORIA_CUTSCENE;
-                // PlaySound(winJingle);
-                // victoryScreen();
-                // venceu = 1;
-                // break;
             }
         }
     }
 
-    cleanup(&mapa, &menuData, stems, som_cut_in, fantasmas);
+    cleanup(&mapa, &menuData, stems, fantasmas, gameSFX);
+    UnloadSound(gameSFX[0]);
     return venceu;
 }
