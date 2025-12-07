@@ -521,7 +521,14 @@ void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, i
     {
         pontuacao->ativo = true;
         pontuacao->parametro_especial = score;
-        pacman->score+= score;
+        if(pacman->score + score < 0)
+        {
+            pacman->score = 0;
+        }
+        else
+        {
+            pacman->score+= score;
+        }
     }
 }
 
