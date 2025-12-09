@@ -231,7 +231,7 @@ void cleanup(tMapa* mapa, tMenu* menuData, Music stems[], tInimigo* fantasmas, S
     }
     //liberar memoria
     freeMascaras(mapa->mapa_mascaras);
-    freeDiddy(mapa->grid_mapa);
+    freeMap(mapa->grid_mapa);
     freeMatrizAux(mapa->matriz_auxiliar);
     free(fantasmas);
     

@@ -5,6 +5,14 @@ Color pontos_ganhados = {6, 128, 81, 255};
 Color sombra_pontos_ganhados = {17, 96, 97, 255};
 Color pontos_perdidos = {179, 45, 125, 255};
 Color sombra_pontos_perdidos = {133, 34, 100, 255};
+
+
+/**
+ * @brief Função para mostrar a pontuação flutuante na tela.
+ * 
+ * @param vfx Ponteiro para a estrutura tVfx que contém informações sobre o efeito visual.
+ * @param pacman Estrutura tJogador que contém informações sobre o jogador.
+ */
 void mostraPontuacao(tVfx* vfx, tJogador pacman)
 {
     if(vfx->tempo_restante == vfx->tempo)

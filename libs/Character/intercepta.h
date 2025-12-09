@@ -2,10 +2,23 @@
 #include "../header.h"
 #pragma once
 
+/**
+ * @brief Função que determina a posição futura do jogador para o fantasma interceptador.
+ * @param player Ponteiro para a estrutura do jogador.
+ * @param posXintercepta Ponteiro para a coordenada X de intercepção.
+ * @param posYintercepta Ponteiro para a coordenada Y de intercepção
+ * @param mapa Ponteiro para a estrutura do mapa.
+*/
 void whereToIntercept(tJogador* player, int* posXintercepta, int* posYintercepta, tMapa* mapa) {
 
     int currentX = (int)(player->pos.x / TAM_GRID);
     int currentY = (int)(player->pos.y / TAM_GRID);
+
+    if(Heuristica(currentX, currentY, currentX, currentY) > 4){
+        *posXintercepta = currentX;
+        *posYintercepta = currentY;
+        return;
+    }
 
     int targetX = currentX; 
     int targetY = currentY; 
@@ -38,6 +51,14 @@ void whereToIntercept(tJogador* player, int* posXintercepta, int* posYintercepta
     *posYintercepta = targetY;
 }
 
+
+/**
+ ** @brief Função que escolhe a direção que o fantasma deve seguir para interceptar o jogador.
+ ** @param fantasma Ponteiro para a estrutura do fantasma.
+ ** @param player Ponteiro para a estrutura do jogador.
+ ** @param mapa Ponteiro para a estrutura do mapa.
+ ** @return Direção que o fantasma deve seguir (CIMA, DIREITA, BAIXO, ESQUERDA).
+ */
 int escolheDirIntercepta(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
 
     int posXintercepta = 0;
@@ -165,6 +186,6 @@ int escolheDirIntercepta(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
     if (pathNode->x < startX) return ESQUERDA;
     if (pathNode->y > startY) return BAIXO;
     if (pathNode->y < startY) return CIM;
-
+    
     return fantasma->direcao; //caso tudo de errado retorna a direcao atual
 }

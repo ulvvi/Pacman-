@@ -5,13 +5,19 @@
 Color PEL = {255, 213, 65, 255};
 
 
-
+/**
+ * @brief Função que modifica o nome do arquivo do mapa com base no nível.
+ * @param filename Vetor de caracteres para armazenar o nome do arquivo.
+ */
 void modificaFilename(char filename[], int level)
 {
     sprintf(filename, "maps/mapa%d.txt", level);
 }
 
-//inicializa a matriz com o nome do arq
+/**
+ * @brief Função que aloca dinamicamente a matriz do mapa.
+ * @return Ponteiro para a matriz alocada.
+ */
 char** allocateMap(){
     char** grid_mapa = (char**)malloc(sizeof(char*)*TAM_I);
     if(grid_mapa == NULL)
@@ -26,7 +32,12 @@ char** allocateMap(){
     return grid_mapa;
 }
 
-//inicializa a matriz com o nome do arq
+/**
+ * @brief Função que inicializa o mapa a partir de um arquivo.
+ * @param filename Nome do arquivo do mapa.
+ * @param mapa Matriz para armazenar o mapa.
+ * @return Número total de pellets no mapa.
+ */
 int initMap(char filename[], char **mapa) {
     ///abrir
     FILE *map;
@@ -64,7 +75,10 @@ int initMap(char filename[], char **mapa) {
     return p;  
 }
 
-//desenha o mapa com a matriz
+/**
+ * @brief Função que desenha o mapa na tela.
+ * @param mapa Estrutura do mapa contendo a matriz e texturas.
+ */
 void drawMap(tMapa mapa) 
 {
     for(int i = 0; i < TAM_I; i++) 
@@ -122,7 +136,11 @@ void drawMap(tMapa mapa)
     }
 }
 
-void freeDiddy(char** grid_mapa)
+/**
+ * @brief Função que libera a memória alocada para o mapa.
+ * @param grid_mapa Matriz do mapa a ser liberada.
+ */
+void freeMap(char** grid_mapa)
 {
     //liberar memoria alocada dinamicamente
     for(int i = 0; i < TAM_I; i++)
@@ -133,6 +151,10 @@ void freeDiddy(char** grid_mapa)
     return;
 }
 
+/**
+ * @brief Função que inicializa a matriz auxiliar usada em algoritmos de pathfinding.
+ * @return Ponteiro para a matriz auxiliar inicializada.
+ */
 int** inicializaMatrizAux(){
     int** matriz_auxiliar = (int**)malloc(sizeof(int*)*TAM_I);
     if(matriz_auxiliar == NULL)
@@ -154,8 +176,10 @@ int** inicializaMatrizAux(){
     return matriz_auxiliar;
 }
 
-
-
+/**
+ * @brief Função que libera a memória alocada para a matriz auxiliar.
+ * @param matriz_auxiliar Matriz auxiliar a ser liberada.
+ */
 void freeMatrizAux(int** matriz_auxiliar)
 {
     //liberar memoria alocada dinamicamente
@@ -167,10 +191,10 @@ void freeMatrizAux(int** matriz_auxiliar)
     return;
 }
 
-
-
-
-
+/**
+ * @brief Função que faz o spawn de uma fruta no mapa com uma certa probabilidade.
+ * @param gridMapa Matriz do mapa onde a fruta será spawnada.
+ */
 void fruitSpawn(char** gridMapa){
     int spawnChance = GetRandomValue(1, 10000);
     if(spawnChance <= 5)

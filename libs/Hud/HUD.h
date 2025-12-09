@@ -41,15 +41,11 @@ char* menuOptionsText[] = {
   "Q - Sair do Jogo"
 };
 
-char* submenuOptionsText[] = {
-  "1 - Slot 1",
-  "2 - Slot 2",
-  "3 - Slot 3",
-  "4 - Slot 4",
-  "5 - Slot 5"
-};
-
-
+/**
+ * @brief Função que desenha a fruta atual na HUD.
+ * @param curFruit Índice da fruta atual.
+ * @param mapa Estrutura do mapa contendo as texturas das frutas.
+ */
 void drawFruit(int curFruit, tMapa mapa){
   DrawRectangle(1400, 800, 40, 40, DARKBLUE);
   DrawRectangle(1405, 805, 30, 30, BLACK);
@@ -70,6 +66,13 @@ void drawFruit(int curFruit, tMapa mapa){
   }
 }
 
+/**
+ * @brief Função que desenha a HUD na tela.
+ * @param score Pontuação atual do jogador.
+ * @param totalPellets Número total de pellets restantes.
+ * @param curFruit Índice da fruta atual.
+ * @param mapa Estrutura do mapa contendo as texturas das frutas.
+ */
 void drawHUD(int score, int totalPellets, int curFruit, tMapa mapa){
     DrawRectangle(0, 800, 1600, 40, BLACK); //desenho da HUD
     DrawText(TextFormat("Score: %d", score), 10, 810, 20, WHITE);
@@ -78,9 +81,10 @@ void drawHUD(int score, int totalPellets, int curFruit, tMapa mapa){
 }
 
 
-/*a ideia agr do game over é ele retornar um valor e na main a gnt fazer algo dependendo do retorno. como gameover so precisa ter o voltar pro menu, rejogar
-fase e fechar jogo, n vai encher a main de coisa n, eh de boa*/
-
+/**
+ * @brief Função que exibe a tela de game over.
+ * @return true se o jogador escolher voltar ao menu, false para tentar novamente.
+ */
 bool gameOver()
 {
     int tam_over = 80;
@@ -111,7 +115,10 @@ bool gameOver()
     }
 }
 
-
+/**
+ * @brief Função que desenha o menu de pausa na tela.
+ * @param menuData Ponteiro para a estrutura do menu.
+ */
 void drawMenu(tMenu* menuData){
     DrawRectangle(0, 0, LARGURA, ALTURA, COLOR_BACKGROUND_OVERLAY);
 
@@ -163,6 +170,11 @@ void drawMenu(tMenu* menuData){
     }
 }
 
+/**
+ * @brief Função que verifica qual opção do menu foi selecionada.
+ * @param menuData Ponteiro para a estrutura do menu.
+ * @return Índice da opção selecionada ou -1 se nenhuma foi selecionada.
+ */
 int currentChosen(tMenu* menuData){
   if(IsKeyPressed(KEY_ENTER)){
     PlaySound(menuData->menuSFX[1]);
@@ -174,6 +186,16 @@ int currentChosen(tMenu* menuData){
   }
 }
 
+/**
+ * @brief Função que processa os inputs do menu de pausa.
+ * @param menuData Ponteiro para a estrutura do menu.
+ * @param state_atual Ponteiro para o estado atual do jogo.
+ * @param map Ponteiro para a estrutura do mapa.
+ * @param pacman Ponteiro para a estrutura do jogador.
+ * @param ghosts Ponteiro duplo para a estrutura dos inimigos.
+ * @param assets Estrutura dos assets do jogo.
+ * @return -2 para novo jogo, -1 para sair, 0 caso contrário.
+ */
 int menuInputs(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo** ghosts, tAssets assets){
   if(IsKeyPressed(KEY_V) || currentChosen(menuData) == BACK){
     *state_atual = GAMEPLAY;
@@ -209,6 +231,16 @@ int menuInputs(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* pa
   return 0;
 }
 
+/**
+ * @brief Função que gerencia a lógica do menu de pausa.
+ * @param menuData Ponteiro para a estrutura do menu.
+ * @param state_atual Ponteiro para o estado atual do jogo.
+ * @param map Ponteiro para a estrutura do mapa.
+ * @param pacman Ponteiro para a estrutura do jogador.
+ * @param ghosts Ponteiro duplo para a estrutura dos inimigos.
+ * @param assets Estrutura dos assets do jogo.
+ * @return -2 para novo jogo, -1 para sair, 0 caso contrário.
+ */
 int menuLogic(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* pacman, tInimigo** ghosts, tAssets assets){
   int subIndex = 0;
   drawMenu(menuData);
