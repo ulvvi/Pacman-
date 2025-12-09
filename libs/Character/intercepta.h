@@ -5,16 +5,19 @@
 /**
  * @brief Função que determina a posição futura do jogador para o fantasma interceptador.
  * @param player Ponteiro para a estrutura do jogador.
+ * @param fantasma Ponteiro para a estrutura do fantasma.
  * @param posXintercepta Ponteiro para a coordenada X de intercepção.
  * @param posYintercepta Ponteiro para a coordenada Y de intercepção
  * @param mapa Ponteiro para a estrutura do mapa.
 */
-void whereToIntercept(tJogador* player, int* posXintercepta, int* posYintercepta, tMapa* mapa) {
+void whereToIntercept(tJogador* player, tInimigo* fantasma, int* posXintercepta, int* posYintercepta, tMapa* mapa) {
 
     int currentX = (int)(player->pos.x / TAM_GRID);
     int currentY = (int)(player->pos.y / TAM_GRID);
+    int ghostX = (int)(fantasma->pos.x / TAM_GRID);
+    int ghostY = (int)(fantasma->pos.y / TAM_GRID);
 
-    if(Heuristica(currentX, currentY, currentX, currentY) > 4){
+    if(Heuristica(ghostX, ghostY, currentX, currentY) < 4){ 
         *posXintercepta = currentX;
         *posYintercepta = currentY;
         return;
@@ -26,7 +29,7 @@ void whereToIntercept(tJogador* player, int* posXintercepta, int* posYintercepta
     int dirX = (player->move_x / player->spd);
     int dirY = (player->move_y / player->spd);
 
-    const int blocksInAdvance = 8;
+    const int blocksInAdvance = 4;
 
     for (int i = 1; i <= blocksInAdvance; i++){
         int potentialX = currentX + (i * dirX);
@@ -64,7 +67,7 @@ int escolheDirIntercepta(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
     int posXintercepta = 0;
     int posYintercepta = 0;
 
-    whereToIntercept(player, &posXintercepta, &posYintercepta, mapa);
+    whereToIntercept(player, fantasma, &posXintercepta, &posYintercepta, mapa);
     
     //converte pra matriz
     int startX = (int)(fantasma->pos.x / TAM_GRID);
