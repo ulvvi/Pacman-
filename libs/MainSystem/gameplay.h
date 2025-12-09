@@ -239,7 +239,7 @@ void cleanup(tMapa* mapa, tMenu* menuData, Music stems[], tInimigo* fantasmas, S
 
 
 
-int gameLevel(int* level, tAssets assets){
+int gameLevel(int* level, tAssets assets, int whatToDo){
     int cronometro = 0;
     int venceu = 0;
     int firstTimeTransicao = 1;
@@ -266,18 +266,24 @@ int gameLevel(int* level, tAssets assets){
     tVfx pontuacao = {3, 3, false, {0,0}, 0};
 
     initGameLevel(level, &mapa, &pacman, &fantasmas, &menuData, stems, gameSFX, &obj_cut_in, assets, &obj_vitoria, &obj_confete);
-    PlaySound(gameSFX[0]);
+    
 
     tCamera camera_principal;
     inicializaCamera(&camera_principal, pacman);
+    PlaySound(gameSFX[0]);
+
+    if(whatToDo == 2){
+        load(&pacman, &fantasmas, &mapa, 1, assets);
+    } 
+
     int dangerPellets = pacman.remainingPellets / 3;
     
-    
+
     /************************************
                 JOGO
     ************************************/
 
-    //tentei ate refatorar mas ficaria mt retardado
+    //tentei ate refatorar mas ficaria mt ruim
     while (!WindowShouldClose())
     {
         //atualiza musicas

@@ -3,13 +3,16 @@
 
 typedef enum {
     MENU_START,
+    MENU_LOAD,
     MENU_QUIT
 } MainMenuOptions;
 
 const char* mainMenuText[] = {
     "Começar",
+    "Carregar Jogo",
     "Sair"
 };
+
 static int menuIndex = 0;
 static void drawMainMenu(void){
     ClearBackground(BLACK);
@@ -62,6 +65,9 @@ int mainMenu(void){
         switch(choice){
             case MENU_START:
                 return 1;
+            case MENU_LOAD:
+                return 2;
+                break;
             case MENU_QUIT:
                 UnloadMusicStream(theme);
                 CloseWindow();
