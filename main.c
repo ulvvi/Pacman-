@@ -8,6 +8,9 @@ typedef enum
 }STATE_MAIN;
 //MAIN
 
+/**
+ * @brief Função principal do jogo, onde o loop principal é executado.
+ */
 int main(void)
 {   
     
@@ -20,12 +23,14 @@ int main(void)
     
     int nivel_atual;
     nivel_atual = 1;
+    int whatToDo;
     while(!WindowShouldClose())
     {   
-        if(mainMenu() == 1) nivel_atual = 1;
+        int whatToDo = mainMenu();
+        if(whatToDo == 1 || whatToDo == 2) nivel_atual = 1;
         while(true){
             //roda a func gamelevel e retorna true ou false(true pra vitoria, false pra derrota)
-            STATE_MAIN state = gameLevel(&nivel_atual, assets);
+            STATE_MAIN state = gameLevel(&nivel_atual, assets, whatToDo);
 
             //iniciar novo jogo a partir do menu
             if(state == NG_PAUSE)

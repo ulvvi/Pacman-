@@ -3,14 +3,21 @@
 
 typedef enum {
     MENU_START,
+    MENU_LOAD,
     MENU_QUIT
 } MainMenuOptions;
 
 const char* mainMenuText[] = {
     "Começar",
+    "Carregar Jogo",
     "Sair"
 };
+
 static int menuIndex = 0;
+
+/**
+ * @brief Desenha o menu principal na tela.
+ */
 static void drawMainMenu(void){
     ClearBackground(BLACK);
     const char* title = "PACMAN+";
@@ -30,6 +37,10 @@ static void drawMainMenu(void){
         }
     }
 }
+
+/**
+ * @brief Processa as entradas do usuário no menu principal.
+ */
 static int mainMenuInputs(void){
     if(IsKeyPressed(KEY_DOWN)){
         menuIndex++;
@@ -46,6 +57,10 @@ static int mainMenuInputs(void){
     return -1;
 }
 
+/**
+ * @brief Executa o loop do menu principal.
+ * @return int A opção selecionada pelo usuário.
+ */
 int mainMenu(void){
     menuIndex = 0;
     Music theme = LoadMusicStream("audio/Music/title.wav");
@@ -62,6 +77,9 @@ int mainMenu(void){
         switch(choice){
             case MENU_START:
                 return 1;
+            case MENU_LOAD:
+                return 2;
+                break;
             case MENU_QUIT:
                 UnloadMusicStream(theme);
                 CloseWindow();

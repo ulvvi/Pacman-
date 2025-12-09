@@ -7,6 +7,14 @@ int sign(int x) {
     return (x > 0) - (x < 0);
 }
 
+/**
+ * @brief Função que determina a posição alvo para o fantasma do tipo Pincer.
+ * @param player Ponteiro para a estrutura do jogador.
+ * @param blinky Ponteiro para a estrutura do fantasma Perseguidor (blinky como referencia ao original).
+ * @param mapa Ponteiro para a estrutura do mapa.
+ * @param targetX Ponteiro para a coordenada X alvo.
+ * @param targetY Ponteiro para a coordenada Y alvo.
+*/
 void whereToPinch(tJogador* player, tInimigo* blinky, tMapa* mapa, int* targetX, int* targetY) {
     
     int P_x = (player->pos.x / TAM_GRID);
@@ -50,6 +58,14 @@ void whereToPinch(tJogador* player, tInimigo* blinky, tMapa* mapa, int* targetX,
     *targetY = T_y;
 }
 
+/**
+ ** @brief Função que escolhe a direção que o fantasma deve seguir para perseguir o jogador.
+ ** @param fantasma Ponteiro para a estrutura do fantasma.
+ ** @param blinky Ponteiro para a estrutura do fantasma Perseguidor (blinky como referencia ao original).
+ ** @param player Ponteiro para a estrutura do jogador.
+ ** @param mapa Ponteiro para a estrutura do mapa.
+ ** @return Direção que o fantasma deve seguir (CIMA, DIREITA, BAIXO, ESQUERDA).
+ */
 int escolheDirPinch(tInimigo* fantasma, tInimigo* blinky, tJogador* player, tMapa* mapa) {
 
     int posXpinch = 0;

@@ -2,6 +2,8 @@
 #include "system.h"
 #include "raylib.h"
 #include <math.h>
+
+
 typedef struct{
     Camera2D camera;
     float duracao;
@@ -9,6 +11,11 @@ typedef struct{
     bool ativa;
 }tCamera;
 
+/**
+ * @brief Função que inicializa a câmera com valores padrão.
+ * @param camera_relativa Ponteiro para a estrutura da câmera.
+ * @param pacman Estrutura do jogador para centralizar a câmera.
+ */
 void inicializaCamera(tCamera* camera_relativa, tJogador pacman)
 {
     camera_relativa->camera.offset.x = (LARGURA)/2;
@@ -21,7 +28,12 @@ void inicializaCamera(tCamera* camera_relativa, tJogador pacman)
     camera_relativa->forca = 0;
     camera_relativa->ativa = false;
 }
-//autoexplicativo
+
+/**
+ * @brief Função que ativa o efeito de tremor de tela.
+ * @param camera_relativa Ponteiro para a estrutura da câmera.
+ * @param tempo Duração do tremor em segundos.
+ */
 void ativaCamera(tCamera* camera_relativa, float tempo, float forca)
 {
     camera_relativa->duracao = tempo;
@@ -29,7 +41,10 @@ void ativaCamera(tCamera* camera_relativa, float tempo, float forca)
     camera_relativa->ativa = true;
 }
 
-//treme a tela de acordo com a forca e o tempo passados pela funcao ativaCamera
+/**
+ * @brief Função que aplica o efeito de tremor de tela na câmera.
+ * @param camera_relativa Ponteiro para a estrutura da câmera.
+ */
 void screenShake(tCamera* camera_relativa)
 {
     if(camera_relativa->duracao > 0)
@@ -55,7 +70,12 @@ void screenShake(tCamera* camera_relativa)
     }
 }
 
-//calcula sua propria forca de acordo com o zoom_destino e o tempo(que é passado pela ativa_camera). serve tanto para zoom in e zoom out
+
+/**
+ * @brief Função que aplica o efeito de zoom in ou zoom out na câmera.
+ * @param camera_relativa Ponteiro para a estrutura da câmera.
+ * @param zoom_destino Valor de zoom desejado.
+ */
 void zoomInOut(tCamera* camera_relativa, float zoom_destino)
 {
     //calculo da forca

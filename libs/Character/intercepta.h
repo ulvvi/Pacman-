@@ -2,18 +2,33 @@
 #include "../header.h"
 #pragma once
 
-void whereToIntercept(tJogador* player, int* posXintercepta, int* posYintercepta, tMapa* mapa) {
+/**
+ * @brief Função que determina a posição futura do jogador para o fantasma interceptador.
+ * @param player Ponteiro para a estrutura do jogador.
+ * @param fantasma Ponteiro para a estrutura do fantasma.
+ * @param posXintercepta Ponteiro para a coordenada X de intercepção.
+ * @param posYintercepta Ponteiro para a coordenada Y de intercepção
+ * @param mapa Ponteiro para a estrutura do mapa.
+*/
+void whereToIntercept(tJogador* player, tInimigo* fantasma, int* posXintercepta, int* posYintercepta, tMapa* mapa) {
 
     int currentX = (int)(player->pos.x / TAM_GRID);
     int currentY = (int)(player->pos.y / TAM_GRID);
+    int ghostX = (int)(fantasma->pos.x / TAM_GRID);
+    int ghostY = (int)(fantasma->pos.y / TAM_GRID);
+    const int blocksInAdvance = 6;
+
+    if(Heuristica(ghostX, ghostY, currentX, currentY) < blocksInAdvance - 3){ 
+        *posXintercepta = currentX;
+        *posYintercepta = currentY;
+        return;
+    }
 
     int targetX = currentX; 
     int targetY = currentY; 
 
     int dirX = (player->move_x / player->spd);
     int dirY = (player->move_y / player->spd);
-
-    const int blocksInAdvance = 8;
 
     for (int i = 1; i <= blocksInAdvance; i++){
         int potentialX = currentX + (i * dirX);
@@ -38,12 +53,22 @@ void whereToIntercept(tJogador* player, int* posXintercepta, int* posYintercepta
     *posYintercepta = targetY;
 }
 
+
+/**
+ ** @brief Função que escolhe a direção que o fantasma deve seguir para interceptar o jogador.
+ ** @param fantasma Ponteiro para a estrutura do fantasma.
+ ** @param player Ponteiro para a estrutura do jogador.
+ ** @param mapa Ponteiro para a estrutura do mapa.
+ ** @return Direção que o fantasma deve seguir (CIMA, DIREITA, BAIXO, ESQUERDA).
+ */
 int escolheDirIntercepta(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
 
     int posXintercepta = 0;
     int posYintercepta = 0;
 
-    whereToIntercept(player, &posXintercepta, &posYintercepta, mapa);
+    whereToIntercept(player, fantasma, &posXintercepta, &posYintercepta, mapa);
+    //debug
+    //DrawRectangle(posXintercepta * TAM_GRID, posYintercepta * TAM_GRID, TAM_GRID, TAM_GRID, RED);
     
     //converte pra matriz
     int startX = (int)(fantasma->pos.x / TAM_GRID);
@@ -165,6 +190,6 @@ int escolheDirIntercepta(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
     if (pathNode->x < startX) return ESQUERDA;
     if (pathNode->y > startY) return BAIXO;
     if (pathNode->y < startY) return CIM;
-
+    
     return fantasma->direcao; //caso tudo de errado retorna a direcao atual
 }

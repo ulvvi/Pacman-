@@ -3,21 +3,31 @@
 #include <math.h>
 #include "../header.h"
 
-/*RETORNA TRUE OU FALSE SE O PLAYER TIVER CENTRALIZADO OU NAO*/
+/**
+ * @brief Verifica se o jogador está centralizado em uma célula do grid.
+ * @param pacman Ponteiro para a estrutura do jogador.
+ */
 bool checaPlayerCentralizado(tJogador *pacman)
 {
     return (((int)pacman->pos.x % TAM_GRID) == 0 && ((int)pacman->pos.y % TAM_GRID) == 0);
 }
 
 
-/*RETORNA TRUE OU FALSE SE O PLAYER TIVER DENTRO DO MAPA OU NAO*/
+/**
+ * @brief Verifica se o jogador está dentro dos limites do mapa.
+ * @param pacman Ponteiro para a estrutura do jogador.
+ */
 bool checaPlayerDentroMapa(tJogador *pacman)
 {
     return (pacman->pos.x > 0 && pacman->pos.x < TAM_GRID*(TAM_J-1) && pacman->pos.y > 0 && pacman->pos.y < TAM_GRID*(TAM_I-1));
 }
 
 
-/*"reseta" o player*/
+/**
+ * @brief Centraliza o jogador na posição inicial definida no mapa.
+ * @param pacman Ponteiro para a estrutura do jogador.
+ * @param grid_mapa Matriz 2D representando o mapa do jogo.
+ */
 void centralizaPlayer(tJogador* pacman, char** grid_mapa)
 {   
     for(int i = 0; i < TAM_I; i++)
@@ -46,7 +56,12 @@ void centralizaPlayer(tJogador* pacman, char** grid_mapa)
     }
 }
 
-/*tudo que precisa ser do do pacman ta ai*/
+/**
+ * @brief Função que inicializa o jogador com valores padrão.
+ * @param pacman Ponteiro para a estrutura do jogador.
+ * @param pellets Número total de pellets no mapa.
+ * @param assets Estrutura contendo as texturas do jogo.
+ */
 void inicializaPlayer(tJogador* pacman, int pellets, tAssets assets)
 {
     //colisao
@@ -106,7 +121,10 @@ void inicializaPlayer(tJogador* pacman, int pellets, tAssets assets)
     pacman->cutscene_morte.rotacao = 0.0;
 }
 
-/*realiza as trocas de sprites a depender de pra onde o pacman ta indo*/
+/**
+ * @brief Função para trocar o sprite do Pacman com base na direção e fruta ativa.
+ * @param pacman Ponteiro para a estrutura do jogador.
+ */ 
 void trocaSpritePacman(tJogador* pacman)
 {
     pacman->cutscene_morte.spritesheet.width = abs(pacman->cutscene_morte.spritesheet.width);
@@ -170,7 +188,15 @@ void trocaSpritePacman(tJogador* pacman)
 
 }
 
-/*COLISAO COM PELLETS(ATUALIZA SCORE E ESTADO AO PEGAR POWER PELLET)*/
+/**
+ * @brief Verifica colisões entre o jogador e os pellets no mapa.
+ * @param pacman Ponteiro para a estrutura do jogador.
+ * @param grid_mapa Matriz 2D representando o mapa do jogo.
+ * @param score Ponteiro para a pontuação do jogador.
+ * @param totalPellets Ponteiro para o número total de pellets restantes.
+ * @param state Ponteiro para o estado atual do jogo.
+ * @param pontuacao Ponteiro para a estrutura de efeitos visuais.
+ */
 void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPellets, GameState* state, tVfx* pontuacao)
 {
     //grid atual
@@ -231,7 +257,11 @@ void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPe
     }
 }
 
-/*apenas cronometra o tempo de power pellet e o desativa. independe do framerate, o tempo é medido em segundos*/
+/**
+ * @brief Função que gerencia o tempo do power pellet.
+ * @param pacman Ponteiro para a estrutura do jogador.
+ * @param mapa Ponteiro para a estrutura do mapa.
+ */
 void powerPellet(tJogador* pacman, tMapa* mapa)
 {   
      pacman->tempo_power_pellet -= GetFrameTime();
@@ -242,14 +272,21 @@ void powerPellet(tJogador* pacman, tMapa* mapa)
         }
 }
 
-/*atualiza colisao do player*/
+/**
+ * @brief Atualiza a área de colisão do jogador com base em sua posição.
+ * @param pacman Ponteiro para a estrutura do jogador.
+ */
 void atualizaColisaoPlayer(tJogador* pacman)
 {
     pacman->colisao_player.x = pacman->pos.x + (TAM_GRID - pacman->colisao_player.width)/2;
     pacman->colisao_player.y = pacman->pos.y + (TAM_GRID - pacman->colisao_player.height)/2;
 }
 
-/*MOVIMENTACAO GERAL DO PLAYER, ATUALIZA SUA POSICAO*/
+/**
+ * @brief Função que move o jogador com base na entrada do usuário e na colisão com o mapa.
+ * @param grid_mapa Matriz 2D representando o mapa do jogo.
+ * @param pacman Ponteiro para a estrutura do jogador.
+ */
 void movePlayer(char** grid_mapa, tJogador* pacman)
 {
     //agora essas duas var servem mais pra indicar a dir no eixo horizontal e vertical(podem ser -1,0,1)
@@ -349,7 +386,10 @@ void movePlayer(char** grid_mapa, tJogador* pacman)
 }
 
 
-/*TELEPORTA O PLAYER DE ACORDO COM A DIRECAO DELE*/
+/**
+ * @brief Função para teletransportar o jogador quando sai dos limites do mapa.
+ * @param pacman Ponteiro para a estrutura do jogador.
+ */
 void teleportaPlayer(tJogador* pacman)
 {
     if(pacman->move_x > 0)

@@ -9,12 +9,16 @@
 enum {
     PERSEGUIDOR,
     INTERCEPTADOR,
-    GUARDA,
-    RETARDO
+    PINCER,
+    RANDOM
 } ghostTypes;
 
 
-
+/**
+ ** @brief Função para trocar o sprite do fantasma com base na direção.
+ ** @param fantasma Ponteiro para a estrutura do fantasma.
+ ** @param numero_fantasma Número total de fantasmas.
+ */
 void trocaSpriteFantasma(tInimigo* fantasma, int numero_fantasma)
 { 
     for(int i = 0; i < numero_fantasma; i++)
@@ -40,7 +44,11 @@ void trocaSpriteFantasma(tInimigo* fantasma, int numero_fantasma)
     }
 }
 
-//"reseta" o fantasma
+/**
+ ** @brief Função para centralizar todos os fantasmas em suas posições iniciais.
+ ** @param fantasma Ponteiro para a estrutura do fantasma.
+ ** @param numero_fantasma Número total de fantasmas.
+ */
 void centralizaFantasma(tInimigo* fantasma, int numero_fantasma)
 {
     for(int i = 0; i < numero_fantasma; i++)
@@ -57,7 +65,11 @@ void centralizaFantasma(tInimigo* fantasma, int numero_fantasma)
     }
 }
 
-
+/**
+ ** @brief Função para verificar se o fantasma está saindo do mapa através dos portais.
+ ** @param fantasma Estrutura do fantasma.
+ ** @return Direção do portal se estiver saindo, caso contrário retorna -1.
+ */
 int saindoMapa(tInimigo fantasma)
 {
     if(fantasma.pos.x == TAM_GRID*(TAM_J)&& fantasma.direcao==2)//portal na direita
@@ -98,6 +110,12 @@ Vector2 teleportaFantasma(tInimigo fantasma){
     return fantasma.pos;
 }
 
+/**
+ * @brief Função para validar se a direção do fantasma é válida com base no mapa.
+ * @param fantasma Estrutura do fantasma.
+ * @param grid_mapa Mapa do jogo representado como uma matriz de caracteres.
+ * @param dir Direção a ser validada.
+ */
 int validaDirecao(tInimigo fantasma, char** grid_mapa, int dir){
         switch(dir)
             {
@@ -129,6 +147,12 @@ int validaDirecao(tInimigo fantasma, char** grid_mapa, int dir){
             }
     
 }
+
+/**
+ * @brief Função para obter a direção oposta.
+ * @param dir Direção atual.
+ * @return Direção oposta.
+ */
 int direcaoOposta(int dir){
     switch(dir)
             {
@@ -142,6 +166,14 @@ int direcaoOposta(int dir){
                 return 2;
             }
 }
+
+
+/**
+ * @brief Função para contar o número de direções válidas para o fantasma.
+ * @param fantasma Estrutura do fantasma.
+ * @param grid_mapa Mapa do jogo representado como uma matriz de caracteres.
+ * @return Número de direções válidas.
+ */
 int contaDirecoes(tInimigo fantasma, char** grid_mapa){
     int j=0;
     for(int i=1;i<=4;i++){
@@ -153,6 +185,12 @@ int contaDirecoes(tInimigo fantasma, char** grid_mapa){
 }
 
 
+/**
+ * @brief Função para escolher uma direção aleatória válida para o fantasma.
+ * @param fantasma Estrutura do fantasma.
+ * @param grid_mapa Mapa do jogo representado como uma matriz de caracteres.
+ * @return Direção escolhida aleatoriamente.
+ */
 int escolheDirecaoRand(tInimigo fantasma,char** grid_mapa)
 {   
     int dirDispo = contaDirecoes(fantasma,grid_mapa);
@@ -208,6 +246,13 @@ int escolheDirecaoRand(tInimigo fantasma,char** grid_mapa)
         }
 }
 
+/**
+ * @brief Função para verificar se o fantasma está interceptando o Pacman.
+ * @param dir Direção do fantasma.
+ * @param fantasma Estrutura do fantasma.
+ * @param pacman Estrutura do Pacman.
+ * @return true se estiver interceptando, false caso contrário.
+ */
 bool interseptaPacman(int dir, tInimigo fantasma, tJogador pacman){
     int pacX = pacman.pos.x;
     int pacY = pacman.pos.y;
@@ -236,6 +281,13 @@ bool interseptaPacman(int dir, tInimigo fantasma, tJogador pacman){
     return false;
 }
 
+/**
+ * @brief Função para fazer o fantasma fugir do Pacman.
+ * @param fantasma Estrutura do fantasma.
+ * @param grid_mapa Mapa do jogo representado como uma matriz de caracteres.
+ * @param pacman Estrutura do Pacman.
+ * @return Direção escolhida para fugir do Pacman.
+ */
 int fogePacman(tInimigo fantasma, char** grid_mapa, tJogador pacman){
     int pacX = pacman.pos.x;
     int pacY = pacman.pos.y;
@@ -289,6 +341,16 @@ int fogePacman(tInimigo fantasma, char** grid_mapa, tJogador pacman){
     
 }
 
+
+/**
+ * @brief Função para mover o fantasma com base em sua lógica de movimento.
+ * @param fantasma Estrutura do fantasma.
+ * @param blinky Estrutura do fantasma Blinky (usado para Pincer).
+ * @param mapa Estrutura do mapa do jogo.
+ * @param indice Índice do ciclo de atualização (usado para temporização).
+ * @param pacman Estrutura do Pacman.
+ * @return Estrutura do fantasma atualizada após o movimento.
+ */
 tInimigo moveFantasma(tInimigo fantasma, tInimigo blinky, tMapa mapa, int indice, tJogador pacman){
     
     if(saindoMapa(fantasma)!=-1){
@@ -298,24 +360,29 @@ tInimigo moveFantasma(tInimigo fantasma, tInimigo blinky, tMapa mapa, int indice
         switch(fantasma.type){
 
             case PERSEGUIDOR:
-                fantasma.direcao=escolheDirPersegue(&fantasma, &pacman, &mapa);
+                fantasma.direcao = escolheDirPersegue(&fantasma, &pacman, &mapa);
                 if(fantasma.direcao == -1){
                     fantasma.direcao=escolheDirecaoRand(fantasma, mapa.grid_mapa);
                 }
                 break;
 
             case INTERCEPTADOR:
-                fantasma.direcao=escolheDirIntercepta(&fantasma, &pacman, &mapa);
+                fantasma.direcao = escolheDirIntercepta(&fantasma, &pacman, &mapa);
                 if(fantasma.direcao == -1){
                     fantasma.direcao=escolheDirecaoRand(fantasma, mapa.grid_mapa);
                 }
+                fantasma.direcao = validaDirecao(fantasma, mapa.grid_mapa, fantasma.direcao);
                 break;
 
-            case GUARDA:
-                fantasma.direcao=escolheDirPinch(&fantasma, &blinky, &pacman, &mapa);
+            case PINCER:
+                fantasma.direcao = escolheDirPinch(&fantasma, &blinky, &pacman, &mapa);
+                if(fantasma.direcao == -1){
+                    fantasma.direcao=escolheDirecaoRand(fantasma, mapa.grid_mapa);
+                }
+                fantasma.direcao = validaDirecao(fantasma, mapa.grid_mapa, fantasma.direcao);
                 break;
 
-            case RETARDO:
+            case RANDOM:
                 fantasma.direcao=escolheDirecaoRand(fantasma, mapa.grid_mapa);
                 break;
         }
@@ -353,6 +420,11 @@ tInimigo moveFantasma(tInimigo fantasma, tInimigo blinky, tMapa mapa, int indice
         
 }
 
+/**
+ ** @brief Função para calcular o número de fantasmas no mapa.
+ ** @param grid_mapa Mapa do jogo representado como uma matriz de caracteres.
+ ** @return Número de fantasmas encontrados no mapa.
+ */
 int calculaFantasmas(char** grid_mapa)
 {
     int numero_fantasmas = 0;
@@ -369,7 +441,12 @@ int calculaFantasmas(char** grid_mapa)
     return numero_fantasmas;
 }
 
-/*inicializa tudo envolvendo o fantasma*/
+/**
+ ** @brief Função para inicializar os fantasmas com suas propriedades e sprites.
+ ** @param fantasma Ponteiro para a estrutura do fantasma.
+ ** @param grid_mapa Mapa do jogo representado como uma matriz de caracteres.
+ ** @param assets Estrutura contendo os assets do jogo.
+ */
 void inicializaFantasmas(tInimigo* fantasma, char** grid_mapa, tAssets assets)
 {   
     int contador = 0;
@@ -439,7 +516,11 @@ void inicializaFantasmas(tInimigo* fantasma, char** grid_mapa, tAssets assets)
     }
 }
 
-/*ATUALIZA COLISAO FANTASMA*/
+
+/**
+ * @brief Função para atualizar as caixas de colisão dos fantasmas.
+ * @param fantasma Ponteiro para a estrutura do fantasma.
+ */
 void atualizaColisaoFantasma(tInimigo* fantasma, int n)
 {
     for(int i = 0; i < n; i++)
@@ -449,7 +530,14 @@ void atualizaColisaoFantasma(tInimigo* fantasma, int n)
     }
 }
 
-/*CHECA COLISAO ENTRE O PLAYER E O FINAL, RETORNA O INDICE DO FANTASMA QUE FOI COLIDIDO, OU -1 SE NAO HOUVE COLISAO*/
+
+/**
+ * @brief Função para checar colisão entre o Pacman e os fantasmas.
+ * @param colisao_player Caixa de colisão do Pacman.
+ * @param fantasma Ponteiro para a estrutura do fantasma.
+ * @param n Número total de fantasmas.
+ * @return Índice do fantasma que colidiu, ou -1 se não houver colisão.
+ */
 int checaColisaoFantasma(Rectangle colisao_player, tInimigo* fantasma, int n)
 {
     for(int i = 0; i < n; i++)
@@ -463,7 +551,10 @@ int checaColisaoFantasma(Rectangle colisao_player, tInimigo* fantasma, int n)
     return -1;
 }
 
-/*funcao pra o fantasma ser comido*/
+/**
+ * @brief Função para processar o evento de comer um fantasma.
+ * @param fantasma Ponteiro para a estrutura do fantasma.
+ */
 void comeFantasma(tInimigo* fantasma, int indice)
 {
     fantasma[indice].pos.x = fantasma[indice].pos_inicial.x;
@@ -477,7 +568,19 @@ void comeFantasma(tInimigo* fantasma, int indice)
     printf("%d", indice);
 }
 
-/*SUBTRAI A VIDA DO JOGADOR*/
+
+/**
+ * @brief Função para processar a colisão entre o Pacman e um fantasma.
+ * @param pacman Ponteiro para a estrutura do Pacman.
+ * @param fantasma Ponteiro para a estrutura do fantasma.
+ * @param grid_mapa Mapa do jogo representado como uma matriz de caracteres.
+ * @param indice Índice do fantasma que colidiu.
+ * @param numero_fantasma Número total de fantasmas.
+ * @param state_atual Ponteiro para o estado atual do jogo.
+ * @param camera_relativa Ponteiro para a estrutura da câmera relativa.
+ * @param pontuacao Ponteiro para a estrutura de efeitos visuais (VFX).
+ * @param gameSFX Array de sons do jogo.
+ */
 void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, int indice, int numero_fantasma, GameState* state_atual, tCamera* camera_relativa, tVfx* pontuacao, Sound gameSFX[])
 {
     if (indice == -1)
@@ -534,7 +637,12 @@ void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, i
     }
 }
 
-/*temporizador e "revive" o fantasma*/
+
+/**
+ * @brief Função para reviver um fantasma após o tempo de morte.
+ * @param fantasma Ponteiro para a estrutura do fantasma.
+ * @param indice Índice do fantasma a ser revivido.
+ */
 void reviveFantasma(tInimigo* fantasma, int indice)
 {
     fantasma[indice].tempo_morto -= GetFrameTime();

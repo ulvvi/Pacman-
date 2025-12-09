@@ -19,7 +19,14 @@ typedef struct Node {
     struct Node* parent;// o kra que deu origem a ele
 } tNode;
 
-//manhatttan :DDDDD
+/**
+ * @brief Função heurística para o algoritmo A*.
+ * @param x1 Coordenada x do nó atual.
+ * @param y1 Coordenada y do nó atual.
+ * @param x2 Coordenada x do nó alvo.
+ * @param y2 Coordenada y do nó alvo.
+ * @return Distância heurística entre os dois nós.
+ */
 int Heuristica(int x1, int y1, int x2, int y2){
     int dx = abs(x1 - x2);
     int dy = abs(y1 - y2);
@@ -34,7 +41,13 @@ int Heuristica(int x1, int y1, int x2, int y2){
     return dx + dy;
 }
 
-//fora do grid ou parede eh paia
+/**
+ ** @brief Função que verifica se uma posição no mapa é válida para o fantasma se mover.
+ ** @param x Coordenada x no mapa.
+ ** @param y Coordenada y no mapa.
+ ** @param mapa Ponteiro para a estrutura do mapa.
+ ** @return true se a posição for válida, false caso contrário.
+ */
 bool EhValido(int x, int y, tMapa* mapa){
     if (x < 0 || x >= TAM_J || y < 0 || y >= TAM_I)
         return false;
@@ -45,7 +58,13 @@ bool EhValido(int x, int y, tMapa* mapa){
     return true;
 }
 
-
+/**
+ * @brief Função que escolhe a direção que o fantasma deve seguir para perseguir o jogador.
+ * @param fantasma Ponteiro para a estrutura do fantasma.
+ * @param player Ponteiro para a estrutura do jogador.
+ * @param mapa Ponteiro para a estrutura do mapa.
+ * @return Direção que o fantasma deve seguir (CIMA, DIREITA, BAIXO, ESQUERDA).
+ */
 int escolheDirPersegue(tInimigo* fantasma, tJogador* player, tMapa* mapa){
     
     //converte pra matriz

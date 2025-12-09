@@ -1,8 +1,15 @@
 #pragma once
 #include "../header.h"
 
-
-
+/**
+ * @brief Desenha o jogo na tela
+ * @param mapa Mapa do jogo
+ * @param pacman Estrutura do jogador
+ * @param state_atual Estado atual do jogo
+ * @param fantasmas Array de inimigos
+ * @param camera_principal Camera principal do jogo
+ * @param pontuacao Efeito visual de pontuação
+ */
 void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual, tInimigo *fantasmas, tCamera camera_principal, tVfx* pontuacao){
     //layer fundo/mapa   
     BeginDrawing(); 
@@ -68,10 +75,20 @@ void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual, tInimigo *fan
     EndMode2D();
     //layer main HUD
     drawHUD(pacman->score, pacman->remainingPellets, pacman->current_fruit, mapa);
-    DrawText(TextFormat("posx: %.2f, posy: %.2f, vida: %d, dir: %d", pacman->pos.x, pacman->pos.y, pacman->vida, pacman->dir), 900, 810, 20, WHITE);
+    DrawText(TextFormat("vida: %d", pacman->vida), 900, 810, 20, WHITE);
 }
 
-//updata o jogo a cada frame
+/**
+ * @brief Atualiza a lógica do jogo
+ * @param pacman Estrutura do jogador
+ * @param mapa Mapa do jogo
+ * @param state_atual Estado atual do jogo
+ * @param menuData Dados do menu
+ * @param fantasma Array de inimigos
+ * @param camera_principal Camera principal do jogo
+ * @param pontuacao Efeito visual de pontuação
+ * @param gameSFX Sons do jogo
+ */
 void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* menuData, tInimigo* fantasma, tCamera* camera_principal, tVfx* pontuacao, Sound gameSFX[5]){
     //contabilizador de frames pro fantasma 
     mapa->frame_counter++;
@@ -175,8 +192,20 @@ bool hasCollectedAllPellets(tJogador* pacman){
     }
 }
 
-
-
+/**
+ * @brief Inicializa o nível do jogo
+ * @param level Nível atual
+ * @param mapa Mapa do jogo
+ * @param pacman Estrutura do jogador
+ * @param fantasmas Ponteiro para o array de inimigos
+ * @param menu Dados do menu
+ * @param stems Músicas do jogo
+ * @param gameSFX Sons do jogo
+ * @param obj_cut_in Animação de cut-in
+ * @param assets Assets do jogo
+ * @param obj_vitoria Animação de vitória
+ * @param obj_confete Animação de confete
+ */
 void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasmas, tMenu* menu, Music stems[3], Sound* gameSFX, tAnimacao* obj_cut_in,
 tAssets assets, tAnimacao* obj_vitoria, tAnimacao* obj_confete) 
 {
@@ -217,8 +246,14 @@ tAssets assets, tAnimacao* obj_vitoria, tAnimacao* obj_confete)
 
 }
 
-
-//limpezas no geral
+/**
+ * @brief Limpa os recursos alocados do nível do jogo
+ * @param mapa Mapa do jogo
+ * @param menuData Dados do menu
+ * @param stems Músicas do jogo
+ * @param fantasmas Array de inimigos
+ * @param gameSFX Sons do jogo
+ */
 void cleanup(tMapa* mapa, tMenu* menuData, Music stems[], tInimigo* fantasmas, Sound gameSFX[5]){  
     //unload nos assets
     stopAllMusic(stems);
@@ -231,15 +266,20 @@ void cleanup(tMapa* mapa, tMenu* menuData, Music stems[], tInimigo* fantasmas, S
     }
     //liberar memoria
     freeMascaras(mapa->mapa_mascaras);
-    freeDiddy(mapa->grid_mapa);
+    freeMap(mapa->grid_mapa);
     freeMatrizAux(mapa->matriz_auxiliar);
     free(fantasmas);
     
 }
 
-
-
-int gameLevel(int* level, tAssets assets){
+/**
+ * @brief Executa o nível do jogo
+ * @param level Nível atual
+ * @param assets Assets do jogo
+ * @param whatToDo Indica se deve carregar um jogo salvo
+ * @return Retorna 1 se o jogador venceu, 0 caso contrário
+ */
+int gameLevel(int* level, tAssets assets, int whatToDo){
     int cronometro = 0;
     int venceu = 0;
     int firstTimeTransicao = 1;
@@ -266,18 +306,24 @@ int gameLevel(int* level, tAssets assets){
     tVfx pontuacao = {3, 3, false, {0,0}, 0};
 
     initGameLevel(level, &mapa, &pacman, &fantasmas, &menuData, stems, gameSFX, &obj_cut_in, assets, &obj_vitoria, &obj_confete);
-    PlaySound(gameSFX[0]);
+    
 
     tCamera camera_principal;
     inicializaCamera(&camera_principal, pacman);
+    PlaySound(gameSFX[0]);
+
+    if(whatToDo == 2){
+        load(&pacman, &fantasmas, &mapa, assets);
+    } 
+
     int dangerPellets = pacman.remainingPellets / 3;
     
-    
+
     /************************************
                 JOGO
     ************************************/
 
-    //tentei ate refatorar mas ficaria mt retardado
+    //tentei ate refatorar mas ficaria mt ruim
     while (!WindowShouldClose())
     {
         //atualiza musicas
@@ -413,6 +459,5 @@ int gameLevel(int* level, tAssets assets){
     }
 
     cleanup(&mapa, &menuData, stems, fantasmas, gameSFX);
-    UnloadSound(gameSFX[0]);
     return venceu;
 }
