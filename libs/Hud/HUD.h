@@ -207,10 +207,10 @@ int menuInputs(tMenu* menuData, GameState* state_atual, tMapa* map, tJogador* pa
     return -1;
   }
   if(IsKeyPressed(KEY_S) || currentChosen(menuData) == SAVE){
-    save(pacman, *ghosts, map, 1); //salva no slot 1 por enquanto
+    save(pacman, *ghosts, map); 
   }
   if(IsKeyPressed(KEY_L) || currentChosen(menuData) == LOAD){
-    load(pacman, ghosts, map, 1, assets); //carrega do slot 1 por enquanto
+    load(pacman, ghosts, map, assets);
   }
 
   //verifica o input para mudar a opcao selecionada

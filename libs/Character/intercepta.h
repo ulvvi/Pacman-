@@ -16,8 +16,9 @@ void whereToIntercept(tJogador* player, tInimigo* fantasma, int* posXintercepta,
     int currentY = (int)(player->pos.y / TAM_GRID);
     int ghostX = (int)(fantasma->pos.x / TAM_GRID);
     int ghostY = (int)(fantasma->pos.y / TAM_GRID);
+    const int blocksInAdvance = 6;
 
-    if(Heuristica(ghostX, ghostY, currentX, currentY) < 4){ 
+    if(Heuristica(ghostX, ghostY, currentX, currentY) < blocksInAdvance - 3){ 
         *posXintercepta = currentX;
         *posYintercepta = currentY;
         return;
@@ -28,8 +29,6 @@ void whereToIntercept(tJogador* player, tInimigo* fantasma, int* posXintercepta,
 
     int dirX = (player->move_x / player->spd);
     int dirY = (player->move_y / player->spd);
-
-    const int blocksInAdvance = 4;
 
     for (int i = 1; i <= blocksInAdvance; i++){
         int potentialX = currentX + (i * dirX);
@@ -68,6 +67,8 @@ int escolheDirIntercepta(tInimigo* fantasma, tJogador* player, tMapa* mapa) {
     int posYintercepta = 0;
 
     whereToIntercept(player, fantasma, &posXintercepta, &posYintercepta, mapa);
+    //debug
+    //DrawRectangle(posXintercepta * TAM_GRID, posYintercepta * TAM_GRID, TAM_GRID, TAM_GRID, RED);
     
     //converte pra matriz
     int startX = (int)(fantasma->pos.x / TAM_GRID);

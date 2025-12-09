@@ -155,16 +155,21 @@ typedef struct
 
 }tGameSounds;
 
-/*RECEBE UM INTEIRO, REALIZA UMA DIVISAO FLUTUANTE POR 60 E RETORNA SEU VALOR EM DECIMAL. GENERICO, DA PRA USAR PRA TUDO*/
+/**
+ * @brief Temporizador que converte frames em segundos.
+ * @param cronometro Ponteiro para o contador de frames.
+ */
 float temporizador(int* cronometro)
 {
     (*cronometro)++;
-    return ((float)*cronometro)/90;
+    return ((float)*cronometro)/100;
 }
 
-
+/**
+ * @brief Inicializa a janela do jogo com as dimensões e título especificados.
+ */
 void initializeWindow(){
     InitWindow(LARGURA, ALTURA, "PACMAN+"); 
-    SetTargetFPS(90);
+    SetTargetFPS(100);
 }
 

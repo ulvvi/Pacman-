@@ -8,6 +8,9 @@ typedef enum
 }STATE_MAIN;
 //MAIN
 
+/**
+ * @brief Função principal do jogo, onde o loop principal é executado.
+ */
 int main(void)
 {   
     

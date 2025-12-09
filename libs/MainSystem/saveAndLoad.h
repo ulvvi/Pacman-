@@ -3,6 +3,12 @@
 #include "../MainSystem/system.h"
 #include "../Character/player.h"
 
+/**
+ * @brief Cria um novo fantasma com os atributos iniciais
+ * @param fantasma Ponteiro para o array de inimigos
+ * @param assets Assets do jogo
+ * @param mapa Mapa do jogo
+ */
 void criaNovoFantasma(tInimigo** fantasma, tAssets assets, tMapa mapa)
 {
     for(int i = 0; i < mapa.numero_fantasmas; i++)
@@ -46,6 +52,11 @@ void criaNovoFantasma(tInimigo** fantasma, tAssets assets, tMapa mapa)
     }
 }
 
+/**
+ * @brief Salva os dados do jogador em um arquivo binário
+ * @param pacman Ponteiro para a estrutura do jogador
+ * @param arq Ponteiro para o arquivo binário
+ */
 void save_player(tJogador* pacman, FILE* arq)
 {
     fwrite(&pacman->pos.x, sizeof(float), 1, arq);
@@ -68,6 +79,12 @@ void save_player(tJogador* pacman, FILE* arq)
     fwrite(&pacman->current_fruit, sizeof(int), 1, arq);
 }
 
+/**
+ * @brief Salva os dados dos inimigos em um arquivo binário
+ * @param fantasma Ponteiro para o array de inimigos
+ * @param map Mapa do jogo
+ * @param arq Ponteiro para o arquivo binário
+ */
 void save_fantasma(tInimigo* fantasma, tMapa map, FILE* arq)
 {
     for(int i = 0; i < map.numero_fantasmas; i++)
@@ -87,6 +104,11 @@ void save_fantasma(tInimigo* fantasma, tMapa map, FILE* arq)
     }
 }
 
+/**
+ * @brief Salva os dados do mapa em um arquivo binário
+ * @param mapa Ponteiro para a estrutura do mapa
+ * @param fp Ponteiro para o arquivo binário
+ */
 void save_map(tMapa* mapa, FILE* fp) {
 
     //fwrite(&mapa->tileset_parede, sizeof(Texture2D), 1, fp);
@@ -116,6 +138,14 @@ void save_map(tMapa* mapa, FILE* fp) {
     }
 }
 
+
+/**
+ * @brief Escreve os dados do jogo em um arquivo binário
+ * @param path Caminho do arquivo binário
+ * @param pacman Ponteiro para a estrutura do jogador
+ * @param ghost Ponteiro para o array de inimigos
+ * @param map Ponteiro para a estrutura do mapa
+ */
 void writeToBin(char* path, tJogador* pacman, tInimigo* ghost, tMapa* map){
     FILE* arq;
     arq = fopen(path, "wb+");
@@ -132,6 +162,13 @@ void writeToBin(char* path, tJogador* pacman, tInimigo* ghost, tMapa* map){
 }
 
 
+/**
+ * @brief Carrega os dados do mapa de um arquivo binário
+ * @param mapa Ponteiro para a estrutura do mapa
+ * @param fp Ponteiro para o arquivo binário
+ * @param fantasma Ponteiro para o array de inimigos
+ * @param assets Assets do jogo
+ */
 void load_map(tMapa* mapa, FILE* fp, tInimigo** fantasma, tAssets assets) {
     
     if (!mapa->grid_mapa || !mapa->matriz_auxiliar || !mapa->mapa_mascaras) {
@@ -164,6 +201,11 @@ void load_map(tMapa* mapa, FILE* fp, tInimigo** fantasma, tAssets assets) {
     fread(mapa->mapa_mascaras, sizeof(int), MASK_SIZE, fp);
 }
 
+/**
+ * @brief Carrega os dados do jogador de um arquivo binário
+ * @param pacman Ponteiro para a estrutura do jogador
+ * @param arq Ponteiro para o arquivo binário
+ */
 void load_player(tJogador* pacman, FILE* arq)
 {
     //fread(pacman, sizeof(tJogador), 1, arq);
@@ -190,6 +232,12 @@ void load_player(tJogador* pacman, FILE* arq)
     pacman->comendo.pos.y = pacman->pos.y;
 }
 
+/**
+ * @brief Carrega os dados dos inimigos de um arquivo binário
+ * @param fantasma Ponteiro para o array de inimigos
+ * @param map Mapa do jogo
+ * @param arq Ponteiro para o arquivo binário
+ */
 void load_fantasma(tInimigo* fantasma, tMapa map, FILE* arq)
 {   
     //realoca dependendo do numero de fantasmas do mapa que sera carregado
@@ -214,6 +262,14 @@ void load_fantasma(tInimigo* fantasma, tMapa map, FILE* arq)
     }
 }
 
+/**
+ * @brief Lê os dados do jogo de um arquivo binário
+ * @param path Caminho do arquivo binário
+ * @param pacman Ponteiro para a estrutura do jogador
+ * @param ghosts Ponteiro para o array de inimigos
+ * @param map Ponteiro para a estrutura do mapa
+ * @param assets Assets do jogo
+ */
 void readFromBin(char* path, tJogador* pacman, tInimigo** ghosts, tMapa* map, tAssets assets){
     FILE* arq;
     arq = fopen(path, "rb");
@@ -230,16 +286,28 @@ void readFromBin(char* path, tJogador* pacman, tInimigo** ghosts, tMapa* map, tA
     return;
 }
 
-
-void save(tJogador* pacman, tInimigo* ghosts, tMapa* map, int slot) {
+/**
+ * @brief Salva o estado atual do jogo em um slot específico
+ * @param pacman Ponteiro para a estrutura do jogador
+ * @param ghosts Ponteiro para o array de inimigos
+ * @param map Ponteiro para a estrutura do mapa
+ */
+void save(tJogador* pacman, tInimigo* ghosts, tMapa* map) {
     char path[256];
-    snprintf(path, sizeof(path), "saves/save%d.bin", slot);
+    snprintf(path, sizeof(path), "saves/save%d.bin", 1);
     writeToBin(path, pacman, ghosts, map);
 }
 
-void load(tJogador* pacman, tInimigo** ghosts, tMapa* map, int slot, tAssets assets){
+/**
+ * @brief Carrega o estado do jogo de um slot específico
+ * @param pacman Ponteiro para a estrutura do jogador
+ * @param ghosts Ponteiro para o array de inimigos
+ * @param map Ponteiro para a estrutura do mapa
+ * @param assets Assets do jogo
+ */
+void load(tJogador* pacman, tInimigo** ghosts, tMapa* map, tAssets assets){
     char path[256];
-    snprintf(path, sizeof(path), "saves/save%d.bin", slot);
+    snprintf(path, sizeof(path), "saves/save%d.bin", 1);
     readFromBin(path, pacman, ghosts, map, assets);
     return;
 }
