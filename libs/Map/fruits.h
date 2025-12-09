@@ -7,7 +7,9 @@
 #define TAM_GRID 40
 
 
+
 void spawnFruit(char** map, tJogador* pacman){
+    
     static int fruit_timer = 0;
     fruit_timer++;
 
@@ -19,7 +21,7 @@ void spawnFruit(char** map, tJogador* pacman){
         do {
             x = GetRandomValue(1, TAM_J - 2);
             y = GetRandomValue(1, TAM_I - 2);
-        } while (map[y][x] != ' ' || map[y][x] == '.');
+        } while (map[y][x] != ' ' && map[y][x] != '.');
 
         if(map[y][x] == '.'){
             pacman->remainingPellets--;

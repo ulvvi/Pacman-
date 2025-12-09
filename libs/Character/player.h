@@ -33,6 +33,7 @@ void centralizaPlayer(tJogador* pacman, char** grid_mapa)
                 pacman->move_x = 0;
                 pacman->move_y = 0;
                 pacman->spd = 2;
+                pacman->spritesheet.y = 0;
                 pacman->comendo.spritesheet.y = 0;
                 pacman->comendo.tempo_frame = 0.060;
                 pacman->curFruitTimer = 0;

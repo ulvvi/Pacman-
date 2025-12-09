@@ -52,6 +52,8 @@ void centralizaFantasma(tInimigo* fantasma, int numero_fantasma)
         fantasma[i].tempo_morto = 0;
         fantasma[i].desenho = true;
         fantasma[i].spd = 2;
+        fantasma[i].colisao_fantasma.width = TAM_GRID;
+        fantasma[i].colisao_fantasma.height = TAM_GRID;
     }
 }
 
