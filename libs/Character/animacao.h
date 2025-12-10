@@ -1,7 +1,5 @@
 #pragma once
 #include "../MainSystem/system.h"
-//teste
-
 /**
  * @brief Função para animar um objeto genérico.
  * @param objeto Ponteiro para a estrutura de animação do objeto.

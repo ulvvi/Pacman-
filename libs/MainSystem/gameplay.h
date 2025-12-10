@@ -89,7 +89,8 @@ void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual, tInimigo *fan
  * @param pontuacao Efeito visual de pontuação
  * @param gameSFX Sons do jogo
  */
-void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* menuData, tInimigo* fantasma, tCamera* camera_principal, tVfx* pontuacao, Sound gameSFX[5], Music stems[3], int dangerPellets){
+void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* menuData, tInimigo* fantasma, tCamera* camera_principal, tVfx* pontuacao, Sound gameSFX[5], 
+Music stems[3], int dangerPellets, tAnimacao* obj_efeito_morango){
     //contabilizador de frames pro fantasma 
     mapa->frame_counter++;
     if(IsKeyPressed(KEY_TAB))
@@ -148,6 +149,7 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
     }
 
     //cronometro das frutas e ativacao de seus respectivos poderes
+    static bool animacao_morango = false;
     switch(pacman->fruta_ativa)
     {
         case GRAPE:
@@ -155,16 +157,30 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
         break;
 
         case STRAWBERRY:
+            animacao_morango = true;
+            obj_efeito_morango->pos.x = pacman->pos.x - 120;
+            obj_efeito_morango->pos.y = pacman->pos.y - 120;
             strawberry(pacman, mapa->grid_mapa);
+
         break;
 
         case BLUEBERRY:
             blueberry(pacman);
+            animacao_morango = true;
         break;
 
         case CHERRY:
             cherry(pacman);
         break;
+    }
+    if(animacao_morango)
+    {
+        animaObjeto(obj_efeito_morango);
+        if(obj_efeito_morango->frame_atual == 6)
+        {
+            animacao_morango = false;
+            obj_efeito_morango->frame_atual = 0;
+        }
     }
 
     //teleporte player
@@ -220,7 +236,7 @@ bool hasCollectedAllPellets(tJogador* pacman){
  * @param obj_confete Animação de confete
  */
 void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasmas, tMenu* menu, Music stems[3], Sound* gameSFX, tAnimacao* obj_cut_in,
-tAssets assets, tAnimacao* obj_vitoria, tAnimacao* obj_confete, tAnimacao* obj_derrota) 
+tAssets assets, tAnimacao* obj_vitoria, tAnimacao* obj_confete, tAnimacao* obj_derrota, tAnimacao* obj_efeito_morango) 
 {
 
     // --- ÁUDIO ---
@@ -259,6 +275,10 @@ tAssets assets, tAnimacao* obj_vitoria, tAnimacao* obj_confete, tAnimacao* obj_d
     *obj_derrota =  (tAnimacao){
         0, 12, 0.080, 0, assets.derrota_cutscene, 
         {0,0,LARGURA, ALTURA}, {0,0}, 0, 0, 0, 1
+    };
+    *obj_efeito_morango =  (tAnimacao){
+        0, 7, 0.150, 0, assets.efeito_morango_animacao, 
+        {0,0, 280, 280}, {0,0}, 0, 0, 0, 1
     };
 
 }
@@ -319,10 +339,11 @@ int gameLevel(int* level, tAssets assets, int whatToDo){
     tAnimacao obj_vitoria;
     tAnimacao obj_confete;
     tAnimacao obj_derrota;
+    tAnimacao obj_efeito_morango;
 
     tVfx pontuacao = {3, 3, false, {0,0}, 0};
 
-    initGameLevel(level, &mapa, &pacman, &fantasmas, &menuData, stems, gameSFX, &obj_cut_in, assets, &obj_vitoria, &obj_confete, &obj_derrota);
+    initGameLevel(level, &mapa, &pacman, &fantasmas, &menuData, stems, gameSFX, &obj_cut_in, assets, &obj_vitoria, &obj_confete, &obj_derrota, &obj_efeito_morango);
     
 
     tCamera camera_principal;
@@ -357,7 +378,7 @@ int gameLevel(int* level, tAssets assets, int whatToDo){
                 if(pacman.power_pellet == true){
                     switchMusic(JACKPOT, stems);
                 }
-                updateLogic(&pacman, &mapa, &state_atual, &menuData, fantasmas, &camera_principal, &pontuacao, gameSFX, stems, dangerPellets);
+                updateLogic(&pacman, &mapa, &state_atual, &menuData, fantasmas, &camera_principal, &pontuacao, gameSFX, stems, dangerPellets, &obj_efeito_morango);
                 if(IsKeyDown(KEY_A)) 
                 {
                     pacman.vida = 0; 
