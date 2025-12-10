@@ -2,7 +2,6 @@
 #pragma once
 #include "../header.h"
 
-Color PEL = {255, 213, 65, 255};
 
 
 /**

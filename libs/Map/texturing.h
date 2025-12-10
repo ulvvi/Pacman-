@@ -71,7 +71,6 @@ void trocaCorEXT(tMapa* mapa, int cor)
  */
 void trocaCor(tMapa* mapa)
 {
-
     mapa->spritesheet.y = 40*GetRandomValue(0, mapa->tamanho_spritesheet);
 }
 

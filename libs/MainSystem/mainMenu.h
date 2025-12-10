@@ -22,7 +22,7 @@ static void drawMainMenu(void){
     ClearBackground(BLACK);
     const char* title = "PACMAN+";
     int titleW = MeasureText(title, 90);
-    DrawText(title, (LARGURA - titleW)/2, 120, 90, YELLOW);
+    DrawText(title, (LARGURA - titleW)/2, 120, 90, PEL);
     int startY = 300;
     for(int i = MENU_START; i <= MENU_QUIT; i++){
         int y = startY + i * 80;

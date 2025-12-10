@@ -1,12 +1,6 @@
 #include "raylib.h"
 #include "../Character/player.h"
 
-Color pontos_ganhados = {6, 128, 81, 255};
-Color sombra_pontos_ganhados = {17, 96, 97, 255};
-Color pontos_perdidos = {179, 45, 125, 255};
-Color sombra_pontos_perdidos = {133, 34, 100, 255};
-
-
 /**
  * @brief Função para mostrar a pontuação flutuante na tela.
  * 

@@ -12,6 +12,13 @@
 #define MASK_SIZE ((TAM_I/2) * (TAM_J/2))
 
 //Cores
+Color pontos_ganhados = {6, 128, 81, 255};
+Color sombra_pontos_ganhados = {17, 96, 97, 255};
+Color pontos_perdidos = {179, 45, 125, 255};
+Color sombra_pontos_perdidos = {133, 34, 100, 255};
+
+Color PEL = {255, 213, 65, 255};
+
 Color ROXO = {119, 59, 191, 255};
 Color ROXO_ESCURO = {78,39,140,255};
 

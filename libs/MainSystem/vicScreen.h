@@ -18,8 +18,8 @@ void victoryScreen(tAnimacao obj_vitoria, tAnimacao obj_confete){
         DrawTextureRec(obj_vitoria.sprite, obj_vitoria.spritesheet, (Vector2){0,0}, WHITE);
         animaObjeto(&obj_confete);
         ClearBackground(BLACK);
-        DrawText(texto_vitoria, x_v+1, y_v+1, fonte_v, sombra_pontos_ganhados);
         DrawText(texto_vitoria, x_v, y_v, fonte_v, pontos_ganhados);
+        DrawText(texto_vitoria, x_v+2, y_v+2, fonte_v, sombra_pontos_ganhados);
         DrawText(texto_tecla, x_t, y_t, fonte_t, Fade(WHITE, 0.8));
         EndDrawing();
 

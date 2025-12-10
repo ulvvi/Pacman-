@@ -360,7 +360,7 @@ int gameLevel(int* level, tAssets assets, int whatToDo){
                 updateLogic(&pacman, &mapa, &state_atual, &menuData, fantasmas, &camera_principal, &pontuacao, gameSFX, stems, dangerPellets);
                 if(IsKeyDown(KEY_A)) 
                 {
-                    pacman.vida--; 
+                    pacman.vida = 0; 
                     state_atual = MORTE;
                 }
                 pacman.comendo.pos.x = pacman.pos.x;
