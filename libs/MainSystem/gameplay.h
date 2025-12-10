@@ -132,7 +132,7 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
     //colisoes pellets
     if(checaPlayerCentralizado(pacman) && checaPlayerDentroMapa(pacman))
     {   
-        colisaoPellets(pacman, mapa->grid_mapa, &pacman->score, &pacman->remainingPellets, state_atual, pontuacao);
+        colisaoPellets(pacman, mapa->grid_mapa, &pacman->score, &pacman->remainingPellets, state_atual, pontuacao, gameSFX);
     }
 
     //cronometro do power pellet
@@ -301,7 +301,7 @@ int gameLevel(int* level, tAssets assets, int whatToDo){
     tMenu menuData;
 
     Music stems[3];
-    Sound gameSFX[7];
+    Sound gameSFX[8];
 
     tMapa mapa = {0};
     

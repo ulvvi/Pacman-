@@ -1,7 +1,10 @@
 #pragma once
 #include "../MainSystem/system.h"
 
-//animacao de "objetos", sempre q atinge o frame final, recomeca
+/**
+ * @brief Função para animar um objeto genérico.
+ * @param objeto Ponteiro para a estrutura de animação do objeto.
+ */
 void animaObjeto(tAnimacao* objeto)
 {
     float escala = objeto->escala;
@@ -22,7 +25,12 @@ void animaObjeto(tAnimacao* objeto)
     DrawTexturePro(objeto->sprite, objeto->spritesheet, dest, origem, objeto->rotacao, WHITE);
 }
 
-//animacao de "cenas", troca o state no final(quando acaba o numero de frames de animacao)
+/**
+ * @brief Função para executar uma cutscene de animação.
+ * @param objeto Ponteiro para a estrutura de animação do objeto.
+ * @param state_atual Ponteiro para o estado atual do jogo.
+ * @param state_final Estado final após a cutscene.
+ */
 void cutscene(tAnimacao* objeto, GameState* state_atual, GameState state_final)
 {
     Vector2 origem = {abs(objeto->spritesheet.width)/2, objeto->spritesheet.height/2};
