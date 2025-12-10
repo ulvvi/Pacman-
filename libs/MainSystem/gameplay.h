@@ -9,8 +9,9 @@
  * @param fantasmas Array de inimigos
  * @param camera_principal Camera principal do jogo
  * @param pontuacao Efeito visual de pontuação
+ * @param assets Assets do jogo
  */
-void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual, tInimigo *fantasmas, tCamera camera_principal, tVfx* pontuacao){
+void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual, tInimigo *fantasmas, tCamera camera_principal, tVfx* pontuacao, tAssets assets){
     //layer fundo/mapa   
     BeginDrawing(); 
     //iniciar camera(tudo entre beginmode2d e endmode2d que sofrera efeito de zoom e de screenshake, oq tiver fora, como hud, n sofrera)
@@ -74,8 +75,7 @@ void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual, tInimigo *fan
     //fim do q a camera afeta
     EndMode2D();
     //layer main HUD
-    drawHUD(pacman->score, pacman->remainingPellets, pacman->current_fruit, mapa);
-    DrawText(TextFormat("vida: %d", pacman->vida), 900, 810, 20, WHITE);
+    drawHUD(pacman->score, pacman->remainingPellets, pacman->current_fruit, mapa, assets, pacman->vida);
 }
 
 /**
@@ -330,7 +330,7 @@ int gameLevel(int* level, tAssets assets, int whatToDo){
         updateMusic(stems);
         
         //desenhos
-        drawGame(mapa, &pacman, state_atual, fantasmas, camera_principal, &pontuacao);
+        drawGame(mapa, &pacman, state_atual, fantasmas, camera_principal, &pontuacao, assets);
              
         //RESTANTE DOS LAYERS(NUMA STATE MACHINE)
         switch(state_atual)

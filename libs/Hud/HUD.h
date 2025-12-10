@@ -15,13 +15,14 @@
 #define OPTION_COUNT 5
 
 #define COLOR_BACKGROUND_OVERLAY  Fade(BLACK, 0.8f)
-#define COLOR_TITLE_BG            BLUE
+#define COLOR_TITLE_BG            ROXO
 #define COLOR_TITLE_TEXT          RAYWHITE
 #define COLOR_OPTION_NORMAL_BG    BLACK
 #define COLOR_OPTION_NORMAL_TEXT  RAYWHITE
 #define COLOR_OPTION_HIGHLIGHT_BG LIGHTGRAY
 #define COLOR_OPTION_HIGHLIGHT_TEXT BLACK
 #define COLOR_SELECTOR            RAYWHITE
+
 
 Color CYAN = {0, 255, 255, 255};
 
@@ -47,7 +48,7 @@ char* menuOptionsText[] = {
  * @param mapa Estrutura do mapa contendo as texturas das frutas.
  */
 void drawFruit(int curFruit, tMapa mapa){
-  DrawRectangle(1400, 800, 40, 40, DARKBLUE);
+  DrawRectangle(1400, 800, 40, 40, ROXO);
   DrawRectangle(1405, 805, 30, 30, BLACK);
 
   switch(curFruit){
@@ -73,11 +74,19 @@ void drawFruit(int curFruit, tMapa mapa){
  * @param curFruit Índice da fruta atual.
  * @param mapa Estrutura do mapa contendo as texturas das frutas.
  */
-void drawHUD(int score, int totalPellets, int curFruit, tMapa mapa){
+void drawHUD(int score, int totalPellets, int curFruit, tMapa mapa, tAssets assets, int vida){
+    int pos_vida_x = 1450;
+    int pos_vida_y = 800;
+    int espacamento = assets.pacman_vida_sprite.width - 10;
     DrawRectangle(0, 800, 1600, 40, BLACK); //desenho da HUD
     DrawText(TextFormat("Score: %d", score), 10, 810, 20, WHITE);
     DrawText(TextFormat("pellets: %d", totalPellets), 150, 810, 20, WHITE);
     drawFruit(curFruit, mapa);
+    for(int i = 0; i < vida; i++)
+    {
+      // DrawRectangle(pos_vida_x + espacamento*i, pos_vida_y, 20, 20, WHITE);
+      DrawTexture(assets.pacman_vida_sprite, pos_vida_x + espacamento*i, pos_vida_y, WHITE);
+    }
 }
 
 
@@ -126,7 +135,7 @@ void drawMenu(tMenu* menuData){
     int titleWidth = MeasureText(titleText, TITLE_FONT_SIZE);
     int titleY = 100;
 
-    DrawRectangle(MENU_SPACING_X - 5, titleY - 5, titleWidth + 30, TITLE_FONT_SIZE + 30, DARKBLUE);
+    DrawRectangle(MENU_SPACING_X - 5, titleY - 5, titleWidth + 30, TITLE_FONT_SIZE + 30, ROXO_ESCURO);
     DrawRectangle(MENU_SPACING_X - 10, titleY - 10, titleWidth + 20, TITLE_FONT_SIZE + 20, COLOR_TITLE_BG);
 
     DrawText(titleText, MENU_SPACING_X, titleY, TITLE_FONT_SIZE, COLOR_TITLE_TEXT);
@@ -145,14 +154,14 @@ void drawMenu(tMenu* menuData){
             int yOffset = (expandedHeight - OPTION_HEIGHT) / 2;
 
             if(IsKeyPressed(KEY_ENTER)){
-            DrawRectangle(MENU_SPACING_X - xOffset, currentY - yOffset, expandedWidth + 5, expandedHeight + 5, DARKGRAY);
+            DrawRectangle(MENU_SPACING_X - xOffset, currentY - yOffset, expandedWidth + 5, expandedHeight + 5, ROXO_ESCURO);
             DrawRectangle(MENU_SPACING_X - xOffset, currentY - yOffset, expandedWidth, expandedHeight, COLOR_OPTION_NORMAL_BG);
             DrawText(menuOptionsText[i], MENU_SPACING_X, currentY + (expandedHeight - OPTION_FONT_SIZE) / 2, OPTION_FONT_SIZE, COLOR_OPTION_NORMAL_TEXT);
               
             }
             else
             {
-            DrawRectangle(MENU_SPACING_X - xOffset, currentY - yOffset, expandedWidth + 5, expandedHeight + 5, DARKGRAY);
+            DrawRectangle(MENU_SPACING_X - xOffset, currentY - yOffset, expandedWidth + 5, expandedHeight + 5, ROXO_ESCURO);
             DrawRectangle(MENU_SPACING_X - xOffset, currentY - yOffset, expandedWidth, expandedHeight, COLOR_OPTION_HIGHLIGHT_BG);
             DrawText(menuOptionsText[i], MENU_SPACING_X, currentY + (expandedHeight - OPTION_FONT_SIZE) / 2, OPTION_FONT_SIZE, COLOR_OPTION_HIGHLIGHT_TEXT);
             }
@@ -162,7 +171,7 @@ void drawMenu(tMenu* menuData){
             
         } 
         else{
-            DrawRectangle(MENU_SPACING_X, currentY, OPTION_WIDTH + 5, OPTION_HEIGHT + 5, DARKGRAY);
+            DrawRectangle(MENU_SPACING_X, currentY, OPTION_WIDTH + 5, OPTION_HEIGHT + 5, ROXO_ESCURO);
             DrawRectangle(MENU_SPACING_X, currentY, OPTION_WIDTH, OPTION_HEIGHT, COLOR_OPTION_NORMAL_BG);
             
             DrawText(menuOptionsText[i], MENU_SPACING_X + 10, currentY + (OPTION_HEIGHT - 20) / 2, OPTION_FONT_SIZE - 10, COLOR_OPTION_NORMAL_TEXT);

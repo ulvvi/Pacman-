@@ -10,6 +10,11 @@
 #define TAM_GRID 40
 #define MAP_SIZE (TAM_I * TAM_J)
 #define MASK_SIZE ((TAM_I/2) * (TAM_J/2))
+
+//Cores
+Color ROXO = {119, 59, 191, 255};
+Color ROXO_ESCURO = {78,39,140,255};
+
 //struct dos possiveis vfx
 typedef enum {
     CHERRY,

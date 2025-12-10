@@ -7,9 +7,9 @@
 #include <stdbool.h>
 #include <limits.h>
 #include "./MainSystem/system.h"
+#include "./MainSystem/assets.h"
 #include "./Map/fruits.h"
 #include "Map/map.h"
-#include "./MainSystem/assets.h"
 #include "Map/texturing.h"
 #include "Character/player.h"
 #include "MainSystem/camera.h"

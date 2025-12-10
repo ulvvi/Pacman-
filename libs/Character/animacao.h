@@ -10,7 +10,7 @@ void animaObjeto(tAnimacao* objeto)
     Rectangle dest = {objeto->pos.x + origem.x, objeto->pos.y + origem.y, objeto->spritesheet.width*escala, objeto->spritesheet.height*escala};
 
     objeto->contador+= GetFrameTime();
-    if(objeto->contador > objeto->tempo_frame)
+    if(objeto->contador >= objeto->tempo_frame)
     { 
        objeto->frame_atual++;
        objeto->contador = 0;
