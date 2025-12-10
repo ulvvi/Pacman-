@@ -11,7 +11,8 @@ Este projeto foi criado para o **Projeto Final da disciplina de Programação II
 
 ### 🕹️ Jogabilidade
 
-Movimente-se usando as **setas do teclado** (↑, ↓, ←, →), e **espaço** para utilizar as frutas coletadas (powerups), o jogo possuí 3 fases que podem ser alteradas por meio de arquivos .txt
+Movimente-se usando as **setas do teclado** (↑, ↓, ←, →), e **espaço** para utilizar as frutas coletadas (powerups).
+Coletar todos os pellets de uma fase te levara para a próxima, o jogo possui 3 fases que podem ser alteradas nos txt correspondentes
 
 ---
 
@@ -46,7 +47,7 @@ Movimente-se usando as **setas do teclado** (↑, ↓, ←, →), e **espaço** 
     ./main.exe
     ```
     
-### 💻 LINUX
+### 💻 Linux
 
 #### 1. Instalação de Dependências
 Para Ubuntu, Debian e distribuições baseadas em apt:
