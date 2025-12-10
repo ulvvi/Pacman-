@@ -79,7 +79,7 @@ void drawFruit(int curFruit, tMapa mapa){
 void drawHUD(int score, int totalPellets, int curFruit, tMapa mapa, tAssets assets, int vida){
     int pos_vida_x = 1450;
     int pos_vida_y = 800;
-    float hue = (float)score/30;
+    float hue = (float)score/40;
     if(hue > 157) hue = 157;
     Color PONTUACAO = ColorFromHSV(hue, 0.95f, 0.5f);
 

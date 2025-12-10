@@ -23,6 +23,7 @@ void trocaSpriteFantasma(tInimigo* fantasma, int numero_fantasma)
 { 
     for(int i = 0; i < numero_fantasma; i++)
     {
+        //alterna pra onde eles tao olhando
         switch(fantasma[i].direcao)
         {
             case 1:

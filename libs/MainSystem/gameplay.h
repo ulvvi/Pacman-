@@ -264,7 +264,7 @@ tAssets assets, tAnimacao* obj_vitoria, tAnimacao* obj_confete, tAnimacao* obj_d
     
     // --- ANIMAÇÕES/CUTSCENES ---
     *obj_cut_in = (tAnimacao){
-        0, 24, 0.075, 0, assets.cut_in_animacao, 
+        0, 25, 0.070, 0, assets.cut_in_animacao, 
         {0,0,LARGURA, 600}, {0, ALTURA/2 - 600/2}, 0, 0, 0, 1
     };
     *obj_vitoria = (tAnimacao){

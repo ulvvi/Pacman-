@@ -269,12 +269,12 @@ void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPe
  */
 void powerPellet(tJogador* pacman, tMapa* mapa)
 {   
-     pacman->tempo_power_pellet -= GetFrameTime();
-        if(pacman->tempo_power_pellet <= 0)
-        {
-            trocaCorEXT(mapa, mapa->cor_atual);
-            pacman->power_pellet = false;
-        }
+    pacman->tempo_power_pellet -= GetFrameTime();
+    if(pacman->tempo_power_pellet <= 0)
+    {
+        trocaCorEXT(mapa, mapa->cor_atual);
+        pacman->power_pellet = false;
+    }
 }
 
 /**
