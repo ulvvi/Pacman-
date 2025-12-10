@@ -166,22 +166,13 @@ Music stems[3], int dangerPellets, tAnimacao* obj_efeito_morango){
 
         case BLUEBERRY:
             blueberry(pacman);
-            animacao_morango = true;
         break;
 
         case CHERRY:
             cherry(pacman);
         break;
     }
-    if(animacao_morango)
-    {
-        animaObjeto(obj_efeito_morango);
-        if(obj_efeito_morango->frame_atual == 6)
-        {
-            animacao_morango = false;
-            obj_efeito_morango->frame_atual = 0;
-        }
-    }
+
 
     //teleporte player
     if(checaPlayerDentroMapa(pacman) == false)
@@ -210,6 +201,18 @@ Music stems[3], int dangerPellets, tAnimacao* obj_efeito_morango){
     //n consegui encaixar esse troca sprite dentro da func do alexandre, por ela n receber um pointer
     if(camera_principal->ativa == true) screenShake(camera_principal);
     trocaSpriteFantasma(fantasma, mapa->numero_fantasmas);
+
+    //efeito do buraco negro
+    if(animacao_morango)
+    {
+        animaObjeto(obj_efeito_morango);
+        if(obj_efeito_morango->frame_atual == 11 || *state_atual == MORTE)
+        {
+            animacao_morango = false;
+            obj_efeito_morango->frame_atual = 0;
+        }
+
+    }
 }
 
 
@@ -277,7 +280,7 @@ tAssets assets, tAnimacao* obj_vitoria, tAnimacao* obj_confete, tAnimacao* obj_d
         {0,0,LARGURA, ALTURA}, {0,0}, 0, 0, 0, 1
     };
     *obj_efeito_morango =  (tAnimacao){
-        0, 7, 0.150, 0, assets.efeito_morango_animacao, 
+        0, 12, 0.070, 0, assets.efeito_morango_animacao, 
         {0,0, 280, 280}, {0,0}, 0, 0, 0, 1
     };
 

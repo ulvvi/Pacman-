@@ -63,7 +63,7 @@ void inicializaAssets(tAssets* assets)
     assets->vitoria_cutscene = LoadTexture("sprites/ambiente/vitoria-Sheet.png");
     assets->confete_animacao = LoadTexture("sprites/ambiente/confetes-Sheet.png");
     assets->derrota_cutscene = LoadTexture("sprites/ambiente/derrota-Sheet.png");
-    assets->efeito_morango_animacao = LoadTexture("sprites/ambiente/animacao_morango-Sheet.png");
+    assets->efeito_morango_animacao = LoadTexture("sprites/ambiente/animacao_morango-Sheet2.png");
    
 }
 
