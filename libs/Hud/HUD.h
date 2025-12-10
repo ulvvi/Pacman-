@@ -77,9 +77,13 @@ void drawFruit(int curFruit, tMapa mapa){
 void drawHUD(int score, int totalPellets, int curFruit, tMapa mapa, tAssets assets, int vida){
     int pos_vida_x = 1450;
     int pos_vida_y = 800;
+    float hue = (float)score/30;
+    if(hue > 157) hue = 157;
+    Color PONTUACAO = ColorFromHSV(hue, 0.95f, 0.5f);
+
     int espacamento = assets.pacman_vida_sprite.width - 10;
     DrawRectangle(0, 800, 1600, 40, BLACK); //desenho da HUD
-    DrawText(TextFormat("Score: %d", score), 10, 810, 20, WHITE);
+    DrawText(TextFormat("Score: %d", score), 10, 810, 20, PONTUACAO);
     DrawText(TextFormat("pellets: %d", totalPellets), 150, 810, 20, WHITE);
     drawFruit(curFruit, mapa);
     for(int i = 0; i < vida; i++)
