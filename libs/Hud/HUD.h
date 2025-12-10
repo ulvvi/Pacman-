@@ -106,8 +106,12 @@ bool gameOver()
     char texto_menu[] = {"V para tentar novamente"};
     char texto_sair[] = {"ESC para sair do jogo"};
     bool game_over = true;
+    Music gameOverMusic = LoadMusicStream("audio/Music/over.wav");
+    SetMusicStreamVolume(gameOverMusic, 1.5f);
+    PlayMusicStream(gameOverMusic);
     while(true)
     {
+        UpdateMusicStream(gameOverMusic);
         BeginDrawing();
         ClearBackground(BLACK);
         DrawText("FIM DE JOGO", (LARGURA - MeasureText(texto_over, tam_over))/2, ALTURA/2 - tam_over/2, 80, RED);
@@ -118,11 +122,15 @@ bool gameOver()
         if(IsKeyPressed(KEY_V))
         {
             //voltar ao menu de alguma forma
+            StopMusicStream(gameOverMusic);
+            UnloadMusicStream(gameOverMusic);
             return false;
         }
         if(IsKeyPressed(KEY_M))
         {
             //voltar ao menu de alguma forma
+            StopMusicStream(gameOverMusic);
+            UnloadMusicStream(gameOverMusic);
             return true;
         }
     }
