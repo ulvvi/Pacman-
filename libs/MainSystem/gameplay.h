@@ -89,7 +89,7 @@ void drawGame(tMapa mapa, tJogador* pacman, GameState state_atual, tInimigo *fan
  * @param pontuacao Efeito visual de pontuação
  * @param gameSFX Sons do jogo
  */
-void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* menuData, tInimigo* fantasma, tCamera* camera_principal, tVfx* pontuacao, Sound gameSFX[5]){
+void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* menuData, tInimigo* fantasma, tCamera* camera_principal, tVfx* pontuacao, Sound gameSFX[5], Music stems[3], int dangerPellets){
     //contabilizador de frames pro fantasma 
     mapa->frame_counter++;
     if(IsKeyPressed(KEY_TAB))
@@ -116,6 +116,13 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
         pacman->remainingPellets--;
     }
 
+    if(IsKeyPressed(KEY_SPACE)){
+        if(pacman->fruta_ativa == -1){
+            PlaySound(gameSFX[6]); //som de usar fruta
+        }
+        useFruit(pacman);
+    }
+
     //spawn de frutas
     spawnFruit(mapa->grid_mapa, pacman);
 
@@ -132,6 +139,12 @@ void updateLogic(tJogador* pacman, tMapa* mapa, GameState* state_atual, tMenu* m
     if(pacman->power_pellet == true)
     {
         powerPellet(pacman, mapa);
+    }
+
+    if(pacman->remainingPellets <= dangerPellets){
+        SetMusicPitch(stems[0], 1.10f);
+        SetMusicPitch(stems[1], 1.10f);
+        SetMusicPitch(stems[2], 1.10f);
     }
 
     //cronometro das frutas e ativacao de seus respectivos poderes
@@ -261,7 +274,7 @@ void cleanup(tMapa* mapa, tMenu* menuData, Music stems[], tInimigo* fantasmas, S
     for(int i = 0; i < 3; i++){
         UnloadMusicStream(stems[i]);
     }
-    for(int i = 0; i < 6; i++){
+    for(int i = 0; i < 7; i++){
         UnloadSound(gameSFX[i]);
     }
     //liberar memoria
@@ -288,7 +301,7 @@ int gameLevel(int* level, tAssets assets, int whatToDo){
     tMenu menuData;
 
     Music stems[3];
-    Sound gameSFX[6];
+    Sound gameSFX[7];
 
     tMapa mapa = {0};
     
@@ -339,12 +352,7 @@ int gameLevel(int* level, tAssets assets, int whatToDo){
                 if(pacman.power_pellet == true){
                     switchMusic(JACKPOT, stems);
                 }
-                if(pacman.remainingPellets <= dangerPellets){
-                    SetMusicPitch(stems[0], 1.10f);
-                    SetMusicPitch(stems[1], 1.10f);
-                    SetMusicPitch(stems[2], 1.10f);
-                }
-                updateLogic(&pacman, &mapa, &state_atual, &menuData, fantasmas, &camera_principal, &pontuacao, gameSFX);
+                updateLogic(&pacman, &mapa, &state_atual, &menuData, fantasmas, &camera_principal, &pontuacao, gameSFX, stems, dangerPellets);
                 if(IsKeyDown(KEY_A)) 
                 {
                     pacman.vida--; 

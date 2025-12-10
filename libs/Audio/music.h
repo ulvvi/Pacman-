@@ -97,10 +97,12 @@ void initiateAudio(Music stems[], Sound* gameSFX, tMenu* menu, int level){
     SetSoundVolume(gameSFX[2], 1.5f);
     gameSFX[3] = LoadSound("audio/ambiente/death.wav");
     SetSoundVolume(gameSFX[3], 2.0f);
-    gameSFX[4] = LoadSound("audio/ambiente/eat_ghost.wav");
+    gameSFX[4] = LoadSound("audio/ambiente/ghost_eat.wav");
     SetSoundVolume(gameSFX[4], 1.5f);
     gameSFX[5] = LoadSound("audio/ambiente/CUTIN.mp3");
     SetSoundVolume(gameSFX[5], 0.5f);
+    gameSFX[6] = LoadSound("audio/ambiente/use_fruit.wav");
+    SetSoundVolume(gameSFX[6], 2.0f);
 
     return;
 }

@@ -311,10 +311,6 @@ void movePlayer(char** grid_mapa, tJogador* pacman)
         move_alvo_y = IsKeyPressed(KEY_DOWN) - IsKeyPressed(KEY_UP);
         move_alvo_x = 0;
     }
-
-    if(IsKeyPressed(KEY_SPACE)){
-        useFruit(pacman);
-    }
     
     //inversao imediata de posicao(no msm eixo)
     if(pacman->move_x != 0 && abs(pacman->move_x) == abs(move_alvo_x*pacman->spd))
