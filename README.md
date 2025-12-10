@@ -1,4 +1,4 @@
-#PACMAN+
+# PACMAN+
 
 [![Feito com RayLib](https://img.shields.io/badge/Made%20with-RayLib-000000.svg?style=flat&logo=raylib)](https://www.raylib.com/)
 [![Linguagem](https://img.shields.io/badge/Language-C-555555.svg?style=flat&logo=c)](https://en.wikipedia.org/wiki/C_(programming_language))
