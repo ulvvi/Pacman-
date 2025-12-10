@@ -106,8 +106,8 @@ bool gameOver(tAssets assets)
     int tam_resto = 20;
     int espacamento = 20;
     char texto_over[] = {"FIM DE JOGO"};
-    char texto_menu[] = {"V para tentar novamente"};
-    char texto_sair[] = {"ESC para sair do jogo"};
+    char texto_rejogar[] = {"Aperte V para tentar novamente"};
+    char texto_menu[] = {"Aperte M para retornar ao menu"};
     bool game_over = true;
     Music gameOverMusic = LoadMusicStream("audio/Music/over.wav");
     SetMusicVolume(gameOverMusic, 2.0f);
@@ -121,10 +121,10 @@ bool gameOver(tAssets assets)
         int pos_gameover_y = (ALTURA/2 - tam_over/2)-120;
         Rectangle spritesheet_derrota = {3200,2520, LARGURA, ALTURA};
         DrawTextureRec(assets.derrota_cutscene, spritesheet_derrota, (Vector2){0,0}, WHITE);
-        DrawText("FIM DE JOGO", pos_gameover_x, pos_gameover_y, 80, pontos_perdidos);
-        DrawText("FIM DE JOGO", pos_gameover_x+2, pos_gameover_y+2, 80, sombra_pontos_perdidos);
-        DrawText("V para rejogar a fase", (LARGURA - MeasureText(texto_menu, tam_resto))/2, pos_gameover_y + espacamento + 60, tam_resto, PEL);
-        DrawText("M para ir ao menu", (LARGURA - MeasureText(texto_menu, tam_resto))/2, pos_gameover_y + espacamento*2 + 60, tam_resto, PEL);
+        DrawText(texto_over, pos_gameover_x, pos_gameover_y, 80, pontos_perdidos);
+        DrawText(texto_over, pos_gameover_x+2, pos_gameover_y+2, 80, sombra_pontos_perdidos);
+        DrawText(texto_rejogar, (LARGURA - MeasureText(texto_menu, tam_resto))/2, pos_gameover_y + espacamento + 60, tam_resto, PEL);
+        DrawText(texto_menu, (LARGURA - MeasureText(texto_menu, tam_resto))/2, pos_gameover_y + espacamento*2 + 60, tam_resto, PEL);
         EndDrawing();
 
         if(IsKeyPressed(KEY_V))
