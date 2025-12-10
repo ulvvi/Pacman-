@@ -274,7 +274,7 @@ void cleanup(tMapa* mapa, tMenu* menuData, Music stems[], tInimigo* fantasmas, S
     for(int i = 0; i < 3; i++){
         UnloadMusicStream(stems[i]);
     }
-    for(int i = 0; i < 7; i++){
+    for(int i = 0; i < 8; i++){
         UnloadSound(gameSFX[i]);
     }
     //liberar memoria

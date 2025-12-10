@@ -125,7 +125,7 @@ void initiateAudio(Music stems[], Sound* gameSFX, tMenu* menu, int level){
     gameSFX[5] = LoadSound("audio/ambiente/CUTIN.mp3");
     SetSoundVolume(gameSFX[5], 0.5f);
     gameSFX[6] = LoadSound("audio/ambiente/use_fruit.wav");
-    SetSoundVolume(gameSFX[6], 3.0f);
+    SetSoundVolume(gameSFX[6], 3.5f);
     gameSFX[7] = LoadSound("audio/ambiente/get_fruit.wav");
     SetSoundVolume(gameSFX[7], 3.0f);
 
