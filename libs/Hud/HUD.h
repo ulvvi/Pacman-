@@ -107,7 +107,7 @@ bool gameOver()
     char texto_sair[] = {"ESC para sair do jogo"};
     bool game_over = true;
     Music gameOverMusic = LoadMusicStream("audio/Music/over.wav");
-    SetMusicVolume(gameOverMusic, 1.0f);
+    SetMusicVolume(gameOverMusic, 2.0f);
     PlayMusicStream(gameOverMusic);
     while(true)
     {
