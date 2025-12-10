@@ -207,7 +207,7 @@ bool hasCollectedAllPellets(tJogador* pacman){
  * @param obj_confete Animação de confete
  */
 void initGameLevel(int* level, tMapa* mapa, tJogador* pacman, tInimigo** fantasmas, tMenu* menu, Music stems[3], Sound* gameSFX, tAnimacao* obj_cut_in,
-tAssets assets, tAnimacao* obj_vitoria, tAnimacao* obj_confete) 
+tAssets assets, tAnimacao* obj_vitoria, tAnimacao* obj_confete, tAnimacao* obj_derrota) 
 {
 
     // --- ÁUDIO ---
@@ -242,6 +242,10 @@ tAssets assets, tAnimacao* obj_vitoria, tAnimacao* obj_confete)
     *obj_confete = (tAnimacao){
         0, 8, 0.160, 0, assets.confete_animacao, 
         {0,0,LARGURA, ALTURA}, {0,0}, 0, 0, 0, 10
+    };
+    *obj_derrota =  (tAnimacao){
+        0, 12, 0.080, 0, assets.derrota_cutscene, 
+        {0,0,LARGURA, ALTURA}, {0,0}, 0, 0, 0, 1
     };
 
 }
@@ -302,10 +306,11 @@ int gameLevel(int* level, tAssets assets, int whatToDo){
     tAnimacao obj_transicao = {0, 18, 0.100, 0, assets.transicao_animacao,{0,0,LARGURA, ALTURA}, {0,0}, 0, 0, 0, 1};
     tAnimacao obj_vitoria;
     tAnimacao obj_confete;
+    tAnimacao obj_derrota;
 
     tVfx pontuacao = {3, 3, false, {0,0}, 0};
 
-    initGameLevel(level, &mapa, &pacman, &fantasmas, &menuData, stems, gameSFX, &obj_cut_in, assets, &obj_vitoria, &obj_confete);
+    initGameLevel(level, &mapa, &pacman, &fantasmas, &menuData, stems, gameSFX, &obj_cut_in, assets, &obj_vitoria, &obj_confete, &obj_derrota);
     
 
     tCamera camera_principal;
@@ -383,10 +388,7 @@ int gameLevel(int* level, tAssets assets, int whatToDo){
                 {
                     if(pacman.vida == 0)
                     {
-                        EndDrawing();
-                        //limpezas pra dar game over
-                        cleanup(&mapa, &menuData, stems, fantasmas, gameSFX);
-                        return venceu;
+                        state_atual = DERROTA_CUTSCENE;
                     }
                     centralizaPlayer(&pacman, mapa.grid_mapa);
                     centralizaFantasma(fantasmas, mapa.numero_fantasmas);
@@ -428,6 +430,7 @@ int gameLevel(int* level, tAssets assets, int whatToDo){
                 }
                 
             break;
+
             case VITORIA_CUTSCENE:
                 pauseAllMusic(stems);
                 cutscene(&obj_vitoria, &state_atual, GAMEPLAY);
@@ -437,7 +440,22 @@ int gameLevel(int* level, tAssets assets, int whatToDo){
                     venceu = 1;
                     return venceu;
                 }
-            break;    
+            break;   
+            
+            case DERROTA_CUTSCENE:  
+                pauseAllMusic(stems);
+                cutscene(&obj_derrota, &state_atual, GAMEPLAY);
+                if(state_atual == GAMEPLAY)
+                {
+                    // ClearBackground(BLACK);
+                    // EndDrawing();
+                    //limpezas pra dar game over
+                    cleanup(&mapa, &menuData, stems, fantasmas, gameSFX);
+                    venceu = 0;
+                    return venceu;
+                }
+
+            break;
             
             case TRANSICAO:
                pauseAllMusic(stems); 

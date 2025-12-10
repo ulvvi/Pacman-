@@ -73,6 +73,8 @@ void drawFruit(int curFruit, tMapa mapa){
  * @param totalPellets Número total de pellets restantes.
  * @param curFruit Índice da fruta atual.
  * @param mapa Estrutura do mapa contendo as texturas das frutas.
+ * @param assets Estrutura dos assets do jogo.
+ * @param vida Vida do jogador.
  */
 void drawHUD(int score, int totalPellets, int curFruit, tMapa mapa, tAssets assets, int vida){
     int pos_vida_x = 1450;
@@ -88,7 +90,6 @@ void drawHUD(int score, int totalPellets, int curFruit, tMapa mapa, tAssets asse
     drawFruit(curFruit, mapa);
     for(int i = 0; i < vida; i++)
     {
-      // DrawRectangle(pos_vida_x + espacamento*i, pos_vida_y, 20, 20, WHITE);
       DrawTexture(assets.pacman_vida_sprite, pos_vida_x + espacamento*i, pos_vida_y, WHITE);
     }
 }
@@ -96,23 +97,29 @@ void drawHUD(int score, int totalPellets, int curFruit, tMapa mapa, tAssets asse
 
 /**
  * @brief Função que exibe a tela de game over.
+ * @param assets Estrutura dos assets do jogo.
  * @return true se o jogador escolher voltar ao menu, false para tentar novamente.
  */
-bool gameOver()
+bool gameOver(tAssets assets)
 {
     int tam_over = 80;
     int tam_resto = 20;
+    int espacamento = 20;
     char texto_over[] = {"FIM DE JOGO"};
     char texto_menu[] = {"V para tentar novamente"};
     char texto_sair[] = {"ESC para sair do jogo"};
-    bool game_over = true;
+    
     while(true)
     {
         BeginDrawing();
         ClearBackground(BLACK);
-        DrawText("FIM DE JOGO", (LARGURA - MeasureText(texto_over, tam_over))/2, ALTURA/2 - tam_over/2, 80, RED);
-        DrawText("V para rejogar a fase", (LARGURA - MeasureText(texto_menu, tam_resto))/2, ALTURA/2 + tam_resto*3, tam_resto, YELLOW);
-        DrawText("M para ir ao menu", (LARGURA - MeasureText(texto_menu, tam_resto))/2, ALTURA/2 + tam_resto*5, tam_resto, YELLOW);
+        int pos_gameover_x = (LARGURA - MeasureText(texto_over, tam_over))/2;
+        int pos_gameover_y = (ALTURA/2 - tam_over/2)-120;
+        Rectangle spritesheet_derrota = {3200,2520, LARGURA, ALTURA};
+        DrawTextureRec(assets.derrota_cutscene, spritesheet_derrota, (Vector2){0,0}, WHITE);
+        DrawText("FIM DE JOGO", pos_gameover_x, pos_gameover_y, 80, RED);
+        DrawText("V para rejogar a fase", (LARGURA - MeasureText(texto_menu, tam_resto))/2, pos_gameover_y + espacamento + 60, tam_resto, YELLOW);
+        DrawText("M para ir ao menu", (LARGURA - MeasureText(texto_menu, tam_resto))/2, pos_gameover_y + espacamento*2 + 60, tam_resto, YELLOW);
         EndDrawing();
 
         if(IsKeyPressed(KEY_V))

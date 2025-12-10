@@ -147,7 +147,8 @@ typedef enum GameState
     PRIMEIRO_MOVIMENTO,
     MORTE,
     TRANSICAO,
-    VITORIA_CUTSCENE
+    VITORIA_CUTSCENE,
+    DERROTA_CUTSCENE
 }GameState;
 
 

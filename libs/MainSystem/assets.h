@@ -24,6 +24,7 @@ typedef struct
     Texture2D transicao_animacao;
     Texture2D vitoria_cutscene;
     Texture2D confete_animacao;
+    Texture2D derrota_cutscene;
     
 
 
@@ -57,6 +58,8 @@ void inicializaAssets(tAssets* assets)
     assets->transicao_animacao = LoadTexture("sprites/ambiente/transicao2-Sheet.png");
     assets->vitoria_cutscene = LoadTexture("sprites/ambiente/vitoria-Sheet.png");
     assets->confete_animacao = LoadTexture("sprites/ambiente/confetes-Sheet.png");
+    assets->derrota_cutscene = LoadTexture("sprites/ambiente/derrota-Sheet.png");
+    
 }
 
 void limpezaGeral(tAssets* assets)
@@ -85,4 +88,5 @@ void limpezaGeral(tAssets* assets)
     UnloadTexture(assets->transicao_animacao);
     UnloadTexture(assets->vitoria_cutscene);
     UnloadTexture(assets->confete_animacao);
+    UnloadTexture(assets->derrota_cutscene);
 }

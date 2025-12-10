@@ -52,7 +52,7 @@ int main(void)
                 //evitar loop infinito se ja foi apertado o ESC(ou o X)
                 if(WindowShouldClose())
                     break;
-                int opcao = gameOver();
+                int opcao = gameOver(assets);
                 if(opcao == 1)
                 {
                     //dando break nesse loop while ja roda o mainmenu dnv e tudo ok
