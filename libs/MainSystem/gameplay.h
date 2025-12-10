@@ -282,7 +282,6 @@ void cleanup(tMapa* mapa, tMenu* menuData, Music stems[], tInimigo* fantasmas, S
 int gameLevel(int* level, tAssets assets, int whatToDo){
     int cronometro = 0;
     int venceu = 0;
-    int firstTimeTransicao = 1;
     
     GameState state_atual = TRANSICAO;
 
@@ -320,7 +319,7 @@ int gameLevel(int* level, tAssets assets, int whatToDo){
     
 
     /************************************
-                JOGO
+        * LOOP PRINCIPAL DO JOGO
     ************************************/
 
     //tentei ate refatorar mas ficaria mt ruim
