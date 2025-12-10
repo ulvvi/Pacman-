@@ -50,11 +50,11 @@ Coletar todos os pellets de uma fase te levara para a próxima, o jogo possui 3 
 ### 💻 Linux
 
 #### 1. Instalação de Dependências
-Para Ubuntu, Debian e distribuições baseadas em apt:
+1. Para Ubuntu, Debian e distribuições baseadas em apt:
+
     ```bash
-    sudo apt update
-    sudo apt install build-essential
-    sudo apt install libraylib-dev
+    pacman -S mingw-w64-ucrt-x86_64-gcc
+    pacman -S mingw-w64-ucrt-x86_64-raylib
     ```
 
 #### 2. Compilar e Rodar
