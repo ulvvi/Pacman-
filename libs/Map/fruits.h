@@ -6,8 +6,11 @@
 #define TAM_J 40
 #define TAM_GRID 40
 
-
-
+/**
+ * @brief Função para spawnar frutas no mapa em intervalos regulares.
+ * @param map Mapa do jogo representado como uma matriz de caracteres.
+ * @param pacman Ponteiro para a estrutura do jogador.
+ */
 void spawnFruit(char** map, tJogador* pacman){
     
     static int fruit_timer = 0;
@@ -50,6 +53,11 @@ void spawnFruit(char** map, tJogador* pacman){
 
 }
 
+/**
+ * @brief Função para o jogador pegar uma fruta.
+ * @param pacman Ponteiro para a estrutura do jogador.
+ * @param fruit_char Caractere representando o tipo de fruta.
+ */
 void getFruit(tJogador* pacman, char fruit_char){
     switch(fruit_char){
         case 'C':
@@ -67,6 +75,10 @@ void getFruit(tJogador* pacman, char fruit_char){
     }
 }
 
+/**
+ * @brief Função para ativar o efeito da fruta coletada.
+ * @param pacman Ponteiro para a estrutura do jogador.
+ */
 void useFruit(tJogador* pacman){
     if(pacman->fruta_ativa == -1){
         pacman->fruta_ativa = pacman->current_fruit;
@@ -75,6 +87,10 @@ void useFruit(tJogador* pacman){
 }
 
 
+/**
+ * @brief Função para o efeito da cereja.
+ * @param pacman Ponteiro para a estrutura do jogador.
+ */
 void cherry(tJogador* pacman){
         if(pacman->curFruitTimer == 0)
         {
@@ -97,6 +113,11 @@ void cherry(tJogador* pacman){
         }  
 }
 
+/**
+ * @brief Função para o efeito da uva.
+ * @param pacman Ponteiro para a estrutura do jogador.
+ * @param grid_mapa Mapa do jogo representado como uma matriz de caracteres.
+ */
 void grape(tJogador* pacman, char** grid_mapa){
         if(pacman->curFruitTimer == 0)
         {
@@ -125,6 +146,10 @@ void grape(tJogador* pacman, char** grid_mapa){
         }  
 }
 
+/**
+ * @brief Função para o efeito do mirtilo.
+ * @param pacman Ponteiro para a estrutura do jogador.
+ */
 void blueberry(tJogador* pacman){
         if(pacman->curFruitTimer == 0)
         {
@@ -143,6 +168,11 @@ void blueberry(tJogador* pacman){
         }
 }
 
+/**
+ * @brief Função para o efeito do morango.
+ * @param pacman Ponteiro para a estrutura do jogador.
+ * @param grid_mapa Mapa do jogo representado como uma matriz de caracteres.
+ */
 void strawberry(tJogador* pacman, char** grid_mapa){
     int centerX = pacman->pos.x/TAM_GRID;
     int centerY = pacman->pos.y/TAM_GRID;

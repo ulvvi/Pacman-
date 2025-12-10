@@ -31,7 +31,10 @@ typedef struct
 
 }tAssets;
 
-
+/**
+ * @brief Carrega todos os assets do jogo.
+ * @param assets Ponteiro para a estrutura de assets.
+ */
 void inicializaAssets(tAssets* assets)
 {
     //pacman

@@ -1,5 +1,10 @@
 #include "../header.h"
 
+/**
+ * @brief Função que exibe a tela de vitória.
+ * @param obj_vitoria Estrutura de animação para o objeto de vitória.
+ * @param obj_confete Estrutura de animação para o objeto de confete.
+ */
 void victoryScreen(tAnimacao obj_vitoria, tAnimacao obj_confete){
     while(!WindowShouldClose()){
         BeginDrawing();

@@ -196,8 +196,9 @@ void trocaSpritePacman(tJogador* pacman)
  * @param totalPellets Ponteiro para o número total de pellets restantes.
  * @param state Ponteiro para o estado atual do jogo.
  * @param pontuacao Ponteiro para a estrutura de efeitos visuais.
+ * @param gameSFX Array de sons do jogo.
  */
-void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPellets, GameState* state, tVfx* pontuacao)
+void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPellets, GameState* state, tVfx* pontuacao, Sound gameSFX[8])
 {
     //grid atual
     int grid_i = pacman->pos.y/TAM_GRID;
@@ -228,24 +229,28 @@ void colisaoPellets(tJogador* pacman, char** grid_mapa, int* score, int* totalPe
         case 'C':
             pontuou = 300;
             getFruit(pacman, 'C');
+            PlaySound(gameSFX[7]);
             grid_mapa[grid_i][grid_j] = ' ';
         break;
 
         case 'S':
             pontuou = 300;
             getFruit(pacman, 'S');
+            PlaySound(gameSFX[7]);
             grid_mapa[grid_i][grid_j] = ' ';
         break;
 
         case 'G':
             pontuou = 300;
             getFruit(pacman, 'G');
+            PlaySound(gameSFX[7]);
             grid_mapa[grid_i][grid_j] = ' ';
         break;
 
         case 'B':
             pontuou = 300;
             getFruit(pacman, 'B');
+            PlaySound(gameSFX[7]);
             grid_mapa[grid_i][grid_j] = ' ';
         break;
     }
@@ -310,10 +315,6 @@ void movePlayer(char** grid_mapa, tJogador* pacman)
     {
         move_alvo_y = IsKeyPressed(KEY_DOWN) - IsKeyPressed(KEY_UP);
         move_alvo_x = 0;
-    }
-
-    if(IsKeyPressed(KEY_SPACE)){
-        useFruit(pacman);
     }
     
     //inversao imediata de posicao(no msm eixo)

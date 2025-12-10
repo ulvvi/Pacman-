@@ -31,6 +31,7 @@ int main(void)
         while(true){
             //roda a func gamelevel e retorna true ou false(true pra vitoria, false pra derrota)
             STATE_MAIN state = gameLevel(&nivel_atual, assets, whatToDo);
+            whatToDo = 1;
 
             //iniciar novo jogo a partir do menu
             if(state == NG_PAUSE)

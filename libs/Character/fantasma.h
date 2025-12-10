@@ -613,7 +613,8 @@ void ConcretizaColisao(tJogador* pacman, tInimigo* fantasma, char **grid_mapa, i
                 *state_atual = MORTE;
             }
             else{
-                score = 100;
+                PlaySound(gameSFX[4]); //som de comer fantasma
+                score = 50;
                 tempo_screenshake = 0.25;
                 forca_screenshake = 200;
                 comeFantasma(fantasma, indice);

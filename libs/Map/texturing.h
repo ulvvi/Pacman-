@@ -55,17 +55,34 @@ enum
     BLOCO_UNICO,
 };
 
+/**
+ * @brief Função para trocar a cor do mapa com base em um valor externo.
+ * @param mapa Ponteiro para a estrutura do mapa.
+ * @param cor Índice da cor a ser aplicada.
+ */
 void trocaCorEXT(tMapa* mapa, int cor)
 {
     mapa->spritesheet.y = 40*cor;
 }
+
+/**
+ * @brief Função para trocar a cor do mapa aleatoriamente.
+ * @param mapa Ponteiro para a estrutura do mapa.
+ */
 void trocaCor(tMapa* mapa)
 {
 
     mapa->spritesheet.y = 40*GetRandomValue(0, mapa->tamanho_spritesheet);
 }
 
-//funcao auxiliar, pra ajudar a identificar paredes
+
+/**
+ * @brief Função para checar se há uma parede em uma posição específica do mapa.
+ * @param grid_mapa Mapa do jogo representado como uma matriz de caracteres.
+ * @param i Índice da linha no mapa.
+ * @param j Índice da coluna no mapa.
+ * @return true se houver uma parede na posição especificada, false caso contrário.
+ */
 bool checaParede(char** grid_mapa, int i, int j)
 {
     if(i < 0 || i >= TAM_I || j < 0 || j >= TAM_J)
@@ -73,7 +90,11 @@ bool checaParede(char** grid_mapa, int i, int j)
     return grid_mapa[i][j] == '#';
 }
 
-//mapeamento dos tiles de acordo com seu bitmask. os indices indicam o bitmask dos tiles
+/**
+ * @brief Função para inicializar o mapeamento dos tiles do mapa.
+ * @param mapa_mascaras Array para armazenar o mapeamento dos tiles.
+ * @param tam Tamanho do array de mapeamento.
+ */
 void inicializaMapeamento(int* mapa_mascaras, int tam)
 {
     //removendo valores lixo
@@ -141,7 +162,13 @@ void inicializaMapeamento(int* mapa_mascaras, int tam)
 //223 = 41, 248 = 42, 250 = 43, 251 = 44, 254 = 45, 
 //255 = 46, 0 = 47
 
-//realiza o calculo da mascara de acordo com o tile central. olha pros 8 blocos adjacentes ao centro pra realizar esse calculo
+/**
+ * @brief Função para calcular a máscara de um tile com base em seus vizinhos.
+ * @param grid_mapa Mapa do jogo representado como uma matriz de caracteres.
+ * @param i Índice da linha do tile no mapa.
+ * @param j Índice da coluna do tile no mapa.
+ * @return Máscara calculada para o tile na posição (i, j).
+ */
 int calculaMascara(char** grid_mapa, int i, int j)
 {   
     //esses vizinhos cardeais é pq tipo, num tile set 8 bit sao 2^8 combinacoes de tile, porem, tem uma repeticao
@@ -180,7 +207,10 @@ int calculaMascara(char** grid_mapa, int i, int j)
     return somatorio_pesos;
 }
 
-//alocacao dos tiles no mapa atual em uma matriz(pra n precisar ficar calculando toda hr a cada frame). essa func so deve rodar em inicializacoes ou troca de mapas
+/**
+ * @brief Função para texturizar o mapa com base nas máscaras calculadas.
+ * @param mapa Ponteiro para a estrutura do mapa.
+ */
 void texturizaMapa(tMapa* mapa)
 {
     for(int i = 0; i < TAM_I; i++)
@@ -198,7 +228,10 @@ void texturizaMapa(tMapa* mapa)
     trocaCor(mapa);
 }
 
-//desenhos dos tiles de acordo com a matriz_auxiliar ja "texturizada"(com as mascaras ja calculadas)
+/**
+ * @brief Função para desenhar as texturas das paredes do mapa na tela.
+ * @param mapa Estrutura do mapa contendo a matriz e texturas.
+ */
 void drawTexturaParede(tMapa mapa)
 {
     Vector2 pos;
@@ -219,13 +252,23 @@ void drawTexturaParede(tMapa mapa)
     }
 }
 
+/**
+ * @brief Função para liberar a memória alocada para as máscaras do mapa.
+ * @param mapa_mascaras Ponteiro para o array de máscaras do mapa.
+ */
 void freeMascaras(int* mapa_mascaras)
 {
     free(mapa_mascaras);
 }
 
 
-//Inicializa tudo em relacao ao mapa junto de suas texturas
+/**
+ * @brief Função para inicializar a estrutura do mapa com suas propriedades e texturas.
+ * @param mapa Ponteiro para a estrutura do mapa.
+ * @param filename Nome do arquivo contendo o mapa.
+ * @param level_atual Ponteiro para o nível atual do jogo.
+ * @param assets Estrutura contendo os assets do jogo.
+ */
 void inicializaMapa(tMapa* mapa, char* filename, int* level_atual, tAssets assets)
 {
     //mapa em si

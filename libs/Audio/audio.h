@@ -5,13 +5,12 @@
 /*
     A ideia geral é ter um vetor com as 4 musicas, que serão trocadas dinamicamente de acordo com o jogo
 */
-
-// para serem passados para o switchMusic
-
-//volume normal
 float normalVolume = 1.00f;
 
-//recebe o conjunto de musicas e inicia todas ao mesmo tempo para ser dinamico
+/**
+ * @brief Toca todas as músicas do conjunto.
+ * @param stems Array de músicas.
+ */
 void playMusic(Music stems[]){
     for(int i = 0; i < 3; i++){
         PlayMusicStream(stems[i]);
@@ -19,7 +18,10 @@ void playMusic(Music stems[]){
     return;
 }
 
-//pega o conjunto de musicas e atualiza elas00
+/**
+ * @brief Atualiza todas as músicas do conjunto.
+ * @param stems Array de músicas.
+ */
 void updateMusic(Music stems[]){
     for(int i = 0; i < 3; i++){
         UpdateMusicStream(stems[i]);
@@ -27,6 +29,10 @@ void updateMusic(Music stems[]){
     return;
 }
 
+/**
+ * @brief Pausa todas as músicas do conjunto.
+ * @param stems Array de músicas.
+ */
 void pauseAllMusic(Music stems[]){
     for(int i = 0; i < 3; i++){
         PauseMusicStream(stems[i]);
@@ -34,6 +40,10 @@ void pauseAllMusic(Music stems[]){
     return;
 }
 
+/**
+ * @brief Retoma todas as músicas do conjunto.
+ * @param stems Array de músicas.
+ */
 void resumeAllMusic(Music stems[]){
     for(int i = 0; i < 3; i++){
         ResumeMusicStream(stems[i]);
@@ -41,6 +51,10 @@ void resumeAllMusic(Music stems[]){
     return;
 }
 
+/**
+ * @brief Para todas as músicas do conjunto.
+ * @param stems Array de músicas.
+ */
 void stopAllMusic(Music stems[]){
     for(int i = 0; i < 3; i++){
         StopMusicStream(stems[i]);
@@ -48,9 +62,11 @@ void stopAllMusic(Music stems[]){
     return;
 }
 
-/*
-    Função recebe um estado e troca a musica;
-*/
+/**
+ * @brief Troca a música atual com base no estado do jogo.
+ * @param state Estado atual do jogo.
+ * @param stems Array de músicas.
+ */
 void switchMusic(GameState state, Music stems[]){
     for(int i = 0; i < 3; i++){
          if(i == state){
@@ -62,6 +78,13 @@ void switchMusic(GameState state, Music stems[]){
     }
 }
 
+/**
+ * @brief Inicia o áudio do jogo carregando as músicas e efeitos sonoros.
+ * @param stems Array de músicas.
+ * @param gameSFX Array de sons do jogo.
+ * @param menu Ponteiro para a estrutura do menu.
+ * @param level Nível atual do jogo.
+ */
 void initiateAudio(Music stems[], Sound* gameSFX, tMenu* menu, int level){
 
     switch(level){
@@ -97,10 +120,14 @@ void initiateAudio(Music stems[], Sound* gameSFX, tMenu* menu, int level){
     SetSoundVolume(gameSFX[2], 1.5f);
     gameSFX[3] = LoadSound("audio/ambiente/death.wav");
     SetSoundVolume(gameSFX[3], 2.0f);
-    gameSFX[4] = LoadSound("audio/ambiente/eat_ghost.wav");
+    gameSFX[4] = LoadSound("audio/ambiente/ghost_eat.wav");
     SetSoundVolume(gameSFX[4], 1.5f);
     gameSFX[5] = LoadSound("audio/ambiente/CUTIN.mp3");
     SetSoundVolume(gameSFX[5], 0.5f);
+    gameSFX[6] = LoadSound("audio/ambiente/use_fruit.wav");
+    SetSoundVolume(gameSFX[6], 3.5f);
+    gameSFX[7] = LoadSound("audio/ambiente/get_fruit.wav");
+    SetSoundVolume(gameSFX[7], 3.0f);
 
     return;
 }

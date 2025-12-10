@@ -17,7 +17,7 @@
 #include "Hud/HUD.h"
 #include "Hud/vfx.h"
 #include "Character/fantasma.h"
-#include "Audio/music.h"
+#include "Audio/audio.h"
 #include "MainSystem/mainMenu.h"
 #include "Character/animacao.h"
 #include "MainSystem/vicScreen.h"
