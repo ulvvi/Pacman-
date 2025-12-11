@@ -14,6 +14,13 @@ enum {
 } ghostTypes;
 
 
+bool checaFantasmaCentralizado(tInimigo fantasma)
+{
+    return (((int)fantasma.pos.x % TAM_GRID) == 0 && ((int)fantasma.pos.y % TAM_GRID) == 0);
+}
+
+
+
 /**
  ** @brief Função para trocar o sprite do fantasma com base na direção.
  ** @param fantasma Ponteiro para a estrutura do fantasma.
@@ -357,7 +364,7 @@ tInimigo moveFantasma(tInimigo fantasma, tInimigo blinky, tMapa mapa, int indice
     if(saindoMapa(fantasma)!=-1){
         fantasma.pos=teleportaFantasma(fantasma);
     }
-    if((indice%20==0 && (fantasma.pos.x>=40 && fantasma.pos.x<=1520) && (fantasma.pos.y>=40 && fantasma.pos.y<=720)) && !pacman.power_pellet){
+    if((/*indice%20==0*/checaFantasmaCentralizado(fantasma) && (fantasma.pos.x>=40 && fantasma.pos.x<=1520) && (fantasma.pos.y>=40 && fantasma.pos.y<=720)) && !pacman.power_pellet){
         switch(fantasma.type){
 
             case PERSEGUIDOR:
@@ -388,7 +395,7 @@ tInimigo moveFantasma(tInimigo fantasma, tInimigo blinky, tMapa mapa, int indice
                 break;
         }
     }
-    if((indice%20==0 && (fantasma.pos.x>=40 && fantasma.pos.x<=1520) && (fantasma.pos.y>=40 && fantasma.pos.y<=720)) && pacman.power_pellet){
+    if((/*indice%20==0*/ checaFantasmaCentralizado(fantasma) && (fantasma.pos.x>=40 && fantasma.pos.x<=1520) && (fantasma.pos.y>=40 && fantasma.pos.y<=720)) && pacman.power_pellet){
         fantasma.direcao=fogePacman(fantasma, mapa.grid_mapa, pacman);
     }
 
