@@ -26,7 +26,6 @@ void whereToPinch(tJogador* player, tInimigo* blinky, tMapa* mapa, int* targetX,
     int dir_x = (player->move_x / player->spd);
     int dir_y = (player->move_y / player->spd);
 
-    const int blocksToPredict = 2; 
     int R_x = P_x;
     int R_y = P_y;
     
