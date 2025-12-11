@@ -141,6 +141,7 @@ Music stems[3], int dangerPellets, tAnimacao* obj_efeito_morango){
     {
         powerPellet(pacman, mapa);
     }
+  
 
     if(pacman->remainingPellets <= dangerPellets){
         SetMusicPitch(stems[0], 1.10f);
@@ -187,6 +188,7 @@ Music stems[3], int dangerPellets, tAnimacao* obj_efeito_morango){
     //iteracao dos fantasmas
     for(int i = 0; i < mapa->numero_fantasmas; i++)
     {
+        trocaSpdFantasma(&fantasma[i], *pacman);
         fantasma[i] = moveFantasma(fantasma[i], fantasma[0], *mapa, mapa->frame_counter, *pacman);
         if(fantasma[i].desenho == false)
         {
