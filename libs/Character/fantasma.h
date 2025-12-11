@@ -20,6 +20,22 @@ bool checaFantasmaCentralizado(tInimigo fantasma)
 }
 
 
+void trocaSpdFantasma(tInimigo* fantasmas, tJogador pacman)
+{
+    if(fantasmas->desenho == false)
+    {
+        return;
+    }
+    if(pacman.power_pellet == true && checaFantasmaCentralizado(*fantasmas))
+    {
+        fantasmas->spd = 1;
+    }
+    else if(pacman.power_pellet == false && checaFantasmaCentralizado(*fantasmas))
+    {
+        fantasmas->spd = 2;
+    }
+}
+
 
 /**
  ** @brief Função para trocar o sprite do fantasma com base na direção.
@@ -661,6 +677,5 @@ void reviveFantasma(tInimigo* fantasma, int indice)
         fantasma[indice].colisao_fantasma.height = TAM_GRID;
         fantasma[indice].desenho = true;
         fantasma[indice].direcao = 0;
-        fantasma[indice].spd = 2;
     }
 }
