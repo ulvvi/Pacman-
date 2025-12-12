@@ -226,7 +226,7 @@ Music stems[3], int dangerPellets, tAnimacao* obj_efeito_morango){
 
 
 bool hasCollectedAllPellets(tJogador* pacman){
-    if(pacman->remainingPellets <= 0 || IsKeyPressed(KEY_C)){
+    if(pacman->remainingPellets <= 0){
         return true;
     } else {
         return false;
