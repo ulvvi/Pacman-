@@ -26,7 +26,7 @@ static void drawMainMenu(void){
     DrawRectangle((LARGURA - 200), 0, 20, ALTURA, ROXO);
     DrawRectangle(0, 80, LARGURA, 20, ROXO_ESCURO);
     DrawText(title, (LARGURA - titleW)/8, 250, 90, PEL);
-    DrawText("Feito por: Pdiddy - Raulzito - Hytalo Santos - Capitão hunter", 0, ALTURA - 40, 20, WHITE);
+    DrawText("Feito por: Guilherme - Taylor - Alexandre - Luydgi", 20, ALTURA - 40, 20, WHITE);
     int startY = 400;
     for(int i = MENU_START; i <= MENU_QUIT; i++){
         int y = startY + i * 80;
