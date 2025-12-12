@@ -26,7 +26,7 @@ int main(void)
     int whatToDo;
     while(!WindowShouldClose())
     {   
-        int whatToDo = mainMenu();
+        int whatToDo = mainMenu(assets);
         if(whatToDo == 1 || whatToDo == 2) nivel_atual = 1;
         while(true){
             //roda a func gamelevel e retorna true ou false(true pra vitoria, false pra derrota)
