@@ -22,18 +22,24 @@ static void drawMainMenu(void){
     ClearBackground(BLACK);
     const char* title = "PACMAN+";
     int titleW = MeasureText(title, 90);
-    DrawText(title, (LARGURA - titleW)/2, 120, 90, PEL);
-    int startY = 300;
+    DrawRectangle((LARGURA/11), 350, 400, 10, ROXO_ESCURO);
+    DrawRectangle((LARGURA - 200), 0, 20, ALTURA, ROXO);
+    DrawRectangle(0, 80, LARGURA, 20, ROXO_ESCURO);
+    DrawText(title, (LARGURA - titleW)/8, 250, 90, PEL);
+    DrawText("Feito por: Pdiddy - Raulzito - Hytalo Santos - Capitão hunter", 0, ALTURA - 40, 20, WHITE);
+    int startY = 400;
     for(int i = MENU_START; i <= MENU_QUIT; i++){
         int y = startY + i * 80;
         if(i == menuIndex){
-            DrawRectangle((LARGURA/2) - 170, y - 10, 340, 60, LIGHTGRAY);
+            DrawRectangle((LARGURA/5) - 170, y - 10, 345, 65, ROXO_ESCURO);
+            DrawRectangle((LARGURA/5) - 170, y - 10, 340, 60, ROXO);
             //DrawText(">", (LARGURA/2) - 210, y + 5, 40, WHITE);
-            DrawText(mainMenuText[i], (LARGURA/2) - 140, y + 5, 40, BLACK);
+            DrawText(mainMenuText[i], (LARGURA/5) - 150, y , 40, BLACK);
         } 
         else {
-            DrawRectangle((LARGURA/2) - 160, y, 320, 50, DARKGRAY);
-            DrawText(mainMenuText[i], (LARGURA/2) - 140, y + 5, 35, WHITE);
+            DrawRectangle((LARGURA/5) - 160, y, 325, 55, ROXO);
+            DrawRectangle((LARGURA/5) - 160, y, 320, 50, ROXO_ESCURO);
+            DrawText(mainMenuText[i], (LARGURA/5) - 140, y + 10, 35, WHITE);
         }
     }
 }
