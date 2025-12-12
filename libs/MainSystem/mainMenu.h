@@ -67,15 +67,27 @@ static int mainMenuInputs(void){
  * @brief Executa o loop do menu principal.
  * @return int A opção selecionada pelo usuário.
  */
-int mainMenu(void){
+int mainMenu(tAssets assets){
     menuIndex = 0;
     Music theme = LoadMusicStream("audio/Music/title.wav");
     SetMusicVolume(theme, 1.25f);
     PlayMusicStream(theme);
+    tAnimacao pacman = {
+        0, 4, 0.120, 0, assets.pacman_menu, 
+        {0,0,120, 120}, {100, 100}, 0, 0, 0, 1
+    };
+
+    tAnimacao frutas = {
+        0, 24, 0.100, 0, assets.frutas_menu, 
+        {0,0,120, 120}, {100, 100}, 0, 0, 0, 1
+    };
+
 
     while(true){
         UpdateMusicStream(theme);
         BeginDrawing();
+        animaObjeto(&pacman);
+        animaObjeto(&frutas);
         drawMainMenu();
         EndDrawing();
         int choice = mainMenuInputs();

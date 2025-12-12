@@ -26,6 +26,8 @@ typedef struct
     Texture2D confete_animacao;
     Texture2D derrota_cutscene;
     Texture2D efeito_morango_animacao;
+    Texture2D pacman_menu;
+    Texture2D frutas_menu;
     
 
 
@@ -64,6 +66,8 @@ void inicializaAssets(tAssets* assets)
     assets->confete_animacao = LoadTexture("sprites/ambiente/confetes-Sheet.png");
     assets->derrota_cutscene = LoadTexture("sprites/ambiente/derrota-Sheet.png");
     assets->efeito_morango_animacao = LoadTexture("sprites/ambiente/animacao_morango-Sheet2.png");
+    assets->pacman_menu =  LoadTexture("sprites/ambiente/pacman_menu-Sheet.png");
+    assets->frutas_menu = LoadTexture("sprites/ambiente/efeito_frutas-Sheet.png");
    
 }
 
