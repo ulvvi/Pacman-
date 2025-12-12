@@ -100,22 +100,29 @@ Music stems[3], int dangerPellets, tAnimacao* obj_efeito_morango){
         *state_atual = PAUSE;
     }
 
-    //debug
-    if(IsKeyPressed(KEY_F1)){
-        pacman->current_fruit = CHERRY;
-    }
-    if(IsKeyPressed(KEY_F2)){
-        pacman->current_fruit = STRAWBERRY;
-    }
-    if(IsKeyPressed(KEY_F3)){
-        pacman->current_fruit = GRAPE;
-    }
-    if(IsKeyPressed(KEY_F4)){
-        pacman->current_fruit = BLUEBERRY;
-    }
-    if(IsKeyDown(KEY_Q)){
-        pacman->remainingPellets--;
-    }
+
+    /*DEBUG*/
+    // if(IsKeyPressed(KEY_F1)){
+    //     pacman->current_fruit = CHERRY;
+    // }
+    // if(IsKeyPressed(KEY_F2)){
+    //     pacman->current_fruit = STRAWBERRY;
+    // }
+    // if(IsKeyPressed(KEY_F3)){
+    //     pacman->current_fruit = GRAPE;
+    // }
+    // if(IsKeyPressed(KEY_F4)){
+    //     pacman->current_fruit = BLUEBERRY;
+    // }
+    // if(IsKeyDown(KEY_Q)){
+    //     pacman->remainingPellets--;
+    // }
+    // if(IsKeyDown(KEY_A)) 
+    // {
+    //     pacman->vida = 0; 
+    //     state_atual = MORTE;
+    // }
+
 
     if(IsKeyPressed(KEY_SPACE)){
         if(pacman->fruta_ativa == -1){
@@ -384,11 +391,7 @@ int gameLevel(int* level, tAssets assets, int whatToDo){
                     switchMusic(JACKPOT, stems);
                 }
                 updateLogic(&pacman, &mapa, &state_atual, &menuData, fantasmas, &camera_principal, &pontuacao, gameSFX, stems, dangerPellets, &obj_efeito_morango);
-                if(IsKeyDown(KEY_A)) 
-                {
-                    pacman.vida = 0; 
-                    state_atual = MORTE;
-                }
+
                 pacman.comendo.pos.x = pacman.pos.x;
                 pacman.comendo.pos.y = pacman.pos.y;
             break;
