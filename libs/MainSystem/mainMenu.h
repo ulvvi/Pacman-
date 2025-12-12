@@ -69,26 +69,28 @@ static int mainMenuInputs(void){
  */
 int mainMenu(tAssets assets){
     menuIndex = 0;
+    int pos_x = LARGURA - LARGURA/2 + 110;
+    int pos_y = ALTURA/4 - ALTURA/6 + 60;
     Music theme = LoadMusicStream("audio/Music/title.wav");
     SetMusicVolume(theme, 1.25f);
     PlayMusicStream(theme);
     tAnimacao pacman = {
-        0, 4, 0.120, 0, assets.pacman_menu, 
-        {0,0,120, 120}, {100, 100}, 0, 0, 0, 1
+        0, 4, 0.130, 0, assets.pacman_menu, 
+        {0,0,120, 120}, {pos_x, pos_y}, 0, 0, 0, 6
     };
 
     tAnimacao frutas = {
         0, 24, 0.100, 0, assets.frutas_menu, 
-        {0,0,120, 120}, {100, 100}, 0, 0, 0, 1
+        {0,0,120, 120}, {pos_x, pos_y}, 0, 0, 0, 6
     };
 
 
     while(true){
         UpdateMusicStream(theme);
         BeginDrawing();
+        drawMainMenu();
         animaObjeto(&pacman);
         animaObjeto(&frutas);
-        drawMainMenu();
         EndDrawing();
         int choice = mainMenuInputs();
         if(choice == -1) continue;
