@@ -48,7 +48,7 @@ char* menuOptionsText[] = {
  * @param mapa Estrutura do mapa contendo as texturas das frutas.
  */
 void drawFruit(int curFruit, tMapa mapa){
-  DrawRectangle(1400, 800, 40, 40, ROXO_ESCURO);
+  DrawRectangle(1400, 800, 40, 40, ROXO);
   DrawRectangle(1405, 805, 30, 30, BLACK);
 
   switch(curFruit){
@@ -79,15 +79,12 @@ void drawFruit(int curFruit, tMapa mapa){
 void drawHUD(int score, int totalPellets, int curFruit, tMapa mapa, tAssets assets, int vida){
     int pos_vida_x = 1450;
     int pos_vida_y = 800;
-    float hue = (float)score/40;
-    if(hue > 157) hue = 157;
-    Color PONTUACAO = ColorFromHSV(hue, 0.95f, 0.5f);
 
     int espacamento = assets.pacman_vida_sprite.width - 10;
     Rectangle borda = {0, 800, 1600, 40};
-    DrawRectangle(0, 800, 1600, 40, ROXO); //desenho da HUD
-    DrawRectangleLinesEx(borda, 6, ROXO_ESCURO);
-    DrawText(TextFormat("Score: %d", score), 10, 810, 20, PONTUACAO);
+    DrawRectangle(0, 800, 1600, 40, ROXO_ESCURO); //desenho da HUD
+    DrawRectangleLinesEx(borda, 6, ROXO);
+    DrawText(TextFormat("Score: %d", score), 10, 810, 20, WHITE);
     DrawText(TextFormat("pellets: %d", totalPellets), 150, 810, 20, WHITE);
     drawFruit(curFruit, mapa);
     for(int i = 0; i < vida; i++)
